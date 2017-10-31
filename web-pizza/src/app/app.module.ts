@@ -5,10 +5,16 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
+import { ItemTypeComponent } from './item-type/item-type.component';
+import { ItemCategoryComponent } from './item-category/item-category.component';
+import { OrderComponent } from './order/order.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ItemTypeComponent,
+    ItemCategoryComponent,
+    OrderComponent
   ],
   imports: [
     BrowserModule,
@@ -19,6 +25,6 @@ import { environment } from '../environments/environment';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
+export class AppModule {
 
 }
