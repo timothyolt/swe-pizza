@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { ItemType } from '../item-type/item-type';
 import { ItemCategory } from './item-category';
+import { Pizza } from '../pizza/pizza';
 
 @Component({
   selector: 'app-item-category',
@@ -9,10 +10,15 @@ import { ItemCategory } from './item-category';
   styleUrls: ['./item-category.component.css']
 })
 export class ItemCategoryComponent implements OnInit {
+  @Input() pizzaRef: string;
+  itemTypes: FirebaseListObservable<ItemType[]>;
+
   constructor(private db: AngularFireDatabase) {
   }
 
   private _itemCat: ItemCategory;
+
+  get itemCat(): ItemCategory { return this._itemCat; }
 
   @Input()
   set itemCat(itemCat: ItemCategory) {
@@ -24,10 +30,6 @@ export class ItemCategoryComponent implements OnInit {
       }
     });
   }
-
-  get itemCat(): ItemCategory { return this._itemCat; }
-
-  itemTypes: FirebaseListObservable<ItemType[]>;
 
   ngOnInit() {
   }

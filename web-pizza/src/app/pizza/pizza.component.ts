@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { FirebaseListObservable } from 'angularfire2/database';
 import { ItemCategory } from '../item-category/item-category';
+import { Pizza } from './pizza';
 
 @Component({
   selector: 'app-pizza',
@@ -9,7 +10,8 @@ import { ItemCategory } from '../item-category/item-category';
 })
 export class PizzaComponent implements OnInit {
 
-  @Input() pizza: any;
+  @Input() orderRef: string;
+  @Input() pizza: Pizza;
   @Input() itemCats: FirebaseListObservable<ItemCategory[]>;
 
   ngOnInit() {

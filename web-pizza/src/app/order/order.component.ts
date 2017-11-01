@@ -10,6 +10,7 @@ import { Pizza } from '../pizza/pizza';
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit {
+  orderRef: string;
   order: FirebaseObjectObservable<Order>;
   pizzas: FirebaseListObservable<Pizza[]>;
   itemCats: FirebaseListObservable<ItemCategory[]>;
@@ -18,16 +19,18 @@ export class OrderComponent implements OnInit {
     db.database.ref('/users/development').once('value', user => {
       if (user.exists() && user.val().activeOrder) {
         const val = user.val();
-        this.order = db.object('/orders/' + val.activeOrder);
-        this.pizzas = db.list('/orders/' + val.activeOrder + '/pizzas');
+        this.orderRef = '/orders/' + val.activeOrder;
+        this.order = db.object(this.orderRef);
+        this.pizzas = db.list(this.orderRef + '/pizzas');
       } else {
         const order = new Order();
         order.createdAtDate = new Date();
         const orderId: string = db.database.ref('/orders').push(order).key;
         db.database.ref('/users/development').update({activeOrder: orderId});
-        this.order = db.object('/orders/' + orderId);
+        this.orderRef = '/orders/' + orderId;
+        this.order = db.object(this.orderRef);
         this.order.update({ id: orderId });
-        this.pizzas = db.list('/orders/' + orderId + '/pizzas');
+        this.pizzas = db.list(this.orderRef + '/pizzas');
         db.database.ref('/defaultPizza').once(
           'value',
           defaultPizza => this.order.update({pizzas: defaultPizza.exists() ? [defaultPizza.val()] : null}));

@@ -1,2 +1,3 @@
 <h4>{{pizza.name}}</h4>
-<app-item-category *ngFor="let itemCat of itemCats | async" [itemCat]="itemCat"></app-item-category>
+<app-item-category *ngFor="let itemCat of itemCats | async" [pizzaRef]="orderRef + '/pizzas/' + pizza.$key"
+                   [itemCat]="itemCat"></app-item-category>
