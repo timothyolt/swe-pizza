@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { ItemCategory } from '../item-category/item-category';
 import { Pizza } from './pizza';
 
@@ -9,10 +9,25 @@ import { Pizza } from './pizza';
   styleUrls: ['./pizza.component.css']
 })
 export class PizzaComponent implements OnInit {
-
-  @Input() orderRef: string;
   @Input() pizza: Pizza;
   @Input() itemCats: FirebaseListObservable<ItemCategory[]>;
+
+  constructor(private db: AngularFireDatabase) {
+  }
+
+  private _orderRef: string;
+
+  get orderRef(): string {
+    return this._orderRef;
+  }
+
+  @Input()
+  set orderRef(value: string) {
+    this._orderRef = value;
+    const pizzaRef = this.db.database.ref(value + '/pizzas/' + this.pizza['$key']);
+    pizzaRef.child('name').on('value', name => this.pizza.name = (name.exists() ? name.val() : null));
+    pizzaRef.child('cost').on('value', cost => this.pizza.cost = (cost.exists() ? cost.val() : null));
+  }
 
   ngOnInit() {
   }
