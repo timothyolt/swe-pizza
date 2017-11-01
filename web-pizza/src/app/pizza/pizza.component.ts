@@ -33,7 +33,10 @@ export class PizzaComponent implements OnInit {
   }
 
   removePizza(e) {
-    this.db.database.ref(this.orderRef + '/pizzas/' + this.pizza['$key']).remove();
+    this.db.database.ref(this.orderRef).child('pizzas').transaction(pizzas => {
+      pizzas.splice(Number(this.pizza['$key']), 1);
+      return pizzas;
+    });
   }
 
 }

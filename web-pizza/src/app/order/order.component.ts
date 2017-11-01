@@ -28,13 +28,19 @@ export class OrderComponent implements OnInit {
         this.addNewPizza(null);
       }
       db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
-        // this.pizzas.splice(Number(pizza.key), 0, pizza.val());
+        if (!this.pizzas) {
+          this.pizzas = [];
+        }
         const pizzaVal = pizza.val();
         pizzaVal['$key'] = pizza.key;
-        this.pizzas.push(pizzaVal);
+        this.pizzas.splice(Number(pizza.key), 0, pizzaVal);
       });
       db.database.ref(this.orderRef + '/pizzas').on('child_removed', pizza => {
         this.pizzas.splice(Number(pizza.key), 1);
+      });
+      db.database.ref(this.orderRef + '/pizzas').on('child_moved', pizza => {
+        // this.pizzas.splice(Number(pizza.key), 1);
+        console.log('moved');
       });
     });
     this.itemCats = db.list('/itemCat');
