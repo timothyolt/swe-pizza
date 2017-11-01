@@ -1,6 +1,6 @@
 <form class="form-inline" style="text-align: left;">
   <fieldset class="form-group">
     <legend>{{itemCat.name}}</legend>
-    <app-item-type *ngFor="let itemType of itemTypes | async" [itemType]="itemType"></app-item-type>
+    <app-item-type *ngFor="let itemType of itemTypes | async" [itemType]="itemType" [exclusive]="itemCat.exclusive"></app-item-type>
   </fieldset>
 </form>

@@ -8,13 +8,15 @@ import { environment } from '../environments/environment';
 import { ItemTypeComponent } from './item-type/item-type.component';
 import { ItemCategoryComponent } from './item-category/item-category.component';
 import { OrderComponent } from './order/order.component';
+import { PizzaComponent } from './pizza/pizza.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ItemTypeComponent,
     ItemCategoryComponent,
-    OrderComponent
+    OrderComponent,
+    PizzaComponent
   ],
   imports: [
     BrowserModule,

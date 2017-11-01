@@ -9,11 +9,8 @@ import { ItemCategory } from './item-category';
   styleUrls: ['./item-category.component.css']
 })
 export class ItemCategoryComponent implements OnInit {
-  constructor(db: AngularFireDatabase) {
-    this.db = db;
+  constructor(private db: AngularFireDatabase) {
   }
-
-  private db: AngularFireDatabase;
 
   private _itemCat: ItemCategory;
 
