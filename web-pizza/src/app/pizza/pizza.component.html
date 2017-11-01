@@ -1,3 +1,4 @@
-<h4>{{pizza.name}}{{pizza.cost ? ' - $' + pizza.cost : ''}}</h4>
+<h4>{{pizza.name}}{{pizza.cost ? ' - $' + pizza.cost :
+  ''}}<button type="button" class="btn btn-link" (click)="removePizza($event)">Remove</button></h4>
 <app-item-category *ngFor="let itemCat of itemCats | async" [pizzaRef]="orderRef + '/pizzas/' + pizza.$key"
                    [itemCat]="itemCat"></app-item-category>

@@ -14,7 +14,7 @@ export class OrderComponent implements OnInit {
   pizzas: Pizza[] = [];
   itemCats: FirebaseListObservable<ItemCategory[]>;
 
-  constructor(db: AngularFireDatabase) {
+  constructor(private db: AngularFireDatabase) {
     db.database.ref('/users/development').once('value', user => {
       if (user.exists() && user.val().activeOrder) {
         this.orderRef = '/orders/' + user.val().activeOrder;
@@ -25,12 +25,7 @@ export class OrderComponent implements OnInit {
         db.database.ref('/users/development').update({activeOrder: orderId});
         this.orderRef = '/orders/' + orderId;
         db.database.ref(this.orderRef).update({ id: orderId });
-        db.database.ref('/defaultPizza').once(
-          'value',
-          defaultPizza => {
-            this.pizzas = defaultPizza.exists() ? [defaultPizza.val()] : [];
-            db.database.ref(this.orderRef).update({pizzas: this.pizzas});
-          });
+        this.addNewPizza(null);
       }
       db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
         // this.pizzas.splice(Number(pizza.key), 0, pizza.val());
@@ -48,4 +43,18 @@ export class OrderComponent implements OnInit {
   ngOnInit() {
   }
 
+  addNewPizza(e) {
+    this.db.database.ref('/defaultPizza').once(
+      'value',
+      defaultPizza => {
+        this.db.database.ref(this.orderRef).child('pizzas').transaction(pizzas => {
+          if (pizzas) {
+            pizzas.push(defaultPizza.val());
+          } else {
+            pizzas = [defaultPizza.val()];
+          }
+          return pizzas;
+        });
+      });
+  }
 }

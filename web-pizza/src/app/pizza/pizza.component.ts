@@ -32,4 +32,8 @@ export class PizzaComponent implements OnInit {
   ngOnInit() {
   }
 
+  removePizza(e) {
+    this.db.database.ref(this.orderRef + '/pizzas/' + this.pizza['$key']).remove();
+  }
+
 }
