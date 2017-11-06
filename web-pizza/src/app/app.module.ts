@@ -5,10 +5,13 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database-deprecated';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
+import { routes } from './app.router';
+
 import { ItemTypeComponent } from './item-type/item-type.component';
 import { ItemCategoryComponent } from './item-category/item-category.component';
 import { OrderComponent } from './order/order.component';
 import { PizzaComponent } from './pizza/pizza.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -16,13 +19,15 @@ import { PizzaComponent } from './pizza/pizza.component';
     ItemTypeComponent,
     ItemCategoryComponent,
     OrderComponent,
-    PizzaComponent
+    PizzaComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase, 'swe-pizza'), // imports firebase/app needed for everything
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
+    routes
   ],
   providers: [],
   bootstrap: [AppComponent]
