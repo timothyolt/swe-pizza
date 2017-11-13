@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { OrderComponent } from './order/order.component';
+import { MyAccountComponent } from './my-account/my-account.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 export const appRoutes: Routes = [
@@ -12,6 +13,7 @@ export const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignUpComponent },
     { path: 'order', component: OrderComponent },
+    { path: 'myaccount', component: MyAccountComponent },
     {
         path: '',
         redirectTo: '/home',
