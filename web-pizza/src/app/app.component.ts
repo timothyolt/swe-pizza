@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.css']
 })
 export class AppComponent {
-  constructor() {
+  isLoggedIn = false;
+
+  constructor(private auth: AngularFireAuth) {
+    this.auth.auth.onAuthStateChanged(user => {
+      if (user) {
+        this.isLoggedIn = true;
+      }
+    });
   }
 }
