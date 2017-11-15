@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
+  doneLoading = false;
   private user = {
     email: '',
     password: '',
@@ -20,24 +21,34 @@ export class SignUpComponent implements OnInit {
     this.auth.auth.onAuthStateChanged(user => {
       if (user) {
         this.router.navigateByUrl('myaccount');
+      } else {
+        this.doneLoading = true;
       }
     });
   }
 
   signup() {
-    this.auth.auth.createUserWithEmailAndPassword(this.user.email, this.user.password).then(user => {
-      return this.auth.auth.signInWithEmailAndPassword(this.user.email, this.user.password);
-    }).catch(error => {
-      console.log(JSON.stringify(error));
-    }).then(user => {
-      if (user) {
-        this.router.navigateByUrl('myaccount');
-      } else {
-        console.log('Error signing up');
-      }
-    }).catch(error => {
-      console.log(JSON.stringify(error));
-    });
+    if (this.user.email !== '' && this.user.password !== '') {
+      this.doneLoading = false;
+      this.auth.auth.createUserWithEmailAndPassword(this.user.email, this.user.password).then(user => {
+        return this.auth.auth.signInWithEmailAndPassword(this.user.email, this.user.password);
+      }).catch(error => {
+        this.doneLoading = true;
+        console.log(JSON.stringify(error));
+      }).then(user => {
+        if (user) {
+          this.router.navigateByUrl('home');
+        } else {
+          this.doneLoading = true;
+          console.log('Error signing up');
+        }
+      }).catch(error => {
+        this.doneLoading = true;
+        console.log(JSON.stringify(error));
+      });
+    } else {
+      alert('Email and password must be filled out');
+    }
   }
 
 }
