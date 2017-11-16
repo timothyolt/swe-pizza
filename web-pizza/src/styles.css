@@ -9,8 +9,8 @@ html, body {
 }
 
 .spinner {
-    border: 5px solid #d3d3d3; /* Light grey */
-    border-top: 5px solid #3498db; /* Blue */
+    border: 5px solid #d3d3d3;
+    border-top: 5px solid #3498db;
     border-radius: 50%;
     width: 120px;
     height: 120px;

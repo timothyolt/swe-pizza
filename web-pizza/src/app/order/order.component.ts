@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database-deprecated';
 import { ItemCategory } from '../item-category/item-category';
 import { Order } from './order';

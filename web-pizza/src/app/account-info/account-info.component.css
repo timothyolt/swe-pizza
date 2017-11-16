@@ -1,0 +1,9 @@
+.split-50 {
+    width: 50%;
+    float: left;
+}
+
+.split-33 {
+    width: 33%;
+    float: left;
+}

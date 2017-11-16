@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AngularFireModule } from 'angularfire2';
@@ -17,6 +17,8 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { MyAccountComponent } from './my-account/my-account.component';
+import { PastOrdersComponent } from './past-orders/past-orders.component';
+import { AccountInfoComponent } from './account-info/account-info.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { MyAccountComponent } from './my-account/my-account.component';
     HomeComponent,
     LoginComponent,
     SignUpComponent,
-    MyAccountComponent
+    MyAccountComponent,
+    PastOrdersComponent,
+    AccountInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,10 @@ import { MyAccountComponent } from './my-account/my-account.component';
     routes
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
 })
 export class AppModule {
 

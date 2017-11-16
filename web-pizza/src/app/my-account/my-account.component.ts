@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
+import { PastOrdersComponent } from '../past-orders/past-orders.component';
+import { AccountInfoComponent } from '../account-info/account-info.component';
 
 @Component({
   selector: 'app-my-account',
@@ -16,7 +18,7 @@ export class MyAccountComponent implements OnInit {
       if (user) {
         //todo get user info
       } else {
-        this.router.navigateByUrl('login');
+        // this.router.navigateByUrl('login');
       }
     });
   }
