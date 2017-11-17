@@ -10,33 +10,25 @@
       </div>
       <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
         <div class="card-body">
-          <div class="form-group split-50">
-            <label for="firstNameInput">First name</label>
-            <input type="text" class="form-control" id="firstNameInput" placeholder="Enter first name">
-          </div>
-          <div class="form-group split-50">
-            <label for="lastNameInput">Last name</label>
-            <input type="text" class="form-control" id="lastNameInput" placeholder="Enter last name">
-          </div>
           <div class="form-group">
             <label for="emailInput">Email address</label>
-            <input type="email" class="form-control" id="emailInput" placeholder="Enter email">
+            <input type="email" class="form-control" id="emailInput" placeholder="Enter email" email [(ngModel)]="user.email">
           </div>
           <div class="form-group">
             <label for="addressInput">Street address</label>
-            <input type="text" class="form-control" id="addressInput" placeholder="Enter street address">
+            <input type="text" class="form-control" id="addressInput" placeholder="Enter street address" [(ngModel)]="account.address">
           </div>
           <div class="form-group split-33">
             <label for="cityInput">City</label>
-            <input type="text" class="form-control" id="cityInput" placeholder="Enter city">
+            <input type="text" class="form-control" id="cityInput" placeholder="Enter city" [(ngModel)]="account.city">
           </div>
           <div class="form-group split-33">
             <label for="stateInput">State</label>
-            <input type="text" class="form-control" id="stateInput" placeholder="Enter state">
+            <input type="text" class="form-control" id="stateInput" placeholder="Enter state" [(ngModel)]="account.state">
           </div>
           <div class="form-group split-33">
             <label for="zipInput">Zip code</label>
-            <input type="number" class="form-control" id="zipInput" placeholder="Enter zip code">
+            <input type="number" class="form-control" id="zipInput" placeholder="Enter zip code" [(ngModel)]="account.zip">
           </div>
           <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;">Save</button>
         </div>
@@ -53,16 +45,20 @@
       <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
         <div class="card-body">
           <div class="form-group">
+            <label for="fullNameInput">Full name</label>
+            <input type="text" class="form-control" id="fullNameInput" placeholder="Enter full name on card" [(ngModel)]="card.fullName">
+          </div>
+          <div class="form-group">
             <label for="ccNumberInput">Credit card number</label>
-            <input type="number" class="form-control" id="ccNumberInput" placeholder="Enter credit card number">
+            <input type="number" class="form-control" id="ccNumberInput" placeholder="Enter credit card number" [(ngModel)]="card.number">
           </div>
           <div class="form-group split-50">
             <label for="expDateInput">Expiration date</label>
-            <input type="number" class="form-control" id="expDateInput" placeholder="Enter expiration date">
+            <input type="number" class="form-control" id="expDateInput" placeholder="Enter expiration date" [(ngModel)]="card.expirationDate">
           </div>
           <div class="form-group split-50">
             <label for="cvcInput">CVC</label>
-            <input type="number" class="form-control" id="cvcInput" placeholder="Enter CVC">
+            <input type="number" class="form-control" id="cvcInput" placeholder="Enter CVC" [(ngModel)]="card.cvc">
           </div>
           <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;">Save</button>
         </div>

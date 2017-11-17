@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
+import { User } from './user';
 
 @Component({
   selector: 'app-login',
@@ -9,10 +10,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   doneLoading = false;
-  private user = {
-    email: '',
-    password: ''
-  }
+  private user = new User();
 
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
