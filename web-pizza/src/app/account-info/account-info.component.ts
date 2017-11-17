@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Account } from './account';
-import { Card } from './card';
-import { User } from '../login/user';
+import { Account } from '../../models/account';
+import { Card } from '../../models/card';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-account-info',

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
-import { User } from './user';
+import { User } from '../../models/user';
+import { Error } from '../../models/error';
 
 @Component({
   selector: 'app-login',
@@ -9,8 +10,9 @@ import { User } from './user';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  doneLoading = false;
-  private user = new User();
+  private doneLoading: boolean = false;
+  private user: User = new User();
+  private error = new Error();
 
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
@@ -25,21 +27,22 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (this.user.email !== '' && this.user.password !== '') {
+    if (this.user.email !== '' && this.user.password !== '' && this.user.email && this.user.password) {
       this.doneLoading = false;
       this.auth.auth.signInWithEmailAndPassword(this.user.email, this.user.password).then(user => {
         if (user) {
           this.router.navigateByUrl('home');
         } else {
           this.doneLoading = true;
-          alert('Incorrect username and password');
+          this.error.show('Incorrect username and password.');
         }
       }).catch(error => {
         this.doneLoading = true;
-        alert(JSON.stringify(error));
+        this.error.show(JSON.stringify(error));
       });
     } else {
-      alert('Email and password must be filled out');
+      this.doneLoading = true;
+      this.error.show('Email and password must be filled out.');
     }
   }
 
