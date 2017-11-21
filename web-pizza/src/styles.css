@@ -1,4 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
 html, body {
-    background-color: #ffefec;
+    /* background-color: #ffefec; */
+    background-color: #fafafa;
+}
+
+.btn-right {
+    float: right;
+}
+
+.spinner {
+    border: 5px solid #d3d3d3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    margin: auto auto;
+    display: block;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
