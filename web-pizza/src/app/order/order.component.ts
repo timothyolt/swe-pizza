@@ -1,8 +1,9 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database-deprecated';
+import { Component, OnInit} from '@angular/core';
 import { ItemCategory } from '../item-category/item-category';
 import { Order } from './order';
 import { Pizza } from '../pizza/pizza';
+import { AngularFireDatabase} from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-order',
@@ -12,7 +13,7 @@ import { Pizza } from '../pizza/pizza';
 export class OrderComponent implements OnInit {
   orderRef: string;
   pizzas: Pizza[] = [];
-  itemCats: FirebaseListObservable<ItemCategory[]>;
+  itemCats: Observable<ItemCategory[]>;
 
   constructor(private db: AngularFireDatabase) {
     db.database.ref('/users/development').once('value', user => {
@@ -43,7 +44,8 @@ export class OrderComponent implements OnInit {
         console.log('moved');
       });
     });
-    this.itemCats = db.list('/itemCat');
+    this.itemCats = db.list('/itemCat').valueChanges();
+    this.itemCats.subscribe(console.log);
   }
 
   ngOnInit() {

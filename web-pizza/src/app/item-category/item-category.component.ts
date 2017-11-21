@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database-deprecated';
 import { ItemType } from '../item-type/item-type';
 import { ItemCategory } from './item-category';
-import { Pizza } from '../pizza/pizza';
+import { AngularFireDatabase} from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-item-category',
@@ -11,7 +11,7 @@ import { Pizza } from '../pizza/pizza';
 })
 export class ItemCategoryComponent implements OnInit {
   @Input() pizzaRef: string;
-  itemTypes: FirebaseListObservable<ItemType[]>;
+  itemTypes: Observable<ItemType[]>;
 
   constructor(private db: AngularFireDatabase) {
   }
@@ -23,12 +23,9 @@ export class ItemCategoryComponent implements OnInit {
   @Input()
   set itemCat(itemCat: ItemCategory) {
     this._itemCat = itemCat;
-    this.itemTypes = this.db.list('/itemType', {
-      query: {
-        orderByChild: 'cat',
-        equalTo: this.itemCat && this.itemCat.id ? this.itemCat.id : null
-      }
-    });
+    this.itemTypes = this.db.list('/itemType', ref =>
+      ref.orderByChild('cat').equalTo(this.itemCat && this.itemCat.id ? this.itemCat.id : null)).valueChanges();
+    this.itemTypes.subscribe(console.log);
   }
 
   ngOnInit() {

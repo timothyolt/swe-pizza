@@ -3,7 +3,6 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule } from 'angularfire2/database-deprecated';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { routes } from './app.router';
@@ -19,6 +18,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { PastOrdersComponent } from './past-orders/past-orders.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 @NgModule({
   declarations: [

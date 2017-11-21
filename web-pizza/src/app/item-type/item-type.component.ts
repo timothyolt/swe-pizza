@@ -1,7 +1,8 @@
 ///<reference path="../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
 import { Component, Input, OnInit } from '@angular/core';
 import { ItemType } from './item-type';
-import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database-deprecated';
+import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-item-type',
@@ -11,7 +12,8 @@ import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/data
 export class ItemTypeComponent implements OnInit {
   @Input() itemType: ItemType;
   @Input() exclusive: boolean;
-  input: FirebaseObjectObservable<any>;
+  object: AngularFireObject<any>;
+  input: Observable<any>;
   checked: boolean;
 
   constructor(private db: AngularFireDatabase) {
@@ -19,13 +21,16 @@ export class ItemTypeComponent implements OnInit {
 
   @Input()
   set inputRef(value: string) {
-    this.input = this.db.object(value);
-    this.input.$ref.on('value', input => {
-      if (input.exists()) {
+    this.object = this.db.object(value);
+    this.input = this.object.snapshotChanges();
+    this.input.subscribe(action => {
+      console.log('item-type subscription');
+      console.log(action);
+      if (action.payload.exists()) {
         if (this.exclusive) {
-          this.checked = this.itemType.id === input.val();
+          this.checked = this.itemType.id === action.payload.val();
         } else {
-          this.checked = input.val();
+          this.checked = action.payload.val();
         }
       } else {
         this.checked = false;
@@ -44,10 +49,10 @@ export class ItemTypeComponent implements OnInit {
     this.checked = e.target.checked;
     if (this.exclusive) {
       if (this.checked) {
-        this.input.set(this.itemType.id);  // path should be /input/$input/$pizza/$itemCat
+        this.object.set(this.itemType.id);  // path should be /input/$input/$pizza/$itemCat
       }
     } else {
-      this.input.set(this.checked ? this.checked : null);  // path should be /input/$input/$pizza/$itemCat/$itemType
+      this.object.set(this.checked ? this.checked : null);  // path should be /input/$input/$pizza/$itemCat/$itemType
     }
   }
 }
