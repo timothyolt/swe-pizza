@@ -13,7 +13,7 @@ export const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignUpComponent },
     { path: 'order', component: OrderComponent },
-    { path: 'myaccount', component: MyAccountComponent },
+    { path: 'account', component: MyAccountComponent },
     {
         path: '',
         redirectTo: '/home',

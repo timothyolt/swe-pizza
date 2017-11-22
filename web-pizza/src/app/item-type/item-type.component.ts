@@ -49,10 +49,12 @@ export class ItemTypeComponent implements OnInit {
     this.checked = e.target.checked;
     if (this.exclusive) {
       if (this.checked) {
-        this.object.set(this.itemType.id);  // path should be /input/$input/$pizza/$itemCat
+        this.object.set(this.itemType.id).catch(console.log);
+        // path should be /input/$input/$pizza/$itemCat
       }
     } else {
-      this.object.set(this.checked ? this.checked : null);  // path should be /input/$input/$pizza/$itemCat/$itemType
+      this.object.set(this.checked ? this.checked : null).catch(console.log);
+      // path should be /input/$input/$pizza/$itemCat/$itemType
     }
   }
 }
