@@ -3,7 +3,10 @@ const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
 exports.onOrderCostDeleted = functions.database.ref('orders/{order}/cost').onDelete(event => {
-  return event.data.ref.parent.transaction(order => {
+  let taxRate;
+  return admin.database().ref('globals/taxRate').once('value', data => {
+    taxRate = data.exists() ? data.val() : 0;
+  }).then(() => event.data.ref.parent.transaction(order => {
     console.log('order recalculate transaction');
     console.log(order);
     if (!order) return order;
@@ -13,21 +16,29 @@ exports.onOrderCostDeleted = functions.database.ref('orders/{order}/cost').onDel
       if (order.pizzas[i] && order.pizzas[i].cost)
         order.cost += order.pizzas[i].cost;
     }
-    if (order.cost === 0)
+    if (order.cost === 0) {
       order.cost = null;
+      order.total = null;
+    }
+    else
+      order.total = order.cost + order.cost * taxRate;
     return order;
-  });
+  }));
 });
 
 exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{child}').onWrite(event => {
   let itemCats;
   let itemTypes;
+  let taxRate;
   return Promise.all([
     admin.database().ref('itemCat').once('value', data => {
       itemCats = data.val();
     }),
     admin.database().ref('itemType').once('value', data => {
       itemTypes = data.val();
+    }),
+    admin.database().ref('globals/taxRate').once('value', data => {
+      taxRate = data.exists() ? data.val() : 0;
     })]
   ).then(() => {
     console.log(event.params.child);
@@ -42,8 +53,12 @@ exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{
           if (order.pizzas[i] && order.pizzas[i].cost)
             order.cost += order.pizzas[i].cost;
         }
-        if (order.cost === 0)
+        if (order.cost === 0) {
           order.cost = null;
+          order.total = null;
+        }
+        else
+          order.total = order.cost + order.cost * taxRate;
         return order;
       });
       else return event.data.ref.parent.transaction(pizza => {
