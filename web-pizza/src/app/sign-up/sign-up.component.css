@@ -1,0 +1,13 @@
+.card {    
+    width: 50%;
+    margin: 0 auto;
+}
+
+.inner-card {
+    margin: 16px;
+}
+
+.sub-action {
+    text-align: center;
+    margin: 16px;
+}

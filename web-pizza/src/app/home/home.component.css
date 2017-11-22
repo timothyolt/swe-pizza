@@ -1,0 +1,22 @@
+.orderBtn {
+    width: 85%;
+    max-width: 1000px;
+    display: block;
+    background-color: #ff6347;
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    height: 100px;
+    line-height: 100px;
+    font-size: 1.75em;
+    position: absolute;
+    bottom: 16px;
+    right: 0;
+    left: 0;
+    border-radius: 10px;
+}
+
+.orderBtn:hover {
+    background-color: red;
+    text-decoration: none;
+}
