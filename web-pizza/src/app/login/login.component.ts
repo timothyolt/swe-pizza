@@ -10,9 +10,9 @@ import { Error } from '../../models/error';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  private doneLoading: boolean = false;
-  private user: User = new User();
-  private error = new Error();
+  doneLoading = false;
+  user: User = new User();
+  error = new Error();
 
   constructor(private auth: AngularFireAuth, private router: Router) { }
 

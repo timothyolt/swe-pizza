@@ -10,10 +10,10 @@ import { Error } from '../../models/error';
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
-  private doneLoading = false;
-  private user = new User();
-  private confirmPassword = '';
-  private error = new Error();
+  doneLoading = false;
+  user = new User();
+  confirmPassword = '';
+  error = new Error();
 
   constructor(private auth: AngularFireAuth, private router: Router) { }
 

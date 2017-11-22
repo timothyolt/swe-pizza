@@ -14,7 +14,7 @@ export class MyAccountComponent implements OnInit {
   ngOnInit() {
     this.auth.auth.onAuthStateChanged(user => {
       if (user) {
-        //todo get user info
+        // todo get user info
       } else {
         // this.router.navigateByUrl('login');
       }

@@ -10,9 +10,9 @@ import { User } from '../../models/user';
   styleUrls: ['./account-info.component.css']
 })
 export class AccountInfoComponent implements OnInit {
-  private account = new Account();
-  private card = new Card();
-  private user = new User();
+  account = new Account();
+  card = new Card();
+  user = new User();
 
   constructor(private auth: AngularFireAuth) { }
 
