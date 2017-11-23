@@ -69,8 +69,4 @@ export class OrderComponent implements OnInit {
         });
       }).catch(console.log);
   }
-
-  onInputChange(event: Event) {
-
-  }
 }
