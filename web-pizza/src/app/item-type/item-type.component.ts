@@ -1,6 +1,6 @@
 ///<reference path="../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
 import { Component, Input, OnInit } from '@angular/core';
-import { ItemType } from './item-type';
+import { ItemType } from '../../models/item-type';
 import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 

@@ -11,7 +11,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 export const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'signup', component: SignUpComponent },
+    { path: 'signUp', component: SignUpComponent },
     { path: 'order', component: OrderComponent },
     { path: 'account', component: MyAccountComponent },
     {
