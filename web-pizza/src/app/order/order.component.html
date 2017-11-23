@@ -2,3 +2,16 @@
 <app-pizza *ngFor="let pizza of pizzas" [orderRef]="orderRef" [pizza]="pizza" [itemCats]="itemCats"></app-pizza>
 <button type="button" class="btn btn-primary" (click)="addNewPizza($event)">New Pizza</button>
 <button type="button" class="btn btn-secondary">Load Pizza</button>
+<h4 *ngIf="cost | async; let cost">Subtotal: ${{cost}}</h4>
+<h4 *ngIf="total | async; let total">Total: ${{total}}</h4>
+<fieldset class="form-group">
+  <legend>Order Type</legend>
+  <label class="form-check-label">
+    <input type="radio" class="form-check-input" name="orderType"
+           id="delivery" [checked]="checked" (change)="onInputChange($event)">Delivery
+  </label>
+  <label class="form-check-label">
+    <input type="radio" class="form-check-input" name="orderType"
+           id="pickup" [checked]="checked" (change)="onInputChange($event)">Pickup
+  </label>
+</fieldset>

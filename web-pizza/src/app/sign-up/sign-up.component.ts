@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
-import { User } from '../../models/user';
 import { Error } from '../../models/error';
 
 @Component({
@@ -11,7 +10,8 @@ import { Error } from '../../models/error';
 })
 export class SignUpComponent implements OnInit {
   doneLoading = false;
-  user = new User();
+  email: string;
+  password: string;
   confirmPassword = '';
   error = new Error();
 
@@ -20,24 +20,24 @@ export class SignUpComponent implements OnInit {
   ngOnInit() {
     this.auth.auth.onAuthStateChanged(user => {
       if (user) {
-        this.router.navigateByUrl('myaccount');
+        this.router.navigateByUrl('account').catch(console.log);
       } else {
         this.doneLoading = true;
       }
     });
   }
 
-  signup() {
-    if (this.user.email !== '' && this.user.password !== '' && this.user.email && this.user.password) {
+  signUp() {
+    if (this.email !== '' && this.password !== '' && this.email && this.password) {
       this.doneLoading = false;
-      this.auth.auth.createUserWithEmailAndPassword(this.user.email, this.user.password).then(user => {
-        return this.auth.auth.signInWithEmailAndPassword(this.user.email, this.user.password);
+      this.auth.auth.createUserWithEmailAndPassword(this.email, this.password).then(user => {
+        return this.auth.auth.signInWithEmailAndPassword(this.email, this.password);
       }).catch(error => {
         this.doneLoading = true;
         this.error.show(JSON.stringify(error));
       }).then(user => {
         if (user) {
-          this.router.navigateByUrl('home');
+          this.router.navigateByUrl('home').catch(console.log);
         } else {
           this.doneLoading = true;
           this.error.show('Error signing up.');

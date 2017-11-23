@@ -11,7 +11,7 @@ export class AppComponent {
 
   constructor(private auth: AngularFireAuth) {
     this.auth.auth.onAuthStateChanged(user => {
-      if (user) {
+      if (user && !user.isAnonymous) {
         this.isLoggedIn = true;
       }
     });

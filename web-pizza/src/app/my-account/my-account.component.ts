@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 @Component({
   selector: 'app-my-account',
@@ -9,16 +10,9 @@ import { Router } from '@angular/router';
 })
 export class MyAccountComponent implements OnInit {
 
-  constructor(private auth: AngularFireAuth, private router: Router) { }
+  constructor(private db: AngularFireDatabase, private auth: AngularFireAuth, private router: Router) { }
 
   ngOnInit() {
-    this.auth.auth.onAuthStateChanged(user => {
-      if (user) {
-        // todo get user info
-      } else {
-        // this.router.navigateByUrl('login');
-      }
-    });
   }
 
 }

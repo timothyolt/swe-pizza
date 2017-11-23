@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
-import { User } from '../../models/user';
 import { Error } from '../../models/error';
 
 @Component({
@@ -11,15 +10,16 @@ import { Error } from '../../models/error';
 })
 export class LoginComponent implements OnInit {
   doneLoading = false;
-  user: User = new User();
+  email: string;
+  password: string;
   error = new Error();
 
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
   ngOnInit() {
     this.auth.auth.onAuthStateChanged(user => {
-      if (user) {
-        this.router.navigateByUrl('home');
+      if (user && !user.isAnonymous) {
+        this.router.navigateByUrl('home').catch(console.log);
       } else {
         this.doneLoading = true;
       }
@@ -27,11 +27,11 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (this.user.email !== '' && this.user.password !== '' && this.user.email && this.user.password) {
+    if (this.email !== '' && this.password !== '' && this.email && this.password) {
       this.doneLoading = false;
-      this.auth.auth.signInWithEmailAndPassword(this.user.email, this.user.password).then(user => {
+      this.auth.auth.signInWithEmailAndPassword(this.email, this.password).then(user => {
         if (user) {
-          this.router.navigateByUrl('home');
+          this.router.navigateByUrl('home').catch(console.log);
         } else {
           this.doneLoading = true;
           this.error.show('Incorrect username and password.');
