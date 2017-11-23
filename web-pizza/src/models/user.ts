@@ -1,4 +1,8 @@
+import { Address } from './address';
+
 export class User {
-    email: string;
-    password: string;
+    phone: number;
+    address: Address;
+    activeOrder: string;
+    payMethods: {[medthodId: string]: boolean};
 }

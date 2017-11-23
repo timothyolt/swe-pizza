@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ItemCategory } from '../item-category/item-category';
-import { Pizza } from './pizza';
+import { ItemCategory } from '../../models/item-category';
+import { Pizza } from '../../models/pizza';
 import { AngularFireDatabase} from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 

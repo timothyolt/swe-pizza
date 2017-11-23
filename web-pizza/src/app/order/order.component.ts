@@ -1,7 +1,7 @@
 import { Component, OnInit} from '@angular/core';
-import { ItemCategory } from '../item-category/item-category';
-import { Order } from './order';
-import { Pizza } from '../pizza/pizza';
+import { ItemCategory } from '../../models/item-category';
+import { Order } from '../../models/order';
+import { Pizza } from '../../models/pizza';
 import { AngularFireDatabase} from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
@@ -12,6 +12,8 @@ import { Observable } from 'rxjs/Observable';
 })
 export class OrderComponent implements OnInit {
   orderRef: string;
+  cost: Observable<number>;
+  total: Observable<number>;
   pizzas: Pizza[] = [];
   itemCats: Observable<ItemCategory[]>;
 
@@ -25,9 +27,11 @@ export class OrderComponent implements OnInit {
         const orderId: string = db.database.ref('/orders').push(order).key;
         db.database.ref('/users/development').update({activeOrder: orderId});
         this.orderRef = '/orders/' + orderId;
-        db.database.ref(this.orderRef).update({ id: orderId });
+        db.database.ref(this.orderRef).update({ id: orderId }).catch(console.log);
         this.addNewPizza(null);
       }
+      this.cost = db.object(this.orderRef + '/cost').valueChanges();
+      this.total = db.object(this.orderRef + '/total').valueChanges();
       db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
         if (!this.pizzas) {
           this.pizzas = [];
@@ -43,7 +47,7 @@ export class OrderComponent implements OnInit {
         // this.pizzas.splice(Number(pizza.key), 1);
         console.log('moved');
       });
-    });
+    }).catch(console.log);
     this.itemCats = db.list('/itemCat').valueChanges();
     this.itemCats.subscribe(console.log);
   }
@@ -63,6 +67,6 @@ export class OrderComponent implements OnInit {
           }
           return pizzas;
         });
-      });
+      }).catch(console.log);
   }
 }
