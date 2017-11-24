@@ -25,9 +25,6 @@
       ".read": "true",
       ".write": "auth.admin === true",
       "$itemCat": {
-        "id": {
-          ".validate": "newData.val() === $itemCat"
-        }
       }
     },
     "itemType": {
@@ -37,9 +34,6 @@
       "$itemType": {
         "cat": {
           ".validate": "root.child('itemCat/' + newData.val()).exists()"
-        },
-        "id": {
-          ".validate": "newData.val() === $itemType"
         }
       }
     },
@@ -47,9 +41,6 @@
       "$order": {
         ".read": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
         ".write": "auth !== null && (!data.exists() || auth.admin === true || data.child('user').val() === auth.uid)",
-        "id": {
-          ".validate": "newData.val() === $order"
-        },
         "user": {
           ".validate": "root.child('users/' + newData.val()).exists()"
         },
