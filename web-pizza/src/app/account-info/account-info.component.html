@@ -10,7 +10,7 @@
       </div>
       <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
         <div class="card-body">
-          <div class="form-group">
+          <div class="form-group" style="display: none">
             <label for="emailInput">Email address</label>
             <input type="email" class="form-control" id="emailInput" placeholder="Enter email" email
                    [ngModel]="(auth.authState | async)?.email" (input)="email = $event.target.value">
