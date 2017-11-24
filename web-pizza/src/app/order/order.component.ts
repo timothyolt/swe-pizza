@@ -4,6 +4,7 @@ import { Order } from '../../models/order';
 import { Pizza } from '../../models/pizza';
 import { AngularFireDatabase} from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-order',
@@ -17,22 +18,36 @@ export class OrderComponent implements OnInit {
   pizzas: Pizza[] = [];
   itemCats: Observable<ItemCategory[]>;
 
-  constructor(private db: AngularFireDatabase) {
-    db.database.ref('/users/development').once('value', user => {
+  constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) {
+    if (this.auth.auth.currentUser) {
+      console.log('using user for order: ' + this.auth.auth.currentUser.uid);
+      this.setupOrder(this.auth.auth.currentUser.uid);
+    } else {
+      console.log('creating anonymous user for order');
+      this.auth.auth.signInAnonymously().catch(console.log).then(() => {
+        console.log('using anonymous user for order: ' + this.auth.auth.currentUser.uid);
+        this.setupOrder(this.auth.auth.currentUser.uid);
+      });
+    }
+  }
+
+  private setupOrder(userId: string) {
+    this.db.database.ref('/users/' + userId).once('value', user => {
       if (user.exists() && user.val().activeOrder) {
         this.orderRef = '/orders/' + user.val().activeOrder;
       } else {
         const order = new Order();
         order.createdAtDate = new Date();
-        const orderId: string = db.database.ref('/orders').push(order).key;
-        db.database.ref('/users/development').update({activeOrder: orderId});
+        order.user = userId;
+        const orderId: string = this.db.database.ref('/orders').push(order).key;
+        this.db.database.ref('/users/' + userId).update({activeOrder: orderId});
         this.orderRef = '/orders/' + orderId;
-        db.database.ref(this.orderRef).update({ id: orderId }).catch(console.log);
+        this.db.database.ref(this.orderRef).update({ id: orderId }).catch(console.log);
         this.addNewPizza(null);
       }
-      this.cost = db.object(this.orderRef + '/cost').valueChanges();
-      this.total = db.object(this.orderRef + '/total').valueChanges();
-      db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
+      this.cost = this.db.object(this.orderRef + '/cost').valueChanges();
+      this.total = this.db.object(this.orderRef + '/total').valueChanges();
+      this.db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
         if (!this.pizzas) {
           this.pizzas = [];
         }
@@ -40,15 +55,15 @@ export class OrderComponent implements OnInit {
         pizzaVal['$key'] = pizza.key;
         this.pizzas.splice(Number(pizza.key), 0, pizzaVal);
       });
-      db.database.ref(this.orderRef + '/pizzas').on('child_removed', pizza => {
+      this.db.database.ref(this.orderRef + '/pizzas').on('child_removed', pizza => {
         this.pizzas.splice(Number(pizza.key), 1);
       });
-      db.database.ref(this.orderRef + '/pizzas').on('child_moved', pizza => {
+      this.db.database.ref(this.orderRef + '/pizzas').on('child_moved', pizza => {
         // this.pizzas.splice(Number(pizza.key), 1);
         console.log('moved');
       });
     }).catch(console.log);
-    this.itemCats = db.list('/itemCat').valueChanges();
+    this.itemCats = this.db.list('/itemCat').valueChanges();
     this.itemCats.subscribe(console.log);
   }
 
