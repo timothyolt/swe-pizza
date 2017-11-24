@@ -6,14 +6,14 @@ export class Order {
   createdAt: string;
   user: string;
   set createdAtDate(date: Date) {
-    this.createdAt = new DatePipe('en-US').transform(date, 'YYYY-MM-ddTHH:mm:ss');
+    this.createdAt = new DatePipe('en-US').transform(date, 'yyyy-MM-ddTHH:mm:ss');
   }
   get createdAtDate() {
     return new Date(this.createdAt);
   }
   paidAt: string;
   set paidAtDate(date: Date) {
-    this.paidAt = new DatePipe('en-US').transform(date, 'YYYY-MM-ddTHH:mm:ss');
+    this.paidAt = new DatePipe('en-US').transform(date, 'yyyy-MM-ddTHH:mm:ss');
   }
   get paidAtDate() {
     return new Date(this.paidAt);
