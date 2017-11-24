@@ -20,6 +20,7 @@
     "itemType": {
       ".read": "true",
       ".write": "auth.admin === true",
+      ".indexOn": ["cat"],
       "$itemType": {
         ".indexOn": ["cat"],
         "cat": {
