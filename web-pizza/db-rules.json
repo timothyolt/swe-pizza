@@ -1,0 +1,78 @@
+{
+  "rules": {
+    "defaultPizza": {
+      ".read": "true",
+      ".write": "auth.admin === true"
+    },
+    "globals": {
+      ".read": "true",
+      ".write": "auth.admin === true"
+    },
+    "itemCat": {
+      ".read": "true",
+      ".write": "auth.admin === true",
+      "$itemCat": {
+        "id": {
+          ".validate": "newData.val() === $itemCat"
+        }
+      }
+    },
+    "itemType": {
+      ".read": "true",
+      ".write": "auth.admin === true",
+      "$itemType": {
+        ".indexOn": ["cat"],
+        "cat": {
+          ".validate": "root.child('itemCat/' + newData.val()).exists()"
+        },
+        "id": {
+          ".validate": "newData.val() === $itemType"
+        }
+      }
+    },
+    "orders": {
+      "$order": {
+        ".read": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
+        ".write": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
+        "id": {
+          ".validate": "newData.val() === $order"
+        },
+        "user": {
+          ".validate": "root.child('users/' + newData.val()).exists()"
+        },
+        "pizzas": {
+          "$pizza": {
+            "$itemCat": {
+              "$itemType": {
+                // itemCategory object keys are valid itemTypes
+                ".validate": "root.child('itemType/' + $itemType).exists()"
+              },
+              // keys are valid itemCategories, other than name and cost
+              // exclusive itemCategories has a string value that is a valid itemType
+              // inclusive itemCategories have an object value
+              ".validate": "$itemCat === 'cost' || $itemCat === 'name' ||
+              (root.child('itemCat/' + $itemCat).exists() && (
+              (newData.isString() && root.child('itemCat/' + $itemCat + '/exclusive').val() === true && root.child('itemType/' + newData.val()).exists()) ||
+              (!newData.isString() && root.child('itemCat/' + $itemCat + '/exclusive').val() !== true)))"
+            }
+          }
+        }
+      }
+    },
+    "payMethods": {
+      "$payMethod": {
+        ".read": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
+        ".write": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)"
+      }
+    },
+    "users": {
+      "$user": {
+        ".read": "$user === auth.uid || auth.admin === true",
+        ".write": "$user === auth.uid || auth.admin === true",
+        "activeOrder": {
+          ".validate": "root.child('orders/' + newData.val()).exists()"
+        }
+      }
+    }
+  }
+}
