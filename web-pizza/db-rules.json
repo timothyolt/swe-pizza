@@ -33,7 +33,7 @@
     "orders": {
       "$order": {
         ".read": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
-        ".write": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
+        ".write": "auth !== null && (!data.exists() || auth.admin === true || data.child('user').val() === auth.uid)",
         "id": {
           ".validate": "newData.val() === $order"
         },
@@ -62,7 +62,7 @@
     "payMethods": {
       "$payMethod": {
         ".read": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
-        ".write": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)"
+        ".write": "auth !== null && (!data.exists() || auth.admin === true || data.child('user').val() === auth.uid)"
       }
     },
     "users": {
