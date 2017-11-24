@@ -18,16 +18,15 @@ export class OrderComponent implements OnInit {
   itemCats: Observable<SnapshotAction[]>;
 
   constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) {
-    if (this.auth.auth.currentUser) {
-      console.log('using user for order: ' + this.auth.auth.currentUser.uid);
-      this.setupOrder(this.auth.auth.currentUser.uid);
-    } else {
-      console.log('creating anonymous user for order');
-      this.auth.auth.signInAnonymously().catch(console.log).then(() => {
-        console.log('using anonymous user for order: ' + this.auth.auth.currentUser.uid);
-        this.setupOrder(this.auth.auth.currentUser.uid);
-      });
-    }
+    this.auth.authState.subscribe(user => {
+      if (user) {
+        console.log('using user for order: ' + user.uid);
+        this.setupOrder(user.uid);
+      } else {
+        console.log('creating anonymous user for order');
+        this.auth.auth.signInAnonymously().catch(console.log);
+      }
+    });
   }
 
   private setupOrder(userId: string) {
@@ -38,10 +37,10 @@ export class OrderComponent implements OnInit {
         const order = new Order();
         order.createdAtDate = new Date();
         order.user = userId;
-        const orderId: string = this.db.database.ref('/orders').push(order).key;
-        this.db.database.ref('/users/' + userId).update({activeOrder: orderId});
+        const orderId = this.db.database.ref('/orders').push(order).key;
+        this.db.database.ref('/users/' + userId).update({activeOrder: orderId}).catch(console.log);
         this.orderRef = '/orders/' + orderId;
-        this.addNewPizza(null);
+        this.addNewPizza();
       }
       this.cost = this.db.object(this.orderRef + '/cost').valueChanges();
       this.total = this.db.object(this.orderRef + '/total').valueChanges();
@@ -64,7 +63,7 @@ export class OrderComponent implements OnInit {
   ngOnInit() {
   }
 
-  addNewPizza(e) {
+  addNewPizza() {
     this.db.database.ref('/defaultPizza').once(
       'value',
       defaultPizza => {
