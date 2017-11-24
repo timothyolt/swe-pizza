@@ -4,6 +4,7 @@ export class Order {
   id: string;
   pizzas: Pizza[];
   createdAt: string;
+  user: string;
   set createdAtDate(date: Date) {
     this.createdAt =
       `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}` +
