@@ -1,8 +1,7 @@
 import { Component, OnInit} from '@angular/core';
-import { ItemCategory } from '../../models/item-category';
 import { Order } from '../../models/order';
 import { Pizza } from '../../models/pizza';
-import { AngularFireDatabase} from 'angularfire2/database';
+import { AngularFireDatabase, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
 
@@ -16,7 +15,7 @@ export class OrderComponent implements OnInit {
   cost: Observable<number>;
   total: Observable<number>;
   pizzas: Pizza[] = [];
-  itemCats: Observable<ItemCategory[]>;
+  itemCats: Observable<SnapshotAction[]>;
 
   constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) {
     if (this.auth.auth.currentUser) {
@@ -42,7 +41,6 @@ export class OrderComponent implements OnInit {
         const orderId: string = this.db.database.ref('/orders').push(order).key;
         this.db.database.ref('/users/' + userId).update({activeOrder: orderId});
         this.orderRef = '/orders/' + orderId;
-        this.db.database.ref(this.orderRef).update({ id: orderId }).catch(console.log);
         this.addNewPizza(null);
       }
       this.cost = this.db.object(this.orderRef + '/cost').valueChanges();
@@ -58,12 +56,8 @@ export class OrderComponent implements OnInit {
       this.db.database.ref(this.orderRef + '/pizzas').on('child_removed', pizza => {
         this.pizzas.splice(Number(pizza.key), 1);
       });
-      this.db.database.ref(this.orderRef + '/pizzas').on('child_moved', pizza => {
-        // this.pizzas.splice(Number(pizza.key), 1);
-        console.log('moved');
-      });
     }).catch(console.log);
-    this.itemCats = this.db.list('/itemCat').valueChanges();
+    this.itemCats = this.db.list('/itemCat').snapshotChanges();
     this.itemCats.subscribe(console.log);
   }
 
@@ -81,7 +75,7 @@ export class OrderComponent implements OnInit {
             pizzas = [defaultPizza.val()];
           }
           return pizzas;
-        });
+        }).catch(console.log);
       }).catch(console.log);
   }
 }

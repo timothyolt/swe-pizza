@@ -1,8 +1,8 @@
 <form class="form-inline" style="text-align: left;">
   <fieldset class="form-group">
     <legend>{{itemCat.name}}</legend>
-    <app-item-type *ngFor="let itemType of itemTypes | async" [itemType]="itemType"
+    <app-item-type *ngFor="let itemTypeSnapshot of itemTypeSnapshots | async" [itemTypeSnapshot]="itemTypeSnapshot"
                    [exclusive]="itemCat.exclusive"
-                   [inputRef]="itemCat.exclusive ? (pizzaRef + '/' + itemCat.id) : (pizzaRef + '/' + itemCat.id + '/' + itemType.id)"></app-item-type>
+                   [inputRef]="itemCat.exclusive ? (pizzaRef + '/' + itemCatSnapshot.key) : (pizzaRef + '/' + itemCatSnapshot.key + '/' + itemTypeSnapshot.key)"></app-item-type>
   </fieldset>
 </form>

@@ -1,7 +1,6 @@
 import { Pizza } from './pizza';
 
 export class Order {
-  id: string;
   pizzas: Pizza[];
   createdAt: string;
   user: string;

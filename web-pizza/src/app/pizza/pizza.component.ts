@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ItemCategory } from '../../models/item-category';
 import { Pizza } from '../../models/pizza';
-import { AngularFireDatabase} from 'angularfire2/database';
+import { AngularFireDatabase, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class PizzaComponent implements OnInit {
   @Input() pizza: Pizza;
-  @Input() itemCats: Observable<ItemCategory[]>;
+  @Input() itemCatSnapshots: Observable<SnapshotAction[]>;
 
   constructor(private db: AngularFireDatabase) {
   }

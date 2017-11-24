@@ -1,5 +1,5 @@
 <h3>Order</h3>
-<app-pizza *ngFor="let pizza of pizzas" [orderRef]="orderRef" [pizza]="pizza" [itemCats]="itemCats"></app-pizza>
+<app-pizza *ngFor="let pizza of pizzas" [orderRef]="orderRef" [pizza]="pizza" [itemCatSnapshots]="itemCats"></app-pizza>
 <button type="button" class="btn btn-primary" (click)="addNewPizza($event)">New Pizza</button>
 <button type="button" class="btn btn-secondary">Load Pizza</button>
 <h4 *ngIf="cost | async; let cost">Subtotal: ${{cost}}</h4>
