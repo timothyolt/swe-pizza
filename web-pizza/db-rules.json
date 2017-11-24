@@ -22,7 +22,6 @@
       ".write": "auth.admin === true",
       ".indexOn": ["cat"],
       "$itemType": {
-        ".indexOn": ["cat"],
         "cat": {
           ".validate": "root.child('itemCat/' + newData.val()).exists()"
         },
