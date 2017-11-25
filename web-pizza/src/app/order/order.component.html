@@ -1,17 +1,20 @@
-<h3>Order</h3>
-<app-pizza *ngFor="let pizza of pizzas" [orderRef]="orderRef" [pizza]="pizza" [itemCatSnapshots]="itemCats"></app-pizza>
-<button type="button" class="btn btn-primary" (click)="addNewPizza()">New Pizza</button>
-<button type="button" class="btn btn-secondary">Load Pizza</button>
-<h4 *ngIf="cost | async; let cost">Subtotal: ${{cost}}</h4>
-<h4 *ngIf="total | async; let total">Total: ${{total}}</h4>
-<fieldset class="form-group">
-  <legend>Order Type</legend>
-  <label class="form-check-label">
-    <input type="radio" class="form-check-input" name="orderType"
-           id="delivery">Delivery
-  </label>
-  <label class="form-check-label">
-    <input type="radio" class="form-check-input" name="orderType"
-           id="pickup">Pickup
-  </label>
-</fieldset>
+<accordion closeOthers="true">
+  <accordion-group heading="Order" [(isOpen)]="isOrderOpen">
+    <app-pizza *ngFor="let pizza of pizzas" [orderRef]="orderRef" [pizza]="pizza" [itemCatSnapshots]="itemCats"></app-pizza>
+    <button type="button" class="btn btn-primary" (click)="addNewPizza()">New Pizza</button>
+    <button type="button" class="btn btn-secondary">Load Pizza</button>
+    <h4 *ngIf="cost | async; let cost">
+      Subtotal: ${{cost}}
+    </h4>
+    <h4 *ngIf="total | async; let total">
+      Total: ${{total}}
+    </h4>
+    <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isDeliveryOpen = true">Next</button>
+  </accordion-group>
+  <accordion-group heading="Delivery" [(isOpen)]="isDeliveryOpen">
+    <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true">Next</button>
+  </accordion-group>
+  <accordion-group heading="Payment" [(isOpen)]="isPaymentOpen">
+    <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;">Finish</button>
+  </accordion-group>
+</accordion>

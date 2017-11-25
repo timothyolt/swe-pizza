@@ -1,87 +1,65 @@
 <div style="margin: 16px 0;">
-  <div id="accordion" role="tablist">
-    <div class="card">
-      <div class="card-header" role="tab" id="headingOne">
-        <h5 class="mb-0">
-          <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            Edit account info
-          </a>
-        </h5>
+  <accordion closeOthers="true">
+    <accordion-group heading="Edit account info" >
+      <div class="form-group" style="display: none">
+        <label for="emailInput">Email address</label>
+        <input type="email" class="form-control" id="emailInput" placeholder="Enter email" email
+               [ngModel]="(auth.authState | async)?.email" (input)="email = $event.target.value">
       </div>
-      <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
-        <div class="card-body">
-          <div class="form-group" style="display: none">
-            <label for="emailInput">Email address</label>
-            <input type="email" class="form-control" id="emailInput" placeholder="Enter email" email
-                   [ngModel]="(auth.authState | async)?.email" (input)="email = $event.target.value">
-          </div>
-          <div class="form-group">
-            <label for="addressInput">Street address</label>
-            <input type="text" class="form-control" id="addressInput" placeholder="Enter street address"
-                   [ngModel]="(user | async)?.address?.line1"
-                   (input)="userPartial['address/line1'] = $event.target.value">
-          </div>
-          <div class="form-group split-33">
-            <label for="cityInput">City</label>
-            <input type="text" class="form-control" id="cityInput" placeholder="Enter city"
-                   [ngModel]="(user | async)?.address?.city"
-                   (input)="userPartial['address/city'] = $event.target.value">
-          </div>
-          <div class="form-group split-33">
-            <label for="stateInput">State</label>
-            <input type="text" class="form-control" id="stateInput" placeholder="Enter state"
-                   [ngModel]="(user | async)?.address?.state"
-                   (input)="userPartial['address/state'] = $event.target.value">
-          </div>
-          <div class="form-group split-33">
-            <label for="zipInput">Zip code</label>
-            <input type="number" class="form-control" id="zipInput" placeholder="Enter zip code"
-                   [ngModel]="(user | async)?.address?.zip" (input)="userPartial['address/zip'] = $event.target.value">
-          </div>
-          <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="saveAccountInfo()">Save
-          </button>
-        </div>
+      <div class="form-group">
+        <label for="addressInput">Street address</label>
+        <input type="text" class="form-control" id="addressInput" placeholder="Enter street address"
+               [ngModel]="(user | async)?.address?.line1"
+               (input)="userPartial['address/line1'] = $event.target.value">
       </div>
-    </div>
-    <div class="card">
-      <div class="card-header" role="tab" id="headingTwo">
-        <h5 class="mb-0">
-          <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            Edit payment info
-          </a>
-        </h5>
+      <div class="form-group split-33">
+        <label for="cityInput">City</label>
+        <input type="text" class="form-control" id="cityInput" placeholder="Enter city"
+               [ngModel]="(user | async)?.address?.city"
+               (input)="userPartial['address/city'] = $event.target.value">
       </div>
-      <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
-        <div class="card-body">
-          <div class="form-group">
-            <label for="fullNameInput">Full name</label>
-            <input type="text" class="form-control" id="fullNameInput" placeholder="Enter full name on card"
-                   [ngModel]="(payment | async)?.name"
-                   (input)="paymentPartial['name'] = $event.target.value">
-          </div>
-          <div class="form-group">
-            <label for="ccNumberInput">Credit card number</label>
-            <input type="number" class="form-control" id="ccNumberInput" placeholder="Enter credit card number"
-                   [ngModel]="(payment | async)?.number?.card"
-                   (input)="paymentPartial['number/card'] = $event.target.value">
-          </div>
-          <div class="form-group split-50">
-            <label for="expDateInput">Expiration date</label>
-            <input type="number" class="form-control" id="expDateInput" placeholder="Enter expiration date"
-                   [ngModel]="(payment | async)?.number?.expiration"
-                   (input)="paymentPartial['number/expiration'] = $event.target.value">
-          </div>
-          <div class="form-group split-50">
-            <label for="cvcInput">CVC</label>
-            <input type="number" class="form-control" id="cvcInput" placeholder="Enter CVC"
-                   [ngModel]="(payment | async)?.number?.cvc"
-                   (input)="paymentPartial['number/cvc'] = $event.target.value">
-          </div>
-          <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;"
-                  (click)="savePaymentInfo()">Save
-          </button>
-        </div>
+      <div class="form-group split-33">
+        <label for="stateInput">State</label>
+        <input type="text" class="form-control" id="stateInput" placeholder="Enter state"
+               [ngModel]="(user | async)?.address?.state"
+               (input)="userPartial['address/state'] = $event.target.value">
       </div>
-    </div>
-  </div>
+      <div class="form-group split-33">
+        <label for="zipInput">Zip code</label>
+        <input type="number" class="form-control" id="zipInput" placeholder="Enter zip code"
+               [ngModel]="(user | async)?.address?.zip" (input)="userPartial['address/zip'] = $event.target.value">
+      </div>
+      <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="saveAccountInfo()">Save
+      </button>
+    </accordion-group>
+    <accordion-group heading="">
+      <div class="form-group">
+        <label for="fullNameInput">Full name</label>
+        <input type="text" class="form-control" id="fullNameInput" placeholder="Enter full name on card"
+               [ngModel]="(payment | async)?.name"
+               (input)="paymentPartial['name'] = $event.target.value">
+      </div>
+      <div class="form-group">
+        <label for="ccNumberInput">Credit card number</label>
+        <input type="number" class="form-control" id="ccNumberInput" placeholder="Enter credit card number"
+               [ngModel]="(payment | async)?.number?.card"
+               (input)="paymentPartial['number/card'] = $event.target.value">
+      </div>
+      <div class="form-group split-50">
+        <label for="expDateInput">Expiration date</label>
+        <input type="number" class="form-control" id="expDateInput" placeholder="Enter expiration date"
+               [ngModel]="(payment | async)?.number?.expiration"
+               (input)="paymentPartial['number/expiration'] = $event.target.value">
+      </div>
+      <div class="form-group split-50">
+        <label for="cvcInput">CVC</label>
+        <input type="number" class="form-control" id="cvcInput" placeholder="Enter CVC"
+               [ngModel]="(payment | async)?.number?.cvc"
+               (input)="paymentPartial['number/cvc'] = $event.target.value">
+      </div>
+      <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;"
+              (click)="savePaymentInfo()">Save
+      </button>
+    </accordion-group>
+  </accordion>
 </div>
