@@ -19,7 +19,7 @@ import { MyAccountComponent } from './my-account/my-account.component';
 import { PastOrdersComponent } from './past-orders/past-orders.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { AccordionModule, TypeaheadModule } from 'ngx-bootstrap';
+import { AccordionModule, ButtonsModule, TypeaheadModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -41,6 +41,7 @@ import { AccordionModule, TypeaheadModule } from 'ngx-bootstrap';
     FormsModule,
     AccordionModule.forRoot(),
     TypeaheadModule.forRoot(),
+    ButtonsModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase, 'swe-pizza'), // imports firebase/app needed for everything
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features

@@ -13,50 +13,46 @@
   </accordion-group>
   <accordion-group heading="Delivery" [(isOpen)]="isDeliveryOpen" (isOpenChange)="resetAddressValidated()">
     <form class="container" id="delivery-form" novalidate>
+      <legend>Order Type</legend>
       <fieldset class="form-group">
-        <legend>Order Type</legend>
-        <label class="form-check-label">
-          <input type="radio" class="form-check-input" name="orderType" id="delivery" required
-                 [checked]="isDelivery | async"
-                 (change)="saveIsDelivery($event.target.checked)">
-          Delivery
-        </label>
-        <label class="form-check-label">
-          <input type="radio" class="form-check-input" name="orderType" id="pickup" required
-                 [checked]="!(isDelivery | async)"
-                 (change)="saveIsDelivery(!$event.target.checked)">
-          Pickup
-        </label>
+        <div class="btn-group">
+          <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+                 [class.active]="isDelivery | async"
+                 (click)="saveIsDelivery(true)">Delivery</label>
+          <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+                 [class.active]="!(isDelivery | async)"
+                 (click)="saveIsDelivery(false)">Pickup</label>
+        </div>
       </fieldset>
       <div class="form-group">
         <label for="addressInput">Street address</label>
-        <div [class.was-validated]="addressValidated">
+        <div [class.was-validated]="(isDelivery | async) && addressValidated">
           <input type="text" class="form-control" id="addressInput" placeholder="Enter street address" name="address"
                  required maxlength="240"
-                 [class.is-valid]="addressValidated && addressValid"
-                 [class.is-invalid]="addressValidated && !addressValid"
+                 [class.is-valid]="(isDelivery | async) && addressValidated && addressValid"
+                 [class.is-invalid]="(isDelivery | async) && addressValidated && !addressValid"
                  [disabled]="!(isDelivery | async)"
                  [ngModel]="(address | async)?.line1"
                  (input)="onInputAddress($event.target.value)"
                  (blur)="onInputAddress($event.target.value, true); saveAddress()">
         </div>
-        <div [class.was-validated]="apartmentValidated">
+        <div [class.was-validated]="(isDelivery | async) && apartmentValidated">
           <input type="text" class="form-control" id="address2Input" placeholder="Enter apartment number"
                  name="apartment" maxlength="240"
-                 [class.is-valid]="apartmentValidated && apartmentValid"
-                 [class.is-invalid]="apartmentValidated && !apartmentValid"
+                 [class.is-valid]="(isDelivery | async) && apartmentValidated && apartmentValid"
+                 [class.is-invalid]="(isDelivery | async) && apartmentValidated && !apartmentValid"
                  [disabled]="!(isDelivery | async)"
                  [ngModel]="(address | async)?.line2"
                  (input)="onInputApartment($event.target.value)"
                  (blur)="onInputApartment($event.target.value, true); saveAddress()">
         </div>
       </div>
-      <div class="form-group split-33" [class.was-validated]="cityValidated">
+      <div class="form-group split-33" [class.was-validated]="(isDelivery | async) && cityValidated">
         <label for="cityInput">City</label>
         <input type="text" class="form-control" id="cityInput" placeholder="Enter city" name="city"
                required maxlength="240"
-               [class.is-valid]="cityValidated && cityValid"
-               [class.is-invalid]="cityValidated && !cityValid"
+               [class.is-valid]="(isDelivery | async) && cityValidated && cityValid"
+               [class.is-invalid]="(isDelivery | async) && cityValidated && !cityValid"
                [disabled]="!(isDelivery | async)"
                [ngModel]="(address | async)?.city"
                (input)="onInputCity($event.target.value)"
@@ -65,13 +61,13 @@
           Please provide a valid city.
         </div>
       </div>
-      <div class="form-group split-33">
+      <div class="form-group split-33" [class.was-validated]="(isDelivery | async) && stateValidated">
         <label for="stateInput">State</label>
         <input type="text" class="form-control" id="stateInput" placeholder="Enter state" name="state"
                required minlength="2" maxlength="2"
                [typeahead]="states"
-               [class.is-valid]="stateValidated && stateValid"
-               [class.is-invalid]="stateValidated && !stateValid"
+               [class.is-valid]="isDelivery && stateValidated && stateValid"
+               [class.is-invalid]="isDelivery && stateValidated && !stateValid"
                [disabled]="!(isDelivery | async)"
                [ngModel]="(address | async)?.state"
                (input)="onInputState($event.target.value)"
@@ -80,7 +76,7 @@
           Please provide a valid state.
         </div>
       </div>
-      <div class="form-group split-33" [class.was-validated]="zipValidated">
+      <div class="form-group split-33" [class.was-validated]="(isDelivery | async) && zipValidated">
         <label for="zipInput">Zip code</label>
         <input class="form-control" id="zipInput" placeholder="Enter zip code" name="zip"
                required type="number"
@@ -89,10 +85,13 @@
                (input)="onInputZip($event.target.value)"
                (blur)="onInputZip($event.target.value, true); saveAddress()">
       </div>
-      <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true">Next</button>
+      <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true"
+              [disabled]="(isDelivery | async) && !(addressValid && apartmentValid && cityValid && stateValid && zipValid)">Next
+      </button>
     </form>
   </accordion-group>
-  <accordion-group heading="Payment" [(isOpen)]="isPaymentOpen">
+  <accordion-group heading="Payment" [(isOpen)]="isPaymentOpen"
+                   [isDisabled]="(isDelivery | async) && !(addressValid && apartmentValid && cityValid && stateValid && zipValid)">
     <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;">Finish</button>
   </accordion-group>
 </accordion>
