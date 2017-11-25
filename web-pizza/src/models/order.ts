@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { Address } from './address';
 
 export class Order {
+  address: Address;
   pizzas: Pizza[];
   createdAt: string;
   user: string;

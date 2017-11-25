@@ -1,9 +1,10 @@
 import { Component, OnInit} from '@angular/core';
 import { Order } from '../../models/order';
 import { Pizza } from '../../models/pizza';
-import { AngularFireDatabase, SnapshotAction } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { Address } from '../../models/address';
 
 @Component({
   selector: 'app-order',
@@ -11,20 +12,20 @@ import { AngularFireAuth } from 'angularfire2/auth';
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit {
+  isOrderOpen = true;
+  isDeliveryOpen = false;
+  isPaymentOpen = false;
+
   orderRef: string;
   cost: Observable<number>;
   total: Observable<number>;
   pizzas: Pizza[] = [];
   itemCats: Observable<SnapshotAction[]>;
 
-  isOrderOpen = true;
-  isDeliveryOpen = false;
-  isPaymentOpen = false;
-
   isDelivery: Observable<boolean>;
-  setIsDelivery(isDelivery: boolean) {
-    this.db.database.ref(this.orderRef).update({delivery: isDelivery}).catch(console.log);
-  }
+  addressRef: AngularFireObject<Address>;
+  address: Observable<Address>;
+  addressPartial: any = {};
 
   constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) {
     this.auth.authState.subscribe(user => {
@@ -56,6 +57,8 @@ export class OrderComponent implements OnInit {
       this.cost = this.db.object(this.orderRef + '/cost').valueChanges();
       this.total = this.db.object(this.orderRef + '/total').valueChanges();
       this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges();
+      this.addressRef = this.db.object(this.orderRef + '/address');
+      this.address = this.addressRef.valueChanges();
       this.db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
         if (!this.pizzas) {
           this.pizzas = [];
@@ -70,6 +73,20 @@ export class OrderComponent implements OnInit {
     }).catch(console.log);
     this.itemCats = this.db.list('/itemCat').snapshotChanges();
     this.itemCats.subscribe(console.log);
+  }
+
+  saveIsDelivery(isDelivery: boolean) {
+    this.db.database.ref(this.orderRef).update({delivery: isDelivery}).catch(console.log);
+  }
+
+  // noinspection JSMethodCanBeStatic
+  parseInt(val: string): number {
+    return Number(val);
+  }
+
+  saveAddress() {
+    this.addressRef.query.ref.update(this.addressPartial).catch(console.log);
+    this.addressPartial = {};
   }
 
   ngOnInit() {
