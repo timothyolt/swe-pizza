@@ -17,6 +17,15 @@ export class OrderComponent implements OnInit {
   pizzas: Pizza[] = [];
   itemCats: Observable<SnapshotAction[]>;
 
+  isOrderOpen = true;
+  isDeliveryOpen = false;
+  isPaymentOpen = false;
+
+  isDelivery: Observable<boolean>;
+  setIsDelivery(isDelivery: boolean) {
+    this.db.database.ref(this.orderRef).update({delivery: isDelivery}).catch(console.log);
+  }
+
   constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) {
     this.auth.authState.subscribe(user => {
       if (user) {
@@ -34,9 +43,11 @@ export class OrderComponent implements OnInit {
       if (user.exists() && user.val().activeOrder) {
         this.orderRef = '/orders/' + user.val().activeOrder;
       } else {
-        const order = new Order();
-        order.createdAtDate = new Date();
-        order.user = userId;
+        const order: Partial<Order> = {
+          createdAtDate: new Date(),
+          user: userId,
+          delivery: true
+        };
         const orderId = this.db.database.ref('/orders').push(order).key;
         this.db.database.ref('/users/' + userId).update({activeOrder: orderId}).catch(console.log);
         this.orderRef = '/orders/' + orderId;
@@ -44,6 +55,7 @@ export class OrderComponent implements OnInit {
       }
       this.cost = this.db.object(this.orderRef + '/cost').valueChanges();
       this.total = this.db.object(this.orderRef + '/total').valueChanges();
+      this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges();
       this.db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
         if (!this.pizzas) {
           this.pizzas = [];

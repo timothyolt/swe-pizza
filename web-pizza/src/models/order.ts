@@ -1,5 +1,6 @@
 import { Pizza } from './pizza';
 import { DatePipe } from '@angular/common';
+import { Address } from './address';
 
 export class Order {
   pizzas: Pizza[];
@@ -19,6 +20,6 @@ export class Order {
     return new Date(this.paidAt);
   }
   total: number;
-  type: string; // delivery or pickup
+  delivery: boolean;
   payMethods: {[medthodId: string]: number};
 }

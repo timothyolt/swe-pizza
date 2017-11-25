@@ -12,6 +12,41 @@
     <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isDeliveryOpen = true">Next</button>
   </accordion-group>
   <accordion-group heading="Delivery" [(isOpen)]="isDeliveryOpen">
+    <fieldset class="form-group">
+      <legend>Order Type</legend>
+      <label class="form-check-label">
+        <input type="radio" class="form-check-input" name="orderType" id="delivery"
+               [checked]="isDelivery | async"
+               (change)="setIsDelivery($event.target.checked)">
+        Delivery
+      </label>
+      <label class="form-check-label">
+        <input type="radio" class="form-check-input" name="orderType" id="pickup"
+               [checked]="!(isDelivery | async)"
+               (change)="setIsDelivery(!$event.target.checked)">
+        Pickup
+      </label>
+    </fieldset>
+    <div class="form-group">
+      <label for="addressInput">Street address</label>
+      <input type="text" class="form-control" id="addressInput" placeholder="Enter street address"
+             [disabled]="!(isDelivery | async)">
+    </div>
+    <div class="form-group split-33">
+      <label for="cityInput">City</label>
+      <input type="text" class="form-control" id="cityInput" placeholder="Enter city"
+             [disabled]="!(isDelivery | async)">
+    </div>
+    <div class="form-group split-33">
+      <label for="stateInput">State</label>
+      <input type="text" class="form-control" id="stateInput" placeholder="Enter state"
+             [disabled]="!(isDelivery | async)">
+    </div>
+    <div class="form-group split-33">
+      <label for="zipInput">Zip code</label>
+      <input type="number" class="form-control" id="zipInput" placeholder="Enter zip code"
+             [disabled]="!(isDelivery | async)">
+    </div>
     <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true">Next</button>
   </accordion-group>
   <accordion-group heading="Payment" [(isOpen)]="isPaymentOpen">
