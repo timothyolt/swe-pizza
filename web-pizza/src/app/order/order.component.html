@@ -11,60 +11,86 @@
     </h4>
     <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isDeliveryOpen = true">Next</button>
   </accordion-group>
-  <accordion-group heading="Delivery" [(isOpen)]="isDeliveryOpen">
-    <fieldset class="form-group">
-      <legend>Order Type</legend>
-      <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="orderType" id="delivery"
-               [checked]="isDelivery | async"
-               (change)="saveIsDelivery($event.target.checked)">
-        Delivery
-      </label>
-      <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="orderType" id="pickup"
-               [checked]="!(isDelivery | async)"
-               (change)="saveIsDelivery(!$event.target.checked)">
-        Pickup
-      </label>
-    </fieldset>
-    <div class="form-group">
-      <label for="addressInput">Street address</label>
-      <input type="text" class="form-control" id="addressInput" placeholder="Enter street address"
-             [disabled]="!(isDelivery | async)"
-             [ngModel]="(address | async)?.line1"
-             (input)="addressPartial.line1 = $event.target.value"
-             (blur)="saveAddress()">
-      <input type="text" class="form-control" id="address2Input" placeholder="Enter apartment number"
-             [disabled]="!(isDelivery | async)"
-             [ngModel]="(address | async)?.line2"
-             (input)="addressPartial.line2 = $event.target.value"
-             (blur)="saveAddress()">
-    </div>
-    <div class="form-group split-33">
-      <label for="cityInput">City</label>
-      <input type="text" class="form-control" id="cityInput" placeholder="Enter city"
-             [disabled]="!(isDelivery | async)"
-             [ngModel]="(address | async)?.city"
-             (input)="addressPartial.city = $event.target.value"
-             (blur)="saveAddress()">
-    </div>
-    <div class="form-group split-33">
-      <label for="stateInput">State</label>
-      <input type="text" class="form-control" id="stateInput" placeholder="Enter state"
-             [disabled]="!(isDelivery | async)"
-             [ngModel]="(address | async)?.state"
-             (input)="addressPartial.state = $event.target.value"
-             (blur)="saveAddress()">
-    </div>
-    <div class="form-group split-33">
-      <label for="zipInput">Zip code</label>
-      <input type="number" class="form-control" id="zipInput" placeholder="Enter zip code"
-             [disabled]="!(isDelivery | async)"
-             [ngModel]="(address | async)?.zip"
-             (input)="addressPartial.zip = parseInt($event.target.value)"
-             (blur)="saveAddress()">
-    </div>
-    <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true">Next</button>
+  <accordion-group heading="Delivery" [(isOpen)]="isDeliveryOpen" (isOpenChange)="resetAddressValidated()">
+    <form class="container" id="delivery-form" novalidate>
+      <fieldset class="form-group">
+        <legend>Order Type</legend>
+        <label class="form-check-label">
+          <input type="radio" class="form-check-input" name="orderType" id="delivery" required
+                 [checked]="isDelivery | async"
+                 (change)="saveIsDelivery($event.target.checked)">
+          Delivery
+        </label>
+        <label class="form-check-label">
+          <input type="radio" class="form-check-input" name="orderType" id="pickup" required
+                 [checked]="!(isDelivery | async)"
+                 (change)="saveIsDelivery(!$event.target.checked)">
+          Pickup
+        </label>
+      </fieldset>
+      <div class="form-group">
+        <label for="addressInput">Street address</label>
+        <div [class.was-validated]="addressValidated">
+          <input type="text" class="form-control" id="addressInput" placeholder="Enter street address" name="address"
+                 required maxlength="240"
+                 [class.is-valid]="addressValidated && addressValid"
+                 [class.is-invalid]="addressValidated && !addressValid"
+                 [disabled]="!(isDelivery | async)"
+                 [ngModel]="(address | async)?.line1"
+                 (input)="onInputAddress($event.target.value)"
+                 (blur)="onInputAddress($event.target.value, true); saveAddress()">
+        </div>
+        <div [class.was-validated]="apartmentValidated">
+          <input type="text" class="form-control" id="address2Input" placeholder="Enter apartment number"
+                 name="apartment" maxlength="240"
+                 [class.is-valid]="apartmentValidated && apartmentValid"
+                 [class.is-invalid]="apartmentValidated && !apartmentValid"
+                 [disabled]="!(isDelivery | async)"
+                 [ngModel]="(address | async)?.line2"
+                 (input)="onInputApartment($event.target.value)"
+                 (blur)="onInputApartment($event.target.value, true); saveAddress()">
+        </div>
+      </div>
+      <div class="form-group split-33" [class.was-validated]="cityValidated">
+        <label for="cityInput">City</label>
+        <input type="text" class="form-control" id="cityInput" placeholder="Enter city" name="city"
+               required maxlength="240"
+               [class.is-valid]="cityValidated && cityValid"
+               [class.is-invalid]="cityValidated && !cityValid"
+               [disabled]="!(isDelivery | async)"
+               [ngModel]="(address | async)?.city"
+               (input)="onInputCity($event.target.value)"
+               (blur)="onInputCity($event.target.value, true); saveAddress()">
+        <div class="invalid-feedback">
+          Please provide a valid city.
+        </div>
+      </div>
+      <div class="form-group split-33">
+        <label for="stateInput">State</label>
+        <input type="text" class="form-control" id="stateInput" placeholder="Enter state" name="state"
+               required minlength="2" maxlength="2"
+               [typeahead]="states"
+               [class.is-valid]="stateValidated && stateValid"
+               [class.is-invalid]="stateValidated && !stateValid"
+               [disabled]="!(isDelivery | async)"
+               [ngModel]="(address | async)?.state"
+               (input)="onInputState($event.target.value)"
+               (blur)="onInputState($event.target.value, true); saveAddress()">
+        <div class="invalid-feedback">
+          Please provide a valid state.
+        </div>
+      </div>
+      <div class="form-group split-33" [class.was-validated]="zipValidated">
+        <label for="zipInput">Zip code</label>
+        <input class="form-control" id="zipInput" placeholder="Enter zip code" name="zip"
+               required type="number"
+               [disabled]="!(isDelivery | async)"
+               [ngModel]="(address | async)?.zip"
+               (input)="onInputZip($event.target.value)"
+               (blur)="onInputZip($event.target.value, true); saveAddress()">
+      </div>
+      <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true">Next</button>
+    </form>
   </accordion-group>
   <accordion-group heading="Payment" [(isOpen)]="isPaymentOpen">
     <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;">Finish</button>

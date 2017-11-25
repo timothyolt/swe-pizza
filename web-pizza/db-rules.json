@@ -58,19 +58,19 @@
         ".write": "auth !== null && (!data.exists() || auth.admin === true || data.child('user').val() === auth.uid)",
         "address": {
           "city": {
-            ".validate": "newData.isString() && newData.val().length < 240"
+            ".validate": "newData.isString() && newData.val().length <= 240"
           },
           "line1": {
-            ".validate": "newData.isString() && newData.val().length < 240"
+            ".validate": "newData.isString() && newData.val().length <= 240"
           },
           "line2": {
-            ".validate": "newData.isString() && newData.val().length < 240"
+            ".validate": "newData.isString() && newData.val().length <= 240"
           },
           "state": {
-            ".validate": "newData.isString() && newData.val().matches(/^(NH)|(NJ)|(NM)|(NY)|(NC)(ND)|(MP)|(OH)|(OK)|(OR)|(PW)|(PA)|(PR)|(RI)|(SC)|(SD)|(TN)|(TX)|(UT)|(VT)|(VI)|(VA)|(WA)|(WV)|(WI)|(WY)|(FL)|(GA)|(GU)|(HI)|(ID)|(IL)|(IN)|(IA)|(KS)|(KY)|(LA)|(ME)|(MH)|(MD)|(MA)|(MI)|(MN)|(MS)|(MO)|(MT)|(NE)|(NV)|(AL)|(AK)|(AS)|(AZ)|(AR)|(CA)|(CO)|(CT)|(DE)|(DC)|(FM)$/)"
+            ".validate": "newData.isString() && newData.val().matches(/^(NH)|(NJ)|(NM)|(NY)|(NC)|(ND)|(MP)|(OH)|(OK)|(OR)|(PW)|(PA)|(PR)|(RI)|(SC)|(SD)|(TN)|(TX)|(UT)|(VT)|(VI)|(VA)|(WA)|(WV)|(WI)|(WY)|(FL)|(GA)|(GU)|(HI)|(ID)|(IL)|(IN)|(IA)|(KS)|(KY)|(LA)|(ME)|(MH)|(MD)|(MA)|(MI)|(MN)|(MS)|(MO)|(MT)|(NE)|(NV)|(AL)|(AK)|(AS)|(AZ)|(AR)|(CA)|(CO)|(CT)|(DE)|(DC)|(FM)$/)"
           },
           "zip": {
-            ".validate": "newData.isNumber() && newData.val() <= 99999"
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 99999"
           }
         },
         "cost": {
@@ -127,19 +127,19 @@
         },
         "address": {
           "city": {
-            ".validate": "newData.isString() && newData.val().length < 240"
+            ".validate": "newData.isString() && newData.val().length <= 240"
           },
           "line1": {
-            ".validate": "newData.isString() && newData.val().length < 240"
+            ".validate": "newData.isString() && newData.val().length <= 240"
           },
           "line2": {
-            ".validate": "newData.isString() && newData.val().length < 240"
+            ".validate": "newData.isString() && newData.val().length <= 240"
           },
           "state": {
             ".validate": "newData.isString() && newData.val().matches(/^(NH)|(NJ)|(NM)|(NY)|(NC)(ND)|(MP)|(OH)|(OK)|(OR)|(PW)|(PA)|(PR)|(RI)|(SC)|(SD)|(TN)|(TX)|(UT)|(VT)|(VI)|(VA)|(WA)|(WV)|(WI)|(WY)|(FL)|(GA)|(GU)|(HI)|(ID)|(IL)|(IN)|(IA)|(KS)|(KY)|(LA)|(ME)|(MH)|(MD)|(MA)|(MI)|(MN)|(MS)|(MO)|(MT)|(NE)|(NV)|(AL)|(AK)|(AS)|(AZ)|(AR)|(CA)|(CO)|(CT)|(DE)|(DC)|(FM)$/)"
           },
           "zip": {
-            ".validate": "newData.isNumber() && newData.val() <= 99999"
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 99999"
           }
         }
       }
