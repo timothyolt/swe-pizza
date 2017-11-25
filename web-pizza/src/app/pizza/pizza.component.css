@@ -1,0 +1,6 @@
+.my-surface {
+  width: 200px;
+  height: 200px;
+  background: grey; /* Google Blue 500 :) */
+  border-radius: 2px;
+}

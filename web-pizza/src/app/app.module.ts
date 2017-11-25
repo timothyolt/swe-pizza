@@ -20,6 +20,7 @@ import { PastOrdersComponent } from './past-orders/past-orders.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AccordionModule, ButtonsModule, TypeaheadModule } from 'ngx-bootstrap';
+import { AccordionGroupListComponent } from './accordion-group-list/accordion-group-list.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AccordionModule, ButtonsModule, TypeaheadModule } from 'ngx-bootstrap';
     SignUpComponent,
     MyAccountComponent,
     PastOrdersComponent,
-    AccountInfoComponent
+    AccountInfoComponent,
+    AccordionGroupListComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,8 @@
-<h4>{{pizza.name}}{{pizza.cost ? ' - $' + pizza.cost :
-  ''}}<button type="button" class="btn btn-link" (click)="removePizza($event)">Remove</button></h4>
+<div class="d-flex">
+  <h4 class="p-2">{{pizza.name}}{{pizza.cost ? ' - $' + pizza.cost : ''}}</h4>
+  <i class="p-2 ml-auto material-icons md-24 hover-blue500" role="button">edit</i>
+  <i class="p-2 material-icons md-24 hover-red500" role="button" (click)="removePizza($event)">delete</i>
+</div>
 <app-item-category *ngFor="let itemCatSnapshot of itemCatSnapshots | async"
                    [pizzaRef]="orderRef + '/pizzas/' + pizza.$key"
                    [itemCatSnapshot]="itemCatSnapshot"></app-item-category>
