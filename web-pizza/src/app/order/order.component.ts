@@ -36,7 +36,7 @@ export class OrderComponent implements OnInit {
   stateValidated = false;
   zipValidated = false;
   addressValid: boolean;
-  apartmentValid: boolean;
+  apartmentValid = true; // not required, starts valid to prevent having to touch input field
   cityValid: boolean;
   stateValid: boolean;
   zipValid: boolean;
@@ -73,6 +73,7 @@ export class OrderComponent implements OnInit {
       this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges();
       this.addressRef = this.db.object(this.orderRef + '/address');
       this.address = this.addressRef.valueChanges();
+      this.address.subscribe(address => this.validateAddressForm(address));
       this.db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
         if (!this.pizzas) {
           this.pizzas = [];
@@ -95,7 +96,7 @@ export class OrderComponent implements OnInit {
     this.db.database.ref(this.orderRef).update({delivery: isDelivery}).catch(console.log);
   }
 
-  resetAddressValidated() {
+  resetAddressFormValidated() {
     this.addressValidated = false;
     this.apartmentValidated = false;
     this.cityValidated = false;
@@ -103,44 +104,68 @@ export class OrderComponent implements OnInit {
     this.zipValidated = false;
   }
 
+  validateAddressForm(address: Address) {
+    this.validateAddress(address.line1);
+    this.validateApartment(address.line2);
+    this.validateCity(address.city);
+    this.validateState(address.state);
+    this.validateZip(address.zip);
+  }
+
   onInputAddress(value: string, final = false) {
     if (final) {
       this.addressValidated = true;
     }
-    this.addressValid = value.length > 0 && value.length <= 240;
+    this.validateAddress(value);
     if (this.addressValid) {
       this.addressPartial.line1 = value;
     }
+  }
+
+  private validateAddress(value: string) {
+    this.addressValid = value.length > 0 && value.length <= 240;
   }
 
   onInputApartment(value: string, final = false) {
     if (final) {
       this.apartmentValidated = true;
     }
-    this.apartmentValid = value.length <= 240;
+    this.validateApartment(value);
     if (this.apartmentValid) {
       this.addressPartial.line2 = value;
     }
+  }
+
+  private validateApartment(value: string) {
+    this.apartmentValid = value.length <= 240;
   }
 
   onInputCity(value: string, final = false) {
     if (final) {
       this.cityValidated = true;
     }
-    this.cityValid = value.length > 0 && value.length <= 240;
+    this.validateCity(value);
     if (this.cityValid) {
       this.addressPartial.city = value;
     }
+  }
+
+  private validateCity(value: string) {
+    this.cityValid = value.length > 0 && value.length <= 240;
   }
 
   onInputState(value: string, final = false) {
     if (final) {
       this.stateValidated = true;
     }
-    this.stateValid = this.stateRegex.test(value);
+    this.validateState(value);
     if (this.stateValid) {
       this.addressPartial.state = value;
     }
+  }
+
+  private validateState(value: string) {
+    this.stateValid = this.stateRegex.test(value);
   }
 
   onInputZip(value: string, final = false) {
@@ -148,10 +173,14 @@ export class OrderComponent implements OnInit {
       this.zipValidated = true;
     }
     const zip = Number(value);
-    this.zipValid = zip >= 0 && zip <= 99999;
+    this.validateZip(zip);
     if (this.zipValid) {
       this.addressPartial.zip = zip;
     }
+  }
+
+  private validateZip(zip: number) {
+    this.zipValid = zip >= 0 && zip <= 99999;
   }
 
   saveAddress() {
