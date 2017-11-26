@@ -85,6 +85,12 @@
         "pizzas": {
           "$pizza": {
             "$itemCat": {
+              "cost": {
+                ".validate": "newData.isNumber()"
+              },
+              "name": {
+                ".validate": "newData.isString() && newData.val().length < 100"
+              },
               "$itemType": {
                 // itemCategory object keys are valid itemTypes
                 ".validate": "root.child('itemType/' + $itemType).exists()"

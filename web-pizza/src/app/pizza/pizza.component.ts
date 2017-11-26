@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ItemCategory } from '../../models/item-category';
 import { Pizza } from '../../models/pizza';
-import { AngularFireDatabase, SnapshotAction } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -10,8 +9,12 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./pizza.component.css']
 })
 export class PizzaComponent implements OnInit {
+  pizzaRef: AngularFireObject<Pizza>;
   @Input() pizza: Pizza;
   @Input() itemCatSnapshots: Observable<SnapshotAction[]>;
+
+  nameEditable = false;
+  pizzaName: string;
 
   constructor(private db: AngularFireDatabase) {
   }
@@ -27,19 +30,31 @@ export class PizzaComponent implements OnInit {
     console.log('key');
     console.log(value);
     this._orderRef = value;
-    const pizzaRef = this.db.database.ref(value + '/pizzas/' + this.pizza['$key']);
-    pizzaRef.child('name').on('value', name => this.pizza.name = (name.exists() ? name.val() : null));
-    pizzaRef.child('cost').on('value', cost => this.pizza.cost = (cost.exists() ? cost.val() : null));
+    this.pizzaRef = this.db.object(value + '/pizzas/' + this.pizza['$key']);
+    this.db.object(value + '/pizzas/' + this.pizza['$key'] + '/name')
+      .snapshotChanges().subscribe(name => this.pizza.name = (name.payload.exists() ? name.payload.val() : null));
+    this.db.object(value + '/pizzas/' + this.pizza['$key'] + '/cost')
+      .snapshotChanges().subscribe(cost => this.pizza.cost = (cost.payload.exists() ? cost.payload.val() : null));
   }
 
   ngOnInit() {
   }
 
-  removePizza(e) {
+  savePizzaName() {
+    if (this.pizzaName) {
+      console.log('update pizza pizzaName');
+      console.log(this.pizzaName);
+      this.pizzaRef.update({name: this.pizzaName}).catch(console.log);
+      this.pizzaName = null;
+    }
+    this.nameEditable = false;
+  }
+
+  removePizza() {
     this.db.database.ref(this.orderRef).child('pizzas').transaction(pizzas => {
       pizzas.splice(Number(this.pizza['$key']), 1);
       return pizzas;
-    });
+    }).catch(console.log);
   }
 
 }
