@@ -2,7 +2,7 @@
   <app-accordion-group-list [(isOpen)]="isOrderOpen">
     <div accordion-heading>
       Order
-      <span *ngIf="total | async; let total" class="float-right pull-right">Total: ${{total}}</span>
+      <span *ngIf="total | async as total" class="float-right pull-right">Total: ${{total}}</span>
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item container">
@@ -14,10 +14,10 @@
         </div>
       </li>
       <li class="list-group-item">
-        <h5 *ngIf="cost | async; let cost">
+        <h5 *ngIf="cost | async as cost">
           Subtotal: ${{cost}}
         </h5>
-        <h5 *ngIf="total | async; let total">
+        <h5 *ngIf="total | async as cost">
           Total: ${{total}}
         </h5>
         <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isDeliveryOpen = true">Next</button>
@@ -49,8 +49,8 @@
                  [class.is-invalid]="(isDelivery | async) && addressValidated && !addressValid"
                  [disabled]="!(isDelivery | async)"
                  [ngModel]="(address | async)?.line1"
-                 (input)="onInputAddress($event.target.value)"
-                 (blur)="onInputAddress($event.target.value, true); saveAddress()">
+                 (input)="onInputAddress(($event.target as HTMLElement).value)"
+                 (blur)="onInputAddress(($event.target as HTMLElement).value, true); saveAddress()">
         </div>
         <div [class.was-validated]="(isDelivery | async) && apartmentValidated">
           <input type="text" class="form-control" id="address2Input" placeholder="Enter apartment number"
@@ -59,8 +59,8 @@
                  [class.is-invalid]="(isDelivery | async) && apartmentValidated && !apartmentValid"
                  [disabled]="!(isDelivery | async)"
                  [ngModel]="(address | async)?.line2"
-                 (input)="onInputApartment($event.target.value)"
-                 (blur)="onInputApartment($event.target.value, true); saveAddress()">
+                 (input)="onInputApartment(($event.target as HTMLElement).value)"
+                 (blur)="onInputApartment(($event.target as HTMLElement).value, true); saveAddress()">
         </div>
       </div>
       <div class="row">
@@ -72,8 +72,8 @@
                  [class.is-invalid]="(isDelivery | async) && cityValidated && !cityValid"
                  [disabled]="!(isDelivery | async)"
                  [ngModel]="(address | async)?.city"
-                 (input)="onInputCity($event.target.value)"
-                 (blur)="onInputCity($event.target.value, true); saveAddress()">
+                 (input)="onInputCity(($event.target as HTMLElement).value)"
+                 (blur)="onInputCity(($event.target as HTMLElement).value, true); saveAddress()">
           <div class="invalid-feedback">
             Please provide a valid city.
           </div>
@@ -87,8 +87,8 @@
                  [class.is-invalid]="isDelivery && stateValidated && !stateValid"
                  [disabled]="!(isDelivery | async)"
                  [ngModel]="(address | async)?.state"
-                 (input)="onInputState($event.target.value)"
-                 (blur)="onInputState($event.target.value, true); saveAddress()">
+                 (input)="onInputState(($event.target as HTMLElement).value)"
+                 (blur)="onInputState(($event.target as HTMLElement).value, true); saveAddress()">
           <div class="invalid-feedback">
             Please provide a valid state.
           </div>
@@ -99,8 +99,8 @@
                  required type="number"
                  [disabled]="!(isDelivery | async)"
                  [ngModel]="(address | async)?.zip"
-                 (input)="onInputZip($event.target.value)"
-                 (blur)="onInputZip($event.target.value, true); saveAddress()">
+                 (input)="onInputZip(($event.target as HTMLElement).value)"
+                 (blur)="onInputZip(($event.target as HTMLElement).value, true); saveAddress()">
         </div>
       </div>
       <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true"
@@ -126,7 +126,7 @@
         <label for="fullNameInput">Full name</label>
         <input type="text" class="form-control" id="fullNameInput" placeholder="Enter full name on card" name="name"
                [ngModel]="(payment | async)?.name"
-               (input)="paymentPartial['name'] = $event.target.value"
+               (input)="paymentPartial['name'] = ($event.target as HTMLElement).value"
                (blur)="savePayment()">
       </div>
       <div class="form-group">
@@ -134,7 +134,7 @@
         <input type="number" class="form-control" id="bankNumber" placeholder="Enter bank number"
                name="bank-number"
                [ngModel]="(payment | async)?.number?.bank"
-               (input)="paymentPartial['number/bank'] = $event.target.value"
+               (input)="paymentPartial['number/bank'] = ($event.target as HTMLElement).value"
                (blur)="savePayment()">
       </div>
       <div class="form-group">
@@ -142,7 +142,7 @@
         <input type="number" class="form-control" id="routingNumber" placeholder="Enter routing number"
                name="routing-number"
                [ngModel]="(payment | async)?.number?.card"
-               (input)="paymentPartial['number/routing'] = $event.target.value"
+               (input)="paymentPartial['number/routing'] = ($event.target as HTMLElement).value"
                (blur)="savePayment()">
       </div>
       <div class="form-group">
@@ -150,7 +150,7 @@
         <input type="number" class="form-control" id="ccNumberInput" placeholder="Enter credit card number"
                name="card-number"
                [ngModel]="(payment | async)?.number?.routing"
-               (input)="paymentPartial['number/card'] = $event.target.value"
+               (input)="paymentPartial['number/card'] = ($event.target as HTMLElement).value"
                (blur)="savePayment()">
       </div>
       <div class="form-group split-50">
@@ -158,14 +158,14 @@
         <input type="number" class="form-control" id="expDateInput" placeholder="Enter expiration date"
                name="expiration"
                [ngModel]="(payment | async)?.number?.expiration"
-               (input)="paymentPartial['number/expiration'] = $event.target.value"
+               (input)="paymentPartial['number/expiration'] = ($event.target as HTMLElement).value"
                (blur)="savePayment()">
       </div>
       <div class="form-group split-50">
         <label for="cvcInput">CVC</label>
         <input type="number" class="form-control" id="cvcInput" placeholder="Enter CVC" name="cvc"
                [ngModel]="(payment | async)?.number?.cvc"
-               (input)="paymentPartial['number/cvc'] = $event.target.value"
+               (input)="paymentPartial['number/cvc'] = ($event.target as HTMLElement).value"
                (blur)="savePayment()">
       </div>
     </form>
