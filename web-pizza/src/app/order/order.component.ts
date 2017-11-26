@@ -5,6 +5,9 @@ import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularf
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Address } from '../../models/address';
+import { Card } from '../../models/card';
+import { Check } from '../../models/check';
+import { Cash } from '../../models/cash';
 
 @Component({
   selector: 'app-order',
@@ -41,6 +44,10 @@ export class OrderComponent implements OnInit {
   stateValid: boolean;
   zipValid: boolean;
 
+  paymentRef: AngularFireObject<Check | Card | Cash>;
+  payment: Observable<Check | Card | Cash>;
+  paymentPartial: any = {};
+
   constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) {
     this.auth.authState.subscribe(user => {
       if (user) {
@@ -74,6 +81,8 @@ export class OrderComponent implements OnInit {
       this.addressRef = this.db.object(this.orderRef + '/address');
       this.address = this.addressRef.valueChanges();
       this.address.subscribe(address => this.validateAddressForm(address));
+      this.paymentRef = this.db.object(this.orderRef + '/payment');
+      this.payment = this.paymentRef.valueChanges();
       this.db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
         if (!this.pizzas) {
           this.pizzas = [];
@@ -188,6 +197,19 @@ export class OrderComponent implements OnInit {
     console.log(this.addressPartial);
     this.addressRef.query.ref.update(this.addressPartial).catch(console.log);
     this.addressPartial = {};
+  }
+
+  savePaymentType(paymentType: string) {
+    console.log('order payment type update');
+    console.log(paymentType);
+    this.paymentRef.update({type: paymentType}).catch(console.log);
+  }
+
+  savePayment() {
+    console.log('order payment update');
+    console.log(this.paymentPartial);
+    this.paymentRef.update(this.paymentPartial).catch(console.log);
+    this.paymentPartial = {};
   }
 
   ngOnInit() {

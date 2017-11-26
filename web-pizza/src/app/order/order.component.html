@@ -27,15 +27,15 @@
       </li>
     </ul>
   </app-accordion-group-list>
-  <accordion-group heading="Delivery" [(isOpen)]="isDeliveryOpen" (isOpenChange)="resetAddressValidated()">
+  <accordion-group heading="Delivery" [(isOpen)]="isDeliveryOpen" (isOpenChange)="resetAddressFormValidated()">
     <form class="container" id="delivery-form" novalidate>
       <legend>Order Type</legend>
       <fieldset class="form-group">
         <div class="btn-group">
-          <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+          <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0" formcontrolname="delivery-button"
                  [class.active]="isDelivery | async"
                  (click)="saveIsDelivery(true)">Delivery</label>
-          <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+          <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0" formcontrolname="pickup-button"
                  [class.active]="!(isDelivery | async)"
                  (click)="saveIsDelivery(false)">Pickup</label>
         </div>
@@ -110,6 +110,65 @@
   </accordion-group>
   <accordion-group heading="Payment" [(isOpen)]="isPaymentOpen"
                    [isDisabled]="(isDelivery | async) && !(addressValid && apartmentValid && cityValid && stateValid && zipValid)">
+    <form class="container" id="payment-form" novalidate>
+      <div class="btn-group">
+        <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+               [class.active]="(payment | async)?.type === 'card'"
+               (click)="savePaymentType('card')">Card</label>
+        <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+               [class.active]="(payment | async)?.type === 'check'"
+               (click)="savePaymentType('check')">Check</label>
+        <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+               [class.active]="(payment | async)?.type === 'cash'"
+               (click)="savePaymentType('cash')">Cash</label>
+      </div>
+      <div class="form-group">
+        <label for="fullNameInput">Full name</label>
+        <input type="text" class="form-control" id="fullNameInput" placeholder="Enter full name on card" name="name"
+               [ngModel]="(payment | async)?.name"
+               (input)="paymentPartial['name'] = $event.target.value"
+               (blur)="savePayment()">
+      </div>
+      <div class="form-group">
+        <label for="ccNumberInput">Bank number</label>
+        <input type="number" class="form-control" id="bankNumber" placeholder="Enter bank number"
+               name="bank-number"
+               [ngModel]="(payment | async)?.number?.bank"
+               (input)="paymentPartial['number/bank'] = $event.target.value"
+               (blur)="savePayment()">
+      </div>
+      <div class="form-group">
+        <label for="ccNumberInput">Routing number</label>
+        <input type="number" class="form-control" id="routingNumber" placeholder="Enter routing number"
+               name="routing-number"
+               [ngModel]="(payment | async)?.number?.card"
+               (input)="paymentPartial['number/routing'] = $event.target.value"
+               (blur)="savePayment()">
+      </div>
+      <div class="form-group">
+        <label for="ccNumberInput">Credit card number</label>
+        <input type="number" class="form-control" id="ccNumberInput" placeholder="Enter credit card number"
+               name="card-number"
+               [ngModel]="(payment | async)?.number?.routing"
+               (input)="paymentPartial['number/card'] = $event.target.value"
+               (blur)="savePayment()">
+      </div>
+      <div class="form-group split-50">
+        <label for="expDateInput">Expiration date</label>
+        <input type="number" class="form-control" id="expDateInput" placeholder="Enter expiration date"
+               name="expiration"
+               [ngModel]="(payment | async)?.number?.expiration"
+               (input)="paymentPartial['number/expiration'] = $event.target.value"
+               (blur)="savePayment()">
+      </div>
+      <div class="form-group split-50">
+        <label for="cvcInput">CVC</label>
+        <input type="number" class="form-control" id="cvcInput" placeholder="Enter CVC" name="cvc"
+               [ngModel]="(payment | async)?.number?.cvc"
+               (input)="paymentPartial['number/cvc'] = $event.target.value"
+               (blur)="savePayment()">
+      </div>
+    </form>
     <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;">Finish</button>
   </accordion-group>
 </accordion>

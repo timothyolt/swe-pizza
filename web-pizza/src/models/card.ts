@@ -11,15 +11,3 @@ export class Card extends SecurePaymentMethod {
       cvc: number;
     };
 }
-
-export class PartialCard {
-  type = 'card';
-  number: Partial<{
-    card: number;
-    expiration: Partial<{
-      month: number;
-      year: number;
-    }>;
-    cvc: number;
-  }>;
-}
