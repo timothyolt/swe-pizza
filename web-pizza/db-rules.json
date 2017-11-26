@@ -82,6 +82,37 @@
         "delivery": {
           ".validate": "newData.isBoolean()"
         },
+        "payment": {
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 240"
+          },
+          "number": {
+            "bank": {
+              ".validate": "newData.parent().parent().child('type').val() === 'check' && newData.isNumber() && newData.val() <= 999999999 && newData.val() >= 0"
+            },
+            "card": {
+              ".validate": "newData.parent().parent().child('type').val() === 'card' && newData.isString() && newData.val().matches(/^([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})|([0-9]{16})$/)"
+            },
+            "cvc": {
+              ".validate": "newData.parent().parent().child('type').val() === 'card' && newData.isNumber() && newData.val() <= 9999 && newData.val() >= 100"
+            },
+            "expiration": {
+              "month": {
+                ".validate": "newData.isNumber() && newData.val() <= 12 && newData.val() >= 1"
+              },
+              "year": {
+                ".validate": "newData.isNumber() && newData.val() <= 99 && newData.val() >= 0"
+              },
+              ".validate": "newData.parent().parent().child('type').val() === 'card'"
+            },
+            "routing": {
+              ".validate": "newData.parent().parent().child('type').val() === 'check' && newData.isNumber() && newData.val() <= 99999999999999999 && newData.val() >= 0"
+            }
+          },
+          "type": {
+            ".validate": "newData.isString() && (newData.val() === 'cash' || newData.val() === 'card' || newData.val() === 'check')"
+          }
+        },
         "pizzas": {
           "$pizza": {
             "$itemCat": {
@@ -114,13 +145,40 @@
       }
     },
     "payMethods": {
-      // todo: finish implementing all payment methods
-      // then fill out the rules
       "$payMethod": {
         ".read": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
         ".write": "auth !== null && (!data.exists() || auth.admin === true || data.child('user').val() === auth.uid)",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length <= 240"
+        },
+        "number": {
+          "bank": {
+            ".validate": "newData.parent().parent().child('type').val() === 'check' && newData.isNumber() && newData.val() <= 999999999 && newData.val() >= 0"
+          },
+          "card": {
+            ".validate": "newData.parent().parent().child('type').val() === 'card' && newData.isString() && newData.val().matches(/^([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})|([0-9]{16})$/)"
+          },
+          "cvc": {
+            ".validate": "newData.parent().parent().child('type').val() === 'card' && newData.isNumber() && newData.val() <= 9999 && newData.val() >= 100"
+          },
+          "expiration": {
+            "month": {
+              ".validate": "newData.isNumber() && newData.val() <= 12 && newData.val() >= 1"
+            },
+            "year": {
+              ".validate": "newData.isNumber() && newData.val() <= 99 && newData.val() >= 0"
+            },
+            ".validate": "newData.parent().parent().child('type').val() === 'card'"
+          },
+          "routing": {
+            ".validate": "newData.parent().parent().child('type').val() === 'check' && newData.isNumber() && newData.val() <= 99999999999999999 && newData.val() >= 0"
+          }
+        },
         "user": {
           ".validate": "root.child('users/' + newData.val()).exists()"
+        },
+        "type": {
+          ".validate": "newData.isString() && (newData.val() === 'cash' || newData.val() === 'card' || newData.val() === 'check')"
         }
       }
     },
