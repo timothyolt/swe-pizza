@@ -123,14 +123,14 @@
                [class.active]="(payment | async)?.type === 'cash'"
                (click)="savePaymentType('cash')">Cash</label>
       </div>
-      <div class="form-group">
+      <div *ngIf="['card', 'check'].includes((payment | async)?.type)" class="form-group">
         <label for="fullNameInput">Full name</label>
         <input type="text" class="form-control" id="fullNameInput" placeholder="Enter full name on card" name="name"
                [ngModel]="(payment | async)?.name"
                (input)="paymentPartial['name'] = $event.target.value"
                (blur)="savePayment()">
       </div>
-      <div class="form-group">
+      <div *ngIf="(payment | async)?.type === 'check'" class="form-group">
         <label for="ccNumberInput">Bank number</label>
         <input type="number" class="form-control" id="bankNumber" placeholder="Enter bank number"
                name="bank-number"
@@ -138,7 +138,7 @@
                (input)="paymentPartial['number/bank'] = $event.target.value"
                (blur)="savePayment()">
       </div>
-      <div class="form-group">
+      <div *ngIf="(payment | async)?.type === 'check'" class="form-group">
         <label for="ccNumberInput">Routing number</label>
         <input type="number" class="form-control" id="routingNumber" placeholder="Enter routing number"
                name="routing-number"
@@ -146,7 +146,7 @@
                (input)="paymentPartial['number/routing'] = $event.target.value"
                (blur)="savePayment()">
       </div>
-      <div class="form-group">
+      <div *ngIf="(payment | async)?.type === 'card'" class="form-group">
         <label for="ccNumberInput">Credit card number</label>
         <input type="number" class="form-control" id="ccNumberInput" placeholder="Enter credit card number"
                name="card-number"
@@ -154,7 +154,7 @@
                (input)="paymentPartial['number/card'] = $event.target.value"
                (blur)="savePayment()">
       </div>
-      <div class="form-group split-50">
+      <div *ngIf="(payment | async)?.type === 'card'" class="form-group split-50">
         <label for="expDateInput">Expiration date</label>
         <input type="number" class="form-control" id="expDateInput" placeholder="Enter expiration date"
                name="expiration"
@@ -162,12 +162,16 @@
                (input)="paymentPartial['number/expiration'] = $event.target.value"
                (blur)="savePayment()">
       </div>
-      <div class="form-group split-50">
+      <div *ngIf="(payment | async)?.type === 'card'" class="form-group split-50">
         <label for="cvcInput">CVC</label>
         <input type="number" class="form-control" id="cvcInput" placeholder="Enter CVC" name="cvc"
                [ngModel]="(payment | async)?.number?.cvc"
                (input)="paymentPartial['number/cvc'] = $event.target.value"
                (blur)="savePayment()">
+      </div>
+      <div *ngIf="(payment | async)?.type === 'cash'">
+        <h4 *ngIf="isDelivery | async">Info: Cash will be accepted by the delivery courier.</h4>
+        <h4 *ngIf="!(isDelivery | async)">Info: Cash will be accepted by the cashier.</h4>
       </div>
     </form>
     <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;">Finish</button>
