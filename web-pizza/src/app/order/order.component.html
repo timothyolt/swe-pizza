@@ -103,7 +103,8 @@
                  (blur)="onInputZip($event.target.value, true); saveAddress()">
         </div>
       </div>
-      <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true"
+      <button type="submit" class="btn btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true"
+              [class.btn-success]="!(isDelivery | async) || (addressValid && apartmentValid && cityValid && stateValid && zipValid)"
               [disabled]="(isDelivery | async) && !(addressValid && apartmentValid && cityValid && stateValid && zipValid)">Next
       </button>
     </form>
