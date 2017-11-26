@@ -97,7 +97,7 @@ export class OrderComponent implements OnInit {
         this.pizzas.splice(Number(pizza.key), 1);
       });
     }).catch(console.log);
-    this.itemCats = this.db.list('/itemCat').snapshotChanges().share();
+    this.itemCats = this.db.list('/itemCat').snapshotChanges();
     this.itemCats.subscribe(console.log);
   }
 
