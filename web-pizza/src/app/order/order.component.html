@@ -17,7 +17,7 @@
         <h5 *ngIf="cost | async as cost">
           Subtotal: ${{cost}}
         </h5>
-        <h5 *ngIf="total | async as cost">
+        <h5 *ngIf="total | async as total">
           Total: ${{total}}
         </h5>
         <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isDeliveryOpen = true">Next</button>
