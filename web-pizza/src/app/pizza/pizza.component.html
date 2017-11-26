@@ -1,8 +1,10 @@
 <div class="d-flex">
-  <h4 class="p-2">{{pizza.name}}{{pizza.cost ? ' - $' + pizza.cost : ''}}</h4>
-  <i class="p-2 ml-auto material-icons md-24 hover-blue500" role="button">edit</i>
-  <i class="p-2 material-icons md-24 hover-red500" role="button" (click)="removePizza($event)">delete</i>
+  <h4 class="p-2" style="padding-bottom: 0!important; margin-bottom: 0;">{{pizza.name}}</h4>
+  <i class="p-2 ml-auto material-icons align-self-center md-24 hover-blue500" role="button">edit</i>
+  <i class="p-2 material-icons align-self-center md-24 hover-red500" role="button"
+     (click)="removePizza($event)">delete</i>
 </div>
+<span *ngIf="pizza.cost" style="margin-left: 0.5rem">Price: ${{pizza.cost}}</span>
 <app-item-category *ngFor="let itemCatSnapshot of itemCatSnapshots | async"
                    [pizzaRef]="orderRef + '/pizzas/' + pizza.$key"
                    [itemCatSnapshot]="itemCatSnapshot"></app-item-category>
