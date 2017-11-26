@@ -75,14 +75,14 @@ export class OrderComponent implements OnInit {
         this.orderRef = '/orders/' + orderId;
         this.addNewPizza();
       }
-      this.cost = this.db.object(this.orderRef + '/cost').valueChanges();
-      this.total = this.db.object(this.orderRef + '/total').valueChanges();
-      this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges();
+      this.cost = this.db.object(this.orderRef + '/cost').valueChanges().share();
+      this.total = this.db.object(this.orderRef + '/total').valueChanges().share();
+      this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges().share();
       this.addressRef = this.db.object(this.orderRef + '/address');
-      this.address = this.addressRef.valueChanges();
+      this.address = this.addressRef.valueChanges().share();
       this.address.subscribe(address => this.validateAddressForm(address));
       this.paymentRef = this.db.object(this.orderRef + '/payment');
-      this.payment = this.paymentRef.valueChanges();
+      this.payment = this.paymentRef.valueChanges().share();
       this.db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
         if (!this.pizzas) {
           this.pizzas = [];
@@ -95,7 +95,7 @@ export class OrderComponent implements OnInit {
         this.pizzas.splice(Number(pizza.key), 1);
       });
     }).catch(console.log);
-    this.itemCats = this.db.list('/itemCat').snapshotChanges();
+    this.itemCats = this.db.list('/itemCat').snapshotChanges().share();
     this.itemCats.subscribe(console.log);
   }
 
