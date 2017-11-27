@@ -1,17 +1,225 @@
-<h3>Order</h3>
-<app-pizza *ngFor="let pizza of pizzas" [orderRef]="orderRef" [pizza]="pizza" [itemCats]="itemCats"></app-pizza>
-<button type="button" class="btn btn-primary" (click)="addNewPizza($event)">New Pizza</button>
-<button type="button" class="btn btn-secondary">Load Pizza</button>
-<h4 *ngIf="cost | async; let cost">Subtotal: ${{cost}}</h4>
-<h4 *ngIf="total | async; let total">Total: ${{total}}</h4>
-<fieldset class="form-group">
-  <legend>Order Type</legend>
-  <label class="form-check-label">
-    <input type="radio" class="form-check-input" name="orderType"
-           id="delivery" (change)="onInputChange($event)">Delivery
-  </label>
-  <label class="form-check-label">
-    <input type="radio" class="form-check-input" name="orderType"
-           id="pickup" (change)="onInputChange($event)">Pickup
-  </label>
-</fieldset>
+<!--suppress JSUnresolvedVariable -->
+<accordion closeOthers="true" xmlns="http://www.w3.org/1999/html">
+  <app-accordion-group-list [(isOpen)]="isOrderOpen">
+    <div accordion-heading>
+      Order
+      <span *ngIf="total | async as total" class="float-right pull-right">Total: ${{total}}</span>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item container">
+        <div class="row">
+          <app-pizza *ngFor="let pizza of pizzas" class="col col-lg-4 col-md-6 col-sm-12 col-12"
+                     [orderRef]="orderRef"
+                     [pizza]="pizza"
+                     [itemCatSnapshots]="itemCats"></app-pizza>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <h5 *ngIf="cost | async as cost">
+          Subtotal: ${{cost}}
+        </h5>
+        <h5 *ngIf="total | async as total">
+          Total: ${{total}}
+        </h5>
+        <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isDeliveryOpen = true">Next</button>
+        <button type="button" class="btn btn-primary btn-right" style="margin-right: 16px;" (click)="addNewPizza()">
+          New Pizza</button>
+        <button type="button" class="btn btn-secondary btn-right" style="margin-right: 16px;">Load Pizza</button>
+      </li>
+    </ul>
+  </app-accordion-group-list>
+  <accordion-group heading="Delivery" [(isOpen)]="isDeliveryOpen" (isOpenChange)="resetAddressFormValidated()">
+    <form class="container" id="delivery-form" novalidate>
+      <legend>Order Type</legend>
+      <fieldset class="form-group">
+        <div class="btn-group">
+          <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0" formcontrolname="delivery-button"
+                 [class.active]="isDelivery | async"
+                 (click)="saveIsDelivery(true)">Delivery</label>
+          <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0" formcontrolname="pickup-button"
+                 [class.active]="!(isDelivery | async)"
+                 (click)="saveIsDelivery(false)">Pickup</label>
+        </div>
+      </fieldset>
+      <div class="form-group">
+        <label for="addressInput">Street address</label>
+        <div [class.was-validated]="(isDelivery | async) && addressValidated" style="margin-bottom: 16px">
+          <input type="text" class="form-control" id="addressInput" placeholder="Enter street address" name="address"
+                 required maxlength="240"
+                 [class.is-valid]="(isDelivery | async) && addressValidated && addressValid"
+                 [class.is-invalid]="(isDelivery | async) && addressValidated && !addressValid"
+                 [disabled]="!(isDelivery | async)"
+                 [ngModel]="(address | async)?.line1"
+                 (input)="onInputAddress($event.target.value)"
+                 (blur)="onInputAddress($event.target.value, true); saveAddress()">
+        </div>
+        <div [class.was-validated]="(isDelivery | async) && apartmentValidated">
+          <input type="text" class="form-control" id="address2Input" placeholder="Enter apartment number"
+                 name="apartment" maxlength="240"
+                 [class.is-valid]="(isDelivery | async) && apartmentValidated && apartmentValid"
+                 [class.is-invalid]="(isDelivery | async) && apartmentValidated && !apartmentValid"
+                 [disabled]="!(isDelivery | async)"
+                 [ngModel]="(address | async)?.line2"
+                 (input)="onInputApartment($event.target.value)"
+                 (blur)="onInputApartment($event.target.value, true); saveAddress()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col col-md-4 col-sm-12" [class.was-validated]="(isDelivery | async) && cityValidated">
+          <label for="cityInput">City</label>
+          <input type="text" class="form-control" id="cityInput" placeholder="Enter city" name="city"
+                 required maxlength="240"
+                 [class.is-valid]="(isDelivery | async) && cityValidated && cityValid"
+                 [class.is-invalid]="(isDelivery | async) && cityValidated && !cityValid"
+                 [disabled]="!(isDelivery | async)"
+                 [ngModel]="(address | async)?.city"
+                 (input)="onInputCity($event.target.value)"
+                 (blur)="onInputCity($event.target.value, true); saveAddress()">
+          <div class="invalid-feedback">
+            Please provide a valid city.
+          </div>
+        </div>
+        <div class="form-group col col-md-4 col-sm-12" [class.was-validated]="(isDelivery | async) && stateValidated">
+          <label for="stateInput">State</label>
+          <input type="text" class="form-control" id="stateInput" placeholder="Enter state" name="state"
+                 required minlength="2" maxlength="2"
+                 [typeahead]="states"
+                 [class.is-valid]="(isDelivery | async) && stateValidated && stateValid"
+                 [class.is-invalid]="(isDelivery | async) && stateValidated && !stateValid"
+                 [disabled]="!(isDelivery | async)"
+                 [ngModel]="(address | async)?.state"
+                 (input)="onInputState($event.target.value)"
+                 (blur)="onInputState($event.target.value, true); saveAddress()">
+          <div class="invalid-feedback">
+            Please provide a valid state.
+          </div>
+        </div>
+        <div class="form-group col col-md-4 col-sm-12" [class.was-validated]="(isDelivery | async) && zipValidated">
+          <label for="zipInput">Zip code</label>
+          <input class="form-control" id="zipInput" placeholder="Enter zip code" name="zip"
+                 required type="number"
+                 [disabled]="!(isDelivery | async)"
+                 [ngModel]="(address | async)?.zip"
+                 (input)="onInputZip($event.target.value)"
+                 (blur)="onInputZip($event.target.value, true); saveAddress()">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true"
+              [class.btn-success]="!(isDelivery | async) || (addressValid && apartmentValid && cityValid && stateValid && zipValid)"
+              [disabled]="(isDelivery | async) && !(addressValid && apartmentValid && cityValid && stateValid && zipValid)">Next
+      </button>
+    </form>
+  </accordion-group>
+  <accordion-group heading="Payment" [(isOpen)]="isPaymentOpen"
+                   [isDisabled]="(isDelivery | async) && !(addressValid && apartmentValid && cityValid && stateValid && zipValid)"
+                   (isOpenChange)="resetPaymentFormValidated()">
+    <form class="container" id="payment-form" novalidate>
+      <div class="btn-group">
+        <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+               [class.active]="(payment | async)?.type === 'card'"
+               (click)="savePaymentType('card')">Card</label>
+        <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+               [class.active]="(payment | async)?.type === 'check'"
+               (click)="savePaymentType('check')">Check</label>
+        <label class="btn btn-primary" btnCheckbox style="box-shadow: 0 0 0 0"
+               [class.active]="(payment | async)?.type === 'cash'"
+               (click)="savePaymentType('cash')">Cash</label>
+      </div>
+      <div *ngIf="['card', 'check'].includes((payment | async)?.type)" class="form-group">
+        <label for="fullNameInput">Full name</label>
+        <input class="form-control" id="fullNameInput" placeholder="Enter full name on card" name="name"
+               type="text" maxlength="240" required
+               [class.is-valid]="nameValidated && nameValid"
+               [class.is-invalid]="nameValidated && !nameValid"
+               [ngModel]="(payment | async)?.name"
+               (input)="onInputName($event.target.value)"
+               (blur)="onInputName($event.target.value, true); savePayment()">
+      </div>
+      <div *ngIf="(payment | async)?.type === 'check'" class="form-group">
+        <label for="bankNumber">Bank number</label>
+        <input class="form-control" id="bankNumber" placeholder="Enter bank number" name="bank-number"
+               type="number" maxlength="9" required
+               [class.is-valid]="bankValidated && bankValid"
+               [class.is-invalid]="bankValidated && !bankValid"
+               [ngModel]="(payment | async)?.number?.bank"
+               (input)="onInputRouting($event.target.value)"
+               (blur)="onInputRouting($event.target.value, true); savePayment()">
+      </div>
+      <div *ngIf="(payment | async)?.type === 'check'" class="form-group">
+        <label for="routingNumber">Routing number</label>
+        <input class="form-control" id="routingNumber" placeholder="Enter routing number" name="routing-number"
+               type="number" maxlength="17" required
+               [class.is-valid]="routingValidated && routingValid"
+               [class.is-invalid]="routingValidated && !routingValid"
+               [ngModel]="(payment | async)?.number?.routing"
+               (input)="onInputBank($event.target.value)"
+               (blur)="onInputBank($event.target.value, true); savePayment()">
+      </div>
+      <div *ngIf="(payment | async)?.type === 'card'" class="form-group">
+        <label for="ccNumberInput">Credit card number</label>
+          <input class="form-control" id="ccNumberInput" name="card-number" placeholder="Enter card number"
+                 maxlength="20" required
+                 [class.is-valid]="cardValidated && cardValid"
+                 [class.is-invalid]="cardValidated && !cardValid"
+                 [ngModel]="(payment | async)?.number?.card"
+                 (input)="onInputCard($event.target.value)"
+                 (blur)="onInputCard($event.target.value, true); savePayment()">
+      </div>
+      <div *ngIf="(payment | async)?.type === 'card'" class="row">
+        <fieldset class="col col-6 col-md-4 col-xl-3 form-group">
+          <label for="expDateMonthInput">Expiration date</label>
+          <div class="row">
+            <div class="col col-6">
+              <ng-template #expNameTemplate let-model="item">
+                <h5>{{model.value}}: {{model.name}}</h5>
+              </ng-template>
+              <input class="form-control" id="expDateMonthInput" placeholder="MM" name="expiration-month"
+                     type="number" maxlength="2"
+                     [typeahead]="expMonths" typeaheadOptionField="value" [typeaheadItemTemplate]="expNameTemplate"
+                     [class.is-valid]="expMonthValidated && expMonthValid"
+                     [class.is-invalid]="expMonthValidated && !expMonthValid"
+                     [ngModel]="(payment | async)?.number?.expiration?.month"
+                     (input)="onInputExpMonth($event.target.value)"
+                     (blur)="onInputExpMonth($event.target.value, true); savePayment()">
+            </div>
+            <div class="col col-6">
+              <input class="form-control" id="expDateYearInput" placeholder="YY" name="expiration-year"
+                     type="number" maxlength="2"
+                     [class.is-valid]="expYearValidated && expMonthValid"
+                     [class.is-invalid]="expYearValidated && !expMonthValid"
+                     [ngModel]="(payment | async)?.number?.expiration?.year"
+                     (input)="onInputExpYear($event.target.value)"
+                     (blur)="onInputExpYear($event.target.value, true); savePayment()">
+            </div>
+          </div>
+        </fieldset>
+        <div class="col col-6 col-md-4 col-xl-3 form-group">
+          <label for="cvcInput">CVC</label>
+          <input class="form-control" id="cvcInput" placeholder="Enter CVC" name="cvc"
+                 type="number" minlength="3" maxlength="4"
+                 [class.is-valid]="cvcValidated && cvcValid"
+                 [class.is-invalid]="cvcValidated && !cvcValid"
+                 [ngModel]="(payment | async)?.number?.cvc"
+                 (input)="onInputCvc($event.target.value)"
+                 (blur)="onInputCvc($event.target.value, true); savePayment()">
+        </div>
+      </div>
+      <div *ngIf="(payment | async)?.type === 'cash'">
+        <h4 *ngIf="isDelivery | async">Info: Cash will be accepted by the delivery courier.</h4>
+        <h4 *ngIf="!(isDelivery | async)">Info: Cash will be accepted by the cashier.</h4>
+      </div>
+    </form>
+    <button *ngIf="!['cash', 'card', 'check'].includes((payment | async)?.type)" type="submit"
+            class="btn btn-right" style="margin-bottom: 16px;">Finish</button>
+    <button *ngIf="(payment | async)?.type === 'cash'" type="submit" class="btn btn-success btn-right"
+            style="margin-bottom: 16px;">Finish</button>
+    <button *ngIf="(payment | async)?.type === 'card'" type="submit" class="btn btn-right"
+            style="margin-bottom: 16px;"
+            [class.btn-success]="nameValid && cardValid && expMonthValid && expYearValid && cvcValid"
+            [disabled]="!(nameValid && cardValid && expMonthValid && expYearValid && cvcValid)">Finish</button>
+    <button *ngIf="(payment | async)?.type === 'check'" type="submit" class="btn btn-right"
+            style="margin-bottom: 16px;"
+            [class.btn-success]="nameValid && routingValid && bankValid"
+            [disabled]="!(nameValid && routingValid && bankValid)">Finish</button>
+  </accordion-group>
+</accordion>

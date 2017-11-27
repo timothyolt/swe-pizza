@@ -1,7 +1,7 @@
 ///<reference path="../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
 import { Component, Input, OnInit } from '@angular/core';
 import { ItemType } from '../../models/item-type';
-import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./item-type.component.css']
 })
 export class ItemTypeComponent implements OnInit {
+  private _itemTypeSnapshot: SnapshotAction;
   @Input() itemType: ItemType;
   @Input() exclusive: boolean;
   object: AngularFireObject<any>;
@@ -17,6 +18,16 @@ export class ItemTypeComponent implements OnInit {
   checked: boolean;
 
   constructor(private db: AngularFireDatabase) {
+  }
+
+  get itemTypeSnapshot(): SnapshotAction {
+    return this._itemTypeSnapshot;
+  }
+
+  @Input()
+  set itemTypeSnapshot(itemTypeSnapshot: SnapshotAction) {
+    this._itemTypeSnapshot = itemTypeSnapshot;
+    this.itemType = itemTypeSnapshot.payload.val();
   }
 
   @Input()
@@ -28,7 +39,7 @@ export class ItemTypeComponent implements OnInit {
       console.log(action);
       if (action.payload.exists()) {
         if (this.exclusive) {
-          this.checked = this.itemType.id === action.payload.val();
+          this.checked = this.itemTypeSnapshot.key === action.payload.val();
         } else {
           this.checked = action.payload.val();
         }
@@ -49,7 +60,7 @@ export class ItemTypeComponent implements OnInit {
     this.checked = e.target.checked;
     if (this.exclusive) {
       if (this.checked) {
-        this.object.set(this.itemType.id).catch(console.log);
+        this.object.set(this.itemTypeSnapshot.key).catch(console.log);
         // path should be /input/$input/$pizza/$itemCat
       }
     } else {

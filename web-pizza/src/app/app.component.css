@@ -16,11 +16,10 @@
 }
 
 .navbar {
-    background-color: transparent !important;
     background: transparent !important;
     border-color: transparent !important;
  }
- 
- .navbar li { 
+
+ .navbar li {
     color: #000;
  }

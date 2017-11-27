@@ -1,6 +1,6 @@
-<div class="form-check">
-  <label class="form-check-label">
+<div class="form-check d-flex justify-content-left">
+  <label class="form-check-label p-2">
     <input type="{{inputType}}" class="form-check-input" name="{{itemType.cat}}"
-           id="{{itemType.id}}" [checked]="checked" (change)="onInputChange($event)">{{itemType.name}} - ${{itemType
-    .cost}}</label>
+           id="{{itemTypeSnapshot.key}}" [checked]="checked" (change)="onInputChange($event)">{{itemType.name}}</label>
+  <div class="ml-auto p-2">${{itemType.cost}}</div>
 </div>
