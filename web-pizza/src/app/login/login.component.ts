@@ -29,8 +29,49 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.email !== '' && this.password !== '' && this.email && this.password) {
       this.doneLoading = false;
-      this.auth.auth.signInWithEmailAndPassword(this.email, this.password).then(user => {
+      let anonymousUserToken: any;
+      const anonymousUserPromise = this.auth.auth.currentUser && this.auth.auth.currentUser.isAnonymous
+        ? this.auth.auth.currentUser.getIdToken(true).catch(error => {
+          this.doneLoading = true;
+          this.error.show(JSON.stringify(error));
+        }).then(token => anonymousUserToken = token)
+        : Promise.resolve(null);
+      anonymousUserPromise.then(() => {
+         return this.auth.auth.signInWithEmailAndPassword(this.email, this.password);
+      }).catch(error => {
+        this.doneLoading = true;
+        this.error.show(JSON.stringify(error));
+      }).then(user => {
         if (user) {
+          return user ? user.getIdToken(true) : null;
+        } else {
+          this.doneLoading = true;
+          this.error.show('Incorrect username and password.');
+        }
+      }).catch(error => {
+        this.doneLoading = true;
+        this.error.show(JSON.stringify(error));
+      }).then(token => {
+        if (!anonymousUserToken) {
+          this.doneLoading = true;
+          this.error.show('Tokenization error');
+          return;
+        }
+        const url = `https://us-central1-swe-pizza.cloudfunctions.net/app/acquireUser`;
+        console.log('Sending request to', url, 'with ID token in Authorization header.');
+        const req = new XMLHttpRequest();
+        req.onload = function() {
+          console.log(req.responseText);
+        }.bind(this);
+        req.onerror = function() {
+          this.error.show('There was an error');
+        }.bind(this);
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization', 'Bearer ' + token);
+        req.setRequestHeader('SecondAuthorization', 'Bearer ' + anonymousUserToken);
+        console.log(req);
+        req.send();
+        if (token) {
           this.router.navigateByUrl('home').catch(console.log);
         } else {
           this.doneLoading = true;

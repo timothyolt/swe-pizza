@@ -1,6 +1,10 @@
 const functions = require('firebase-functions');
 const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
+const express = require('express');
+const cookieParser = require('cookie-parser')();
+const cors = require('cors')({origin: true});
+const app = express();
 
 exports.onOrderCostDeleted = functions.database.ref('orders/{order}/cost').onDelete(event => {
   let taxRate;
@@ -135,6 +139,116 @@ exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{
   });
 });
 
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  response.send("Hello from Firebase!");
+// Express middleware that validates Firebase ID Tokens passed in the Authorization HTTP header.
+// The Firebase ID token needs to be passed as a Bearer token in the Authorization HTTP header like this:
+// `Authorization: Bearer <Firebase ID Token>`.
+// when decoded successfully, the ID Token content will be added as `req.user`.
+const validateFirebaseIdToken = (req, res, next) => {
+  console.log('Check if request is authorized with Firebase ID token');
+
+  if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
+    !req.cookies.__session) {
+    console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
+      'Make sure you authorize your request by providing the following HTTP header:',
+      'Authorization: Bearer <Firebase ID Token>',
+      'or by passing a "__session" cookie.');
+    res.status(403).send('Unauthorized');
+    return;
+  }
+
+  let idToken;
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    console.log('Found "Authorization" header');
+    // Read the ID Token from the Authorization header.
+    idToken = req.headers.authorization.split('Bearer ')[1];
+  } else {
+    console.log('Found "__session" cookie');
+    // Read the ID Token from cookie.
+    idToken = req.cookies.__session;
+  }
+  admin.auth().verifyIdToken(idToken).then(decodedIdToken => {
+    console.log('ID Token correctly decoded', decodedIdToken);
+    req.user = decodedIdToken;
+    next();
+  }).catch(error => {
+    console.error('Error while verifying Firebase ID token:', error);
+    res.status(403).send('Unauthorized');
+  });
+};
+
+app.use(cors);
+app.use(cookieParser);
+app.use(validateFirebaseIdToken);
+app.get('/acquireUser', (req, res) => {
+  let acquireUserIdToken;
+  let acquireUser;
+  let userSnapshot;
+  let acquireUserSnapshot;
+  if (req.headers.secondauthorization && req.headers.secondauthorization.startsWith('Bearer ')) {
+    console.log('Found "SecondAuthorization" header');
+    // Read the ID Token from the Authorization header.
+    acquireUserIdToken = req.headers.secondauthorization.split('Bearer ')[1];
+  } else {
+    console.error('No Secondary Firebase ID token was passed as a Bearer token in the Authorization header.',
+      'Make sure you authorize your request by providing the following HTTP header:',
+      'SecondAuthorization: Bearer <Firebase ID Token>');
+    res.status(403).send('Unauthorized');
+    return;
+  }
+  return admin.auth().verifyIdToken(acquireUserIdToken).then(decodedIdToken => {
+    console.log('ID Token correctly decoded', decodedIdToken);
+    acquireUser = decodedIdToken;
+    return decodedIdToken
+  }).catch(error => {
+    console.error('Error while verifying Firebase ID token:', error);
+    res.status(403).send('Unauthorized');
+    console.log('Hello', req.user.uid, ' and ', acquireUser.uid);
+  }).then(decodedIdToken => Promise.all([
+    admin.database().ref('/users/' + req.user.uid).on('value', user => {
+      userSnapshot = user;
+    }),
+    admin.database().ref('/users/' + decodedIdToken.uid).on('value', user => {
+      acquireUserSnapshot = user;
+    })
+  ])).then(() => {
+    if (userSnapshot.child('activeOrder').exists() && acquireUserSnapshot.child('activeOrder').exists()) {
+      let acquireOrderSnapshot;
+      let orderSnapshot;
+      // because the user acquires the new order, the new order must acquire the old one
+      Promise.all([
+        admin.database().ref('/orders/' + userSnapshot.child('activeOrder').val()).on('value', acquireOrder => {
+          acquireOrderSnapshot = acquireOrder;
+        }),
+        admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).on('value', order => {
+          orderSnapshot = order;
+        })
+      ]).then(() => {
+        const orderMax = Math.max(Object.keys(orderSnapshot.child('pizzas').val()));
+        const order = orderSnapshot.val();
+        const acquireOrder = acquireOrderSnapshot.val();
+        for (const pizza in Object.keys(acquireOrder.pizzas)) if (acquireOrder.pizzas.hasOwnProperty(pizza)) {
+          console.log(pizza);
+          acquireOrder.pizzas[pizza + orderMax] = acquireOrder[pizza];
+          delete acquireOrder.pizzas[pizza];
+        }
+        for (const pizza in Object.keys(order.pizzas)) if (order.pizzas.hasOwnProperty(pizza)) {
+          console.log(pizza);
+          acquireOrder.pizzas[pizza] = order.pizzas[pizza];
+        }
+        return admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).update(acquireOrder);
+      }).catch(console.error);
+    }
+    if (acquireUserSnapshot.exists()) {
+      // note, this only produces an option update for direct children
+      // a partial address will override a full one
+      admin.database().ref('/users/' + req.user.uid).update(acquireUserSnapshot.val()).catch(console.error);
+    }
+  }).catch(error => {
+    console.error('Error while acquiring user: ', error);
+  });
 });
+
+// This HTTPS endpoint can only be accessed by your Firebase Users.
+// Requests need to be authorized by providing an `Authorization` HTTP header
+// with value `Bearer <Firebase ID Token>`.
+exports.app = functions.https.onRequest(app);

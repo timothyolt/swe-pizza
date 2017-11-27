@@ -27,6 +27,7 @@
                 </div>
                 <div *ngIf="isLoggedIn">
                     <a routerLink="/account">My Account</a>
+                    <a (click)="signOut()" href="javascript:void(0)">Logout</a>
                 </div>
             </div>
         </div>
