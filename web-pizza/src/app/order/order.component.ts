@@ -9,6 +9,7 @@ import { Card } from '../../models/card';
 import { Check } from '../../models/check';
 import { Cash } from '../../models/cash';
 import 'rxjs/add/operator/shareReplay';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-order',
@@ -81,12 +82,12 @@ export class OrderComponent implements OnInit {
 
   constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) {
     this.auth.authState.subscribe(user => {
-      if (user) {
+      if (user && !user.isAnonymous) {
         console.log('using user for order: ' + user.uid);
         this.setupOrder(user.uid);
       } else {
         console.log('creating anonymous user for order');
-        this.auth.auth.signInAnonymously().catch(console.log);
+        this.auth.auth.signInAnonymously().then(anonymousUser => this.setupOrder(anonymousUser.uid)).catch(console.log);
       }
     });
   }
@@ -97,10 +98,9 @@ export class OrderComponent implements OnInit {
         this.orderRef = '/orders/' + user.val().activeOrder;
       } else {
         const order: Partial<Order> = {
-          createdAtDate: new Date(),
-          user: userId,
-          delivery: true
+          user: userId
         };
+        console.log(order);
         const orderId = this.db.database.ref('/orders').push(order).key;
         this.db.database.ref('/users/' + userId).update({activeOrder: orderId}).catch(console.log);
         this.orderRef = '/orders/' + orderId;
@@ -127,7 +127,7 @@ export class OrderComponent implements OnInit {
         this.pizzas.splice(Number(pizza.key), 1);
       });
     }).catch(console.log);
-    this.itemCats = this.db.list('/itemCat').snapshotChanges().shareReplay(1);;
+    this.itemCats = this.db.list('/itemCat').snapshotChanges().shareReplay(1);
     this.itemCats.subscribe(console.log);
   }
 
@@ -146,11 +146,11 @@ export class OrderComponent implements OnInit {
   }
 
   validateAddressForm(address: Address) {
-    this.validateAddress(address.line1);
-    this.validateApartment(address.line2);
-    this.validateCity(address.city);
-    this.validateState(address.state);
-    this.validateZip(address.zip);
+    this.validateAddress(address ? address.line1 : null);
+    this.validateApartment(address ? address.line2 : null);
+    this.validateCity(address ? address.city : null);
+    this.validateState(address ? address.state : null);
+    this.validateZip(address ? address.zip : null);
   }
 
   onInputAddress(value: string, final = false) {
@@ -163,8 +163,8 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  private validateAddress(value: string) {
-    this.addressValid = value.length > 0 && value.length <= 240;
+  private validateAddress(value: string | null) {
+    this.addressValid = value && value.length > 0 && value.length <= 240;
   }
 
   onInputApartment(value: string, final = false) {
@@ -177,8 +177,8 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  private validateApartment(value: string) {
-    this.apartmentValid = value.length <= 240;
+  private validateApartment(value: string | null) {
+    this.apartmentValid = value ? value.length <= 240 : true;
   }
 
   onInputCity(value: string, final = false) {
@@ -191,8 +191,8 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  private validateCity(value: string) {
-    this.cityValid = value.length > 0 && value.length <= 240;
+  private validateCity(value: string | null) {
+    this.cityValid = value && value.length > 0 && value.length <= 240;
   }
 
   onInputState(value: string, final = false) {
@@ -205,8 +205,8 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  private validateState(value: string) {
-    this.stateValid = this.stateRegex.test(value);
+  private validateState(value: string | null) {
+    this.stateValid = value && this.stateRegex.test(value);
   }
 
   onInputZip(value: string, final = false) {
@@ -220,8 +220,8 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  private validateZip(zip: number) {
-    this.zipValid = zip >= 0 && zip <= 99999;
+  private validateZip(zip: number | null) {
+    this.zipValid = zip && zip >= 0 && zip <= 99999;
   }
 
   saveAddress() {
@@ -248,7 +248,7 @@ export class OrderComponent implements OnInit {
   }
 
   validatePaymentForm(payment: Card | Check | Cash) {
-    switch (payment.type) {
+    if (payment) switch (payment.type) {s
       case 'card':
         this.validatePaymentCardForm(payment as Card);
         break;
@@ -289,7 +289,7 @@ export class OrderComponent implements OnInit {
   }
 
   private validateName(name: string | null) {
-    this.nameValid = name.length > 0 && name.length <= 240;
+    this.nameValid = name && name.length > 0 && name.length <= 240;
   }
 
   onInputRouting(value: string, final = false) {
@@ -304,7 +304,7 @@ export class OrderComponent implements OnInit {
   }
 
   private validateRouting(routing: number | null) {
-    this.routingValid = routing > 0 && routing <= 999999999;
+    this.routingValid = routing && routing > 0 && routing <= 999999999;
   }
 
   onInputBank(value: string, final = false) {
@@ -319,7 +319,7 @@ export class OrderComponent implements OnInit {
   }
 
   private validateBank(bank: number | null) {
-    this.bankValid = bank > 0 && bank <= 99999999999999999;
+    this.bankValid = bank && bank > 0 && bank <= 99999999999999999;
   }
 
   onInputCard(value: string, final = false) {
@@ -348,7 +348,7 @@ export class OrderComponent implements OnInit {
   }
 
   private validateExpMonth(expMonth: number | null) {
-    this.expMonthValid = expMonth >= 1 && expMonth <= 12;
+    this.expMonthValid = expMonth && expMonth >= 1 && expMonth <= 12;
   }
 
   onInputExpYear(value: string, final = false) {
@@ -363,7 +363,7 @@ export class OrderComponent implements OnInit {
   }
 
   private validateExpYear(expYear: number | null) {
-    this.expYearValid = expYear >= 1 && expYear <= 99;
+    this.expYearValid = expYear && expYear >= 1 && expYear <= 99;
   }
 
   onInputCvc(value: string, final = false) {
@@ -378,7 +378,7 @@ export class OrderComponent implements OnInit {
   }
 
   private validateCvc(cvc: number | null) {
-    this.cvcValid = cvc >= 100 && cvc <= 9999;
+    this.cvcValid = cvc && cvc >= 100 && cvc <= 9999;
   }
 
   savePayment() {

@@ -2,6 +2,7 @@
   <dictionary name="timot">
     <words>
       <w>firebase</w>
+      <w>tokenization</w>
     </words>
   </dictionary>
 </component>
