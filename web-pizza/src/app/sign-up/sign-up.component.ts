@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 import { Error } from '../../models/error';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-sign-up',
@@ -28,7 +29,7 @@ export class SignUpComponent implements OnInit {
   }
 
   signUp() {
-    if (this.email !== '' && this.password !== '' && this.email && this.password) {
+    if (this.email !== '' && this.password !== '') {
       this.doneLoading = false;
       this.auth.auth.createUserWithEmailAndPassword(this.email, this.password).then(user => {
         return this.auth.auth.signInWithEmailAndPassword(this.email, this.password);
