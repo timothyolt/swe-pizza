@@ -248,7 +248,7 @@ export class OrderComponent implements OnInit {
   }
 
   validatePaymentForm(payment: Card | Check | Cash) {
-    if (payment) switch (payment.type) {s
+    if (payment) switch (payment.type) {
       case 'card':
         this.validatePaymentCardForm(payment as Card);
         break;
