@@ -29,7 +29,36 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.email !== '' && this.password !== '' && this.email && this.password) {
       this.doneLoading = false;
-      this.auth.auth.signInWithEmailAndPassword(this.email, this.password).then(user => {
+      const migrateUser = this.auth.auth.currentUser && this.auth.auth.currentUser.isAnonymous ? this.auth.auth.currentUser.uid : null;
+      this.auth.auth.signInWithEmailAndPassword(this.email, this.password)
+        .catch(error => {
+        this.doneLoading = true;
+        this.error.show(JSON.stringify(error));
+      }).then(user => {
+        return user.getIdToken(true);
+      }).catch(error => {
+        this.doneLoading = true;
+        this.error.show(JSON.stringify(error));
+      }).then(token => {
+        const url = `https://us-central1-swe-pizza.cloudfunctions.net/app/hello`;
+        // 'https://' + this.auth.app.options['authDomain'] + '/hello';
+        console.log('Sending request to', url, 'with ID token in Authorization' +
+          ' header.');
+        const req = new XMLHttpRequest();
+        req.onload = function() {
+          console.log(req.responseText);
+        }.bind(this);
+        req.onerror = function() {
+          this.error.show('There was an error');
+        }.bind(this);
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization', 'Bearer ' + token);
+        console.log(req);
+        req.send();
+      }).catch(error => {
+        this.doneLoading = true;
+        this.error.show(JSON.stringify(error));
+      }).then(user => {
         if (user) {
           this.router.navigateByUrl('home').catch(console.log);
         } else {
