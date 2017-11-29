@@ -277,14 +277,22 @@ app.get('/acquireUser', (req, res) => {
       }).then(() => {
         // note, this only produces an option update for direct children
         // a partial address will override a full one
-        return admin.database().ref('/users/' + req.user.uid).update(acquireUserSnapshot.val());
+        const acquireUserVal = acquireUserSnapshot.val();
+        // todo: update any payments to allow user access
+        // todo: update any orders to allow user access
+        acquireUserVal.payMethods = null;
+        return admin.database().ref('/users/' + req.user.uid).update(acquireUserVal);
       });
-      // todo: update any orders or payments to allow user access
     } else if (acquireUserSnapshot.exists()) {
       // note, this only produces an option update for direct children
       // a partial address will override a full one
-      return admin.database().ref('/users/' + req.user.uid).update(acquireUserSnapshot.val());
+      const acquireUserVal = acquireUserSnapshot.val();
+      // todo: update any payments to allow user access
+      // todo: update any orders to allow user access
+      return admin.database().ref('/users/' + req.user.uid).update(acquireUserVal);
     }
+  }).then(() => {
+    return admin.auth().deleteUser(acquireUser.uid);
   }).then(() => {
     res.status(200).send('OK');
   }).catch(error => {
