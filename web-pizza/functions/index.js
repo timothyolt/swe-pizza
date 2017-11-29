@@ -38,6 +38,9 @@ exports.onPizzaRemoved = functions.database.ref('orders/{order}/pizzas/{pizza}')
     return admin.database().ref('globals/taxRate').once('value', data => {
       taxRate = data.exists() ? data.val() : 0;
     }).then(() => event.data.ref.parent.parent.child('cost').transaction(orderCost => {
+      if (!orderCost) {
+        return null;
+      }
       orderCost -= event.data.previous.child('cost').val();
       if (orderCost === 0) {
         orderCost = null;
