@@ -94,10 +94,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authSubscription = this.auth.authState.subscribe(user => {
       if (user) {
-        if (!user.isAnonymous) {
-          console.log('using user for order: ' + user.uid);
-          this.setupOrder(user.uid);
-        }
+        console.log('using user for order: ' + user.uid);
+        this.setupOrder(user.uid);
       } else {
         console.log('creating anonymous user for order');
         if (this.addressSubscription)
@@ -108,7 +106,7 @@ export class OrderComponent implements OnInit, OnDestroy {
           this.itemCatsSubscription.unsubscribe();
         if (this.pizzaRef)
           this.pizzaRef.off();
-        this.auth.auth.signInAnonymously().then(anonymousUser => this.setupOrder(anonymousUser.uid)).catch(console.log);
+        this.auth.auth.signInAnonymously().catch(console.log);
       }
     });
   }
