@@ -24,7 +24,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription.add(this.auth.auth.onAuthStateChanged(user => {
       if (user && !user.isAnonymous) {
-        this.router.navigateByUrl('account').catch(console.log);
+        this.router.navigateByUrl('home').catch(console.log);
       } else {
         this.doneLoading = true;
       }
