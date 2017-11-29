@@ -21,6 +21,7 @@ import { AccountInfoComponent } from './account-info/account-info.component';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AccordionModule, ButtonsModule, TypeaheadModule } from 'ngx-bootstrap';
 import { AccordionGroupListComponent } from './accordion-group-list/accordion-group-list.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { AccordionGroupListComponent } from './accordion-group-list/accordion-gr
     MyAccountComponent,
     PastOrdersComponent,
     AccountInfoComponent,
-    AccordionGroupListComponent
+    AccordionGroupListComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

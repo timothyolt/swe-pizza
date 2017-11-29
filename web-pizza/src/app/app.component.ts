@@ -14,9 +14,4 @@ export class AppComponent {
       this.isLoggedIn = user && !user.isAnonymous;
     });
   }
-
-  signOut() {
-    console.log('logging out');
-    this.auth.auth.signOut().catch(console.error);
-  }
 }

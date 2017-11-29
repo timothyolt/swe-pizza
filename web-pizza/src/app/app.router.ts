@@ -7,10 +7,12 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { OrderComponent } from './order/order.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { LogoutComponent } from './logout/logout.component';
 
 export const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'logout', component: LogoutComponent },
     { path: 'signUp', component: SignUpComponent },
     { path: 'order', component: OrderComponent },
     { path: 'account', component: MyAccountComponent },
