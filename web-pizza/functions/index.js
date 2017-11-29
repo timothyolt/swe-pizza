@@ -227,49 +227,69 @@ app.get('/acquireUser', (req, res) => {
   }).catch(error => {
     console.error('Error while verifying Firebase ID token:', error);
     res.status(403).send('Unauthorized');
-    console.log('Hello', req.user.uid, ' and ', acquireUser.uid);
-  }).then(decodedIdToken => Promise.all([
-    admin.database().ref('/users/' + req.user.uid).on('value', user => {
+  }).then(() => {
+    return admin.database().ref('/users/' + req.user.uid).once('value', user => {
+      console.log('user get: ', user ? user.val() : null);
       userSnapshot = user;
-    }),
-    admin.database().ref('/users/' + decodedIdToken.uid).on('value', user => {
+    })
+  }).then(() => {
+    return admin.database().ref('/users/' + acquireUser.uid).once('value', user => {
+      console.log('user get: ', user ? user.val() : null);
       acquireUserSnapshot = user;
     })
-  ])).then(() => {
-    if (userSnapshot.child('activeOrder').exists() && acquireUserSnapshot.child('activeOrder').exists()) {
+  }).then(() => {
+    console.log('user: ', userSnapshot.val());
+    console.log('acquireUser: ', acquireUserSnapshot.val());
+    if (userSnapshot && acquireUserSnapshot && userSnapshot.child('activeOrder').exists() && acquireUserSnapshot.child('activeOrder').exists()) {
       let acquireOrderSnapshot;
       let orderSnapshot;
       // because the user acquires the new order, the new order must acquire the old one
-      Promise.all([
-        admin.database().ref('/orders/' + userSnapshot.child('activeOrder').val()).on('value', acquireOrder => {
+      return Promise.all([
+        admin.database().ref('/orders/' + userSnapshot.child('activeOrder').val()).once('value', acquireOrder => {
           acquireOrderSnapshot = acquireOrder;
         }),
-        admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).on('value', order => {
+        admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).once('value', order => {
           orderSnapshot = order;
         })
       ]).then(() => {
-        const orderMax = Math.max(Object.keys(orderSnapshot.child('pizzas').val()));
+        let orderMax = -1; // -1 for no pizzas /shrug
+        orderSnapshot.child('pizzas').forEach(pizza => {
+          if (Number(pizza.key) > orderMax)
+            orderMax = Number(pizza.key);
+        });
         const order = orderSnapshot.val();
         const acquireOrder = acquireOrderSnapshot.val();
         for (const pizza in Object.keys(acquireOrder.pizzas)) if (acquireOrder.pizzas.hasOwnProperty(pizza)) {
-          console.log(pizza);
-          acquireOrder.pizzas[pizza + orderMax] = acquireOrder[pizza];
-          delete acquireOrder.pizzas[pizza];
+          console.log(Number(pizza));
+          acquireOrder.pizzas[Number(pizza) + orderMax + 1] = acquireOrder.pizzas[Number(pizza)];
+          delete acquireOrder.pizzas[Number(pizza)];
         }
         for (const pizza in Object.keys(order.pizzas)) if (order.pizzas.hasOwnProperty(pizza)) {
-          console.log(pizza);
-          acquireOrder.pizzas[pizza] = order.pizzas[pizza];
+          console.log(Number(pizza));
+          acquireOrder.pizzas[Number(pizza)] = order.pizzas[Number(pizza)];
         }
-        return admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).update(acquireOrder);
-      }).catch(console.error);
-    }
-    if (acquireUserSnapshot.exists()) {
+        acquireOrder.user = req.user.uid;
+        // note, this only produces an option update for direct children
+        // a partial address or payment will override a full one
+        return admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).update(acquireOrder).then(() => {
+          return admin.database().ref('/orders/' + userSnapshot.child('activeOrder').val()).remove();
+        });
+      }).then(() => {
+        // note, this only produces an option update for direct children
+        // a partial address will override a full one
+        return admin.database().ref('/users/' + req.user.uid).update(acquireUserSnapshot.val());
+      });
+      // todo: update any orders or payments to allow user access
+    } else if (acquireUserSnapshot.exists()) {
       // note, this only produces an option update for direct children
       // a partial address will override a full one
-      admin.database().ref('/users/' + req.user.uid).update(acquireUserSnapshot.val()).catch(console.error);
+      return admin.database().ref('/users/' + req.user.uid).update(acquireUserSnapshot.val());
     }
+  }).then(() => {
+    res.status(200).send('OK');
   }).catch(error => {
     console.error('Error while acquiring user: ', error);
+    res.status(500).send(error);
   });
 });
 
