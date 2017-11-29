@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 import { Error } from '../../models/error';
 import * as firebase from 'firebase';
 import EmailAuthProvider = firebase.auth.EmailAuthProvider;
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css']
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent implements OnInit, OnDestroy {
+  subscription = new Subscription();
   doneLoading = false;
   email: string;
   password: string;
@@ -20,13 +22,17 @@ export class SignUpComponent implements OnInit {
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
   ngOnInit() {
-    this.auth.auth.onAuthStateChanged(user => {
+    this.subscription.add(this.auth.auth.onAuthStateChanged(user => {
       if (user && !user.isAnonymous) {
         this.router.navigateByUrl('account').catch(console.log);
       } else {
         this.doneLoading = true;
       }
-    });
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   signUp() {
