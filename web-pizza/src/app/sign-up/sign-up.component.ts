@@ -40,9 +40,11 @@ export class SignUpComponent implements OnInit, OnDestroy {
       this.doneLoading = false;
       if (this.auth.auth.currentUser && this.auth.auth.currentUser.isAnonymous) {
         const emailCredential = EmailAuthProvider.credential(this.email, this.password);
-        this.auth.auth.currentUser.linkWithCredential(emailCredential).catch(error => {
-          this.doneLoading = true;
-          this.error.show(JSON.stringify(error));
+        this.auth.auth.currentUser.linkWithCredential(emailCredential).then(() => {
+          // counter-intuitive, but this is what we need to trigger a state change on credential link
+          return this.auth.auth.signOut();
+        }).then(() => {
+          return this.auth.auth.signInWithEmailAndPassword(this.email, this.password);
         }).then(user => {
           if (user) {
             this.router.navigateByUrl('home').catch(console.log);
@@ -55,11 +57,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
           this.error.show(JSON.stringify(error));
         });
       } else {
-        this.auth.auth.createUserWithEmailAndPassword(this.email, this.password).then(user => {
+        this.auth.auth.createUserWithEmailAndPassword(this.email, this.password).then(() => {
           return this.auth.auth.signInWithEmailAndPassword(this.email, this.password);
-        }).catch(error => {
-          this.doneLoading = true;
-          this.error.show(JSON.stringify(error));
         }).then(user => {
           if (user) {
             this.router.navigateByUrl('home').catch(console.log);
