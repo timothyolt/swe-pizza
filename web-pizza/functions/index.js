@@ -30,6 +30,28 @@ exports.onOrderCostDeleted = functions.database.ref('orders/{order}/cost').onDel
   }));
 });
 
+exports.onPizzaRemoved = functions.database.ref('orders/{order}/pizzas/{pizza}').onDelete(event => {
+  console.log('delete data ', event.data.previous.child('cost').val());
+  if (event.data.previous.child('cost').exists()) {
+    console.log('order pizza removal transaction');
+    let taxRate;
+    return admin.database().ref('globals/taxRate').once('value', data => {
+      taxRate = data.exists() ? data.val() : 0;
+    }).then(() => event.data.ref.parent.parent.child('cost').transaction(orderCost => {
+      orderCost -= event.data.previous.child('cost').val();
+      if (orderCost === 0) {
+        orderCost = null;
+        event.data.ref.parent.parent.child('total').set(null);
+      }
+      else
+        event.data.ref.parent.parent.child('total').set(orderCost + orderCost * taxRate);
+      return orderCost;
+    }));
+  } else {
+    return null;
+  }
+});
+
 exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{child}').onWrite(event => {
   let itemCats;
   let itemTypes;
