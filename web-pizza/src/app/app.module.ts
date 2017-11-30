@@ -21,6 +21,9 @@ import { AccountInfoComponent } from './account-info/account-info.component';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { ToppingsListComponent } from './toppings-list/toppings-list.component';
+import { AccordionModule, ButtonsModule, TypeaheadModule } from 'ngx-bootstrap';
+import { AccordionGroupListComponent } from './accordion-group-list/accordion-group-list.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -37,11 +40,16 @@ import { ToppingsListComponent } from './toppings-list/toppings-list.component';
     PastOrdersComponent,
     AccountInfoComponent,
     AdminPanelComponent,
-    ToppingsListComponent
+    ToppingsListComponent,
+    AccordionGroupListComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    AccordionModule.forRoot(),
+    TypeaheadModule.forRoot(),
+    ButtonsModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase, 'swe-pizza'), // imports firebase/app needed for everything
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features

@@ -10,6 +10,10 @@
       {
         "source": "**",
         "destination": "/index.html"
+      },
+      {
+        "source": "/hello",
+        "function": "hello"
       }
     ]
   }

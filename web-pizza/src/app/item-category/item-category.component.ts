@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ItemType } from '../../models/item-type';
 import { ItemCategory } from '../../models/item-category';
-import { AngularFireDatabase} from 'angularfire2/database';
+import { AngularFireDatabase, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -11,21 +11,25 @@ import { Observable } from 'rxjs/Observable';
 })
 export class ItemCategoryComponent implements OnInit {
   @Input() pizzaRef: string;
-  itemTypes: Observable<ItemType[]>;
+  itemTypeSnapshots: Observable<SnapshotAction[]>;
 
   constructor(private db: AngularFireDatabase) {
   }
 
-  private _itemCat: ItemCategory;
+  private _itemCatSnapshot: SnapshotAction;
+  itemCat: ItemCategory;
 
-  get itemCat(): ItemCategory { return this._itemCat; }
+  get itemCatSnapshot(): SnapshotAction {
+    return this._itemCatSnapshot;
+  }
 
   @Input()
-  set itemCat(itemCat: ItemCategory) {
-    this._itemCat = itemCat;
-    this.itemTypes = this.db.list('/itemType', ref =>
-      ref.orderByChild('cat').equalTo(this.itemCat && this.itemCat.id ? this.itemCat.id : null)).valueChanges();
-    this.itemTypes.subscribe(console.log);
+  set itemCatSnapshot(itemCatSnapshot: SnapshotAction) {
+    this._itemCatSnapshot = itemCatSnapshot;
+    this.itemCat = itemCatSnapshot.payload.val();
+    this.itemTypeSnapshots = this.db.list('/itemType', ref => ref.orderByChild('cat')
+        .equalTo(this.itemCatSnapshot && this.itemCatSnapshot.key ? this.itemCatSnapshot.key : null)).snapshotChanges();
+    this.itemTypeSnapshots.subscribe(console.log);
   }
 
   ngOnInit() {

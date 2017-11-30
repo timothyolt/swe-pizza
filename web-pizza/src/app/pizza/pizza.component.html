@@ -1,4 +1,17 @@
-<h4>{{pizza.name}}{{pizza.cost ? ' - $' + pizza.cost :
-  ''}}<button type="button" class="btn btn-link" (click)="removePizza($event)">Remove</button></h4>
-<app-item-category *ngFor="let itemCat of itemCats | async" [pizzaRef]="orderRef + '/pizzas/' + pizza.$key"
-                   [itemCat]="itemCat"></app-item-category>
+<div class="d-flex">
+  <h5 *ngIf="!nameEditable" class="p-2" style="padding-bottom: 0!important; margin-bottom: 0;">{{pizza.name}}</h5>
+  <input *ngIf="nameEditable" type="text" class="p-2 form-control" maxlength="100" title="Name" placeholder="Pizza name"
+         [ngModel]="pizza.name"
+         (input)="pizzaName = $event.target.value"
+         (blur)="savePizzaName()">
+  <i class="p-2 ml-auto material-icons md-24" role="button"
+     [class.hover-blue500] = "!nameEditable"
+     [class.blue-500] = "nameEditable"
+     (click)="nameEditable = !nameEditable">edit</i>
+  <i class="p-2 material-icons md-24 hover-red500" role="button"
+     (click)="removePizza()">delete</i>
+</div>
+<span *ngIf="pizza.cost" style="margin-left: 0.5rem">Price: ${{pizza.cost}}</span>
+<app-item-category *ngFor="let itemCatSnapshot of itemCatSnapshots | async"
+                   [pizzaRef]="orderRef + '/pizzas/' + pizza.$key"
+                   [itemCatSnapshot]="itemCatSnapshot"></app-item-category>

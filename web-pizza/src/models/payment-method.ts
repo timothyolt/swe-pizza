@@ -7,5 +7,5 @@ export abstract class PaymentMethod {
 export abstract class SecurePaymentMethod extends PaymentMethod {
   name: string;
   address: Address;
-  userId: string;
+  user: string;
 }

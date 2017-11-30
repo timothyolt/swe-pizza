@@ -68,16 +68,16 @@ export class AccountInfoComponent implements OnInit {
   savePaymentInfo() {
     console.log('savePaymentInfo');
     console.log(this.paymentPartial);
-    if (this.paymentRef) {
-      this.paymentRef.query.ref.update(this.paymentPartial).catch(console.log);
-    } else {
-      const paymentRef = this.db.database.ref('payMethods').push(this.paymentPartial).ref;
+    if (!this.paymentRef) {
+      const paymentPartial = {user: this.auth.auth.currentUser.uid};
+      const paymentRef = this.db.database.ref('payMethods').push(paymentPartial).ref;
       const userPartial = {payMethods: {}};
       userPartial.payMethods[paymentRef.key] = true;
       this.userRef.update(userPartial).catch(console.log);
-      this.paymentRef = this.db.object(paymentRef.key);
+      this.paymentRef = this.db.object('payMethods/' + paymentRef.key);
       this.payment = this.paymentRef.valueChanges();
     }
+    this.paymentRef.query.ref.update(this.paymentPartial).catch(console.log);
     this.paymentPartial = {};
   }
 
