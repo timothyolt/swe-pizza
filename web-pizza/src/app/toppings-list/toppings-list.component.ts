@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { ItemType } from '../../models/item-type';
 
@@ -9,7 +9,7 @@ import { ItemType } from '../../models/item-type';
   styleUrls: ['./toppings-list.component.css']
 })
 export class ToppingsListComponent implements OnInit {
-  itemTypes: Observable<ItemType[]>;  
+  itemTypes: Observable<ItemType[]>;
 
   constructor(private db: AngularFireDatabase) { }
 

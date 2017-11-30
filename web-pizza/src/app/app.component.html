@@ -12,7 +12,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                <!-- <li class="nav-item active"> -->
+                    <!-- <li class="nav-item active"> -->
                     <a class="nav-link" routerLink="/home">Home
                         <span class="sr-only">(current)</span>
                     </a>
@@ -26,6 +26,8 @@
                     <a routerLink="/login">Login</a>
                 </div>
                 <div *ngIf="isLoggedIn">
+                    <a routerLink="/admin" *ngIf="isAdmin">Manage Site</a>
+                    &nbsp;
                     <a routerLink="/account">My Account</a>
                     &nbsp;
                     <a routerLink="/logout">Logout</a>
