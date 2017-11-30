@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
-import { AngularFireDatabase } from 'angularfire2/database';
 
 @Component({
-  selector: 'app-my-account',
-  templateUrl: './my-account.component.html',
-  styleUrls: ['./my-account.component.css']
+  selector: 'app-admin-panel',
+  templateUrl: './admin-panel.component.html',
+  styleUrls: ['./admin-panel.component.css']
 })
-export class MyAccountComponent implements OnInit {
+export class AdminPanelComponent implements OnInit {
   doneLoading = false;
 
-  constructor(private db: AngularFireDatabase, private auth: AngularFireAuth, private router: Router) { }
+  constructor(private auth: AngularFireAuth, private router: Router) { }
 
   ngOnInit() {
     this.auth.auth.onAuthStateChanged(user => {

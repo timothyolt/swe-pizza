@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { OrderComponent } from './order/order.component';
 import { MyAccountComponent } from './my-account/my-account.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 export const appRoutes: Routes = [
@@ -14,6 +15,7 @@ export const appRoutes: Routes = [
     { path: 'signUp', component: SignUpComponent },
     { path: 'order', component: OrderComponent },
     { path: 'account', component: MyAccountComponent },
+    { path: 'admin', component: AdminPanelComponent },
     {
         path: '',
         redirectTo: '/home',

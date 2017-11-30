@@ -20,7 +20,7 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit() {
     this.auth.auth.onAuthStateChanged(user => {
-      if (user) {
+      if (user && !user.isAnonymous) {
         this.router.navigateByUrl('account').catch(console.log);
       } else {
         this.doneLoading = true;

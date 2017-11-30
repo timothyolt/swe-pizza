@@ -19,6 +19,8 @@ import { MyAccountComponent } from './my-account/my-account.component';
 import { PastOrdersComponent } from './past-orders/past-orders.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { ToppingsListComponent } from './toppings-list/toppings-list.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
     SignUpComponent,
     MyAccountComponent,
     PastOrdersComponent,
-    AccountInfoComponent
+    AccountInfoComponent,
+    AdminPanelComponent,
+    ToppingsListComponent
   ],
   imports: [
     BrowserModule,
