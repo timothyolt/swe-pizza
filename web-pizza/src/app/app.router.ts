@@ -7,8 +7,9 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { OrderComponent } from './order/order.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LogoutComponent } from './logout/logout.component';
+import { EditToppingComponent } from './edit-topping/edit-topping.component'
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 export const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -18,6 +19,7 @@ export const appRoutes: Routes = [
     { path: 'order', component: OrderComponent },
     { path: 'account', component: MyAccountComponent },
     { path: 'admin', component: AdminPanelComponent },
+    { path: 'admin/toppings/:id/edit', component: EditToppingComponent },
     {
         path: '',
         redirectTo: '/home',

@@ -24,6 +24,7 @@ import { ToppingsListComponent } from './toppings-list/toppings-list.component';
 import { AccordionModule, ButtonsModule, TypeaheadModule } from 'ngx-bootstrap';
 import { AccordionGroupListComponent } from './accordion-group-list/accordion-group-list.component';
 import { LogoutComponent } from './logout/logout.component';
+import { EditToppingComponent } from './edit-topping/edit-topping.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { LogoutComponent } from './logout/logout.component';
     AdminPanelComponent,
     ToppingsListComponent,
     AccordionGroupListComponent,
-    LogoutComponent
+    LogoutComponent,
+    EditToppingComponent
   ],
   imports: [
     BrowserModule,
