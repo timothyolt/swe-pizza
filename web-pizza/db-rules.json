@@ -2,7 +2,7 @@
   "rules": {
     "defaultPizza": {
       ".read": "true",
-      ".write": "auth.admin === true",
+      ".write": "auth.admin === true || root.child('users/' + auth.uid).child('admin').val() === true",
       "$itemCat": {
         "$itemType": {
           // itemCategory object keys are valid itemTypes
@@ -26,7 +26,7 @@
     },
     "itemCat": {
       ".read": "true",
-      ".write": "auth.admin === true",
+      ".write": "auth.admin === true || root.child('users/' + auth.uid).child('admin').val() === true",
       "$itemCat": {
         "exclusive": {
           ".validate": "newData.isBoolean()"
@@ -38,7 +38,7 @@
     },
     "itemType": {
       ".read": "true",
-      ".write": "auth.admin === true",
+      ".write": "auth.admin === true || root.child('users/' + auth.uid).child('admin').val() === true",
       ".indexOn": ["cat"],
       "$itemType": {
         "cat": {
