@@ -18,5 +18,5 @@ export class ToppingsListComponent implements OnInit {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
     });
   }
-  
+
 }

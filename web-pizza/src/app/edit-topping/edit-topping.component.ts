@@ -38,4 +38,12 @@ export class EditToppingComponent implements OnInit {
     });
   }
 
+  delete() {
+    if (confirm('Are you sure you want to delete this topping?(TEMP BOX)')) {
+      this.db.object(`/itemType/${this.key}`).query.ref.remove().then(() => {
+        this.router.navigateByUrl('/admin');
+      });
+    }
+  }
+
 }

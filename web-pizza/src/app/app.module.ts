@@ -26,6 +26,9 @@ import { AccordionGroupListComponent } from './accordion-group-list/accordion-gr
 import { LogoutComponent } from './logout/logout.component';
 import { EditToppingComponent } from './edit-topping/edit-topping.component';
 import { CreateToppingComponent } from './create-topping/create-topping.component';
+import { ToppingCatListComponent } from './topping-cat-list/topping-cat-list.component';
+import { EditToppingCatComponent } from './edit-topping-cat/edit-topping-cat.component';
+import { CreateToppingCatComponent } from './create-topping-cat/create-topping-cat.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +49,10 @@ import { CreateToppingComponent } from './create-topping/create-topping.componen
     AccordionGroupListComponent,
     LogoutComponent,
     EditToppingComponent,
-    CreateToppingComponent
+    CreateToppingComponent,
+    ToppingCatListComponent,
+    EditToppingCatComponent,
+    CreateToppingCatComponent
   ],
   imports: [
     BrowserModule,

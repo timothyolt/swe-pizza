@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist" *ngIf="doneLoading">
   <li class="nav-item">
-    <a class="nav-link active" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="home" aria-selected="true">Edit Toppings</a>
+    <a class="nav-link active" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="home" aria-selected="true">Edit Menu</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Edit Marketing Info</a>
@@ -8,7 +8,17 @@
 </ul>
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-    <app-toppings-list></app-toppings-list>
+    <accordion [closeOthers]="true">
+      <accordion-group heading="Default pizza">
+        default config
+      </accordion-group>
+      <accordion-group heading="Toppings">
+          <app-toppings-list></app-toppings-list>
+      </accordion-group>
+      <accordion-group heading="Topping catagories">
+        <app-topping-cat-list></app-topping-cat-list>
+      </accordion-group>
+    </accordion>
   </div>
   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
     <!-- <app-account-info></app-account-info> -->
