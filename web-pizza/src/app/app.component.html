@@ -21,18 +21,24 @@
                     <a class="nav-link" routerLink="/order">Order</a>
                 </li>
             </ul>
-            <div class="form-inline my-2 my-lg-0">
-                <div *ngIf="!isLoggedIn">
+            <ul class="navbar-nav">
+                <ng-container *ngIf="!isLoggedIn">
+                  <li class="nav-item my-2 my-lg-0">
                     <a routerLink="/login">Login</a>
-                </div>
-                <div *ngIf="isLoggedIn">
+                  </li>
+                </ng-container>
+                <ng-container *ngIf="isLoggedIn">
+                  <li class="nav-item mx-0 mx-lg-2 my-2 my-lg-0">
                     <a routerLink="/admin" *ngIf="isAdmin">Manage Site</a>
-                    &nbsp;
+                  </li>
+                  <li class="nav-item mx-0 mx-lg-2 my-2 my-lg-0">
                     <a routerLink="/account">My Account</a>
-                    &nbsp;
+                  </li>
+                  <li class="nav-item mx-0 mx-lg-2 my-2 my-lg-0">
                     <a routerLink="/logout">Logout</a>
-                </div>
-            </div>
+                  </li>
+                </ng-container>
+            </ul>
         </div>
     </div>
 </nav>
