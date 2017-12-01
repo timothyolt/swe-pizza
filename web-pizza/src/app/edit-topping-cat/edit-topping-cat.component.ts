@@ -9,6 +9,7 @@ import { ItemCategory } from '../../models/item-category';
   styleUrls: ['./edit-topping-cat.component.css']
 })
 export class EditToppingCatComponent implements OnInit {
+  doneLoading = false;
   catagory = new ItemCategory();
   key: string;
 
@@ -17,7 +18,10 @@ export class EditToppingCatComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.key = params['id'];
-      this.db.object(`/itemCat`).query.ref.child(this.key).once('value', item => this.catagory = item.val());
+      this.db.object(`/itemCat/${this.key}`).query.ref.once('value', item => {
+        this.catagory = item.val();
+        this.doneLoading = true;
+      });
     });
   }
 

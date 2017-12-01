@@ -11,6 +11,7 @@ import { ItemType } from '../../models/item-type';
   styleUrls: ['./edit-topping.component.css']
 })
 export class EditToppingComponent implements OnInit {
+  doneLoading = false;
   topping = new ItemType();
   itemCats: Observable<ItemCategory[]>;
   key: string;
@@ -20,11 +21,15 @@ export class EditToppingComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.key = params['id'];
-      this.db.object(`/itemType`).query.ref.child(this.key).once('value', item => this.topping = item.val());
-    });
 
-    this.itemCats = this.db.list('/itemCat').snapshotChanges().map(changes => {
-      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+      this.db.object(`/itemType`).query.ref.child(this.key).once('value', item => {
+        this.topping = item.val();
+        this.doneLoading = true;
+      });
+
+      this.itemCats = this.db.list('/itemCat').snapshotChanges().map(changes => {
+        return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+      });
     });
   }
 
