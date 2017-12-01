@@ -27,9 +27,9 @@ export class CreateToppingComponent implements OnInit {
 
   save() {
     let ref = this.db.object('/itemType').query.ref.push({
-      name: this.name,
-      cost: this.cost,
-      cat: this.cat
+      name: this.topping.name,
+      cost: this.topping.cost,
+      cat: this.topping.cat
     }).then(item => {
       this.router.navigateByUrl('/admin');
     });
