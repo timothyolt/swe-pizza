@@ -19,4 +19,18 @@ export class ToppingsListComponent implements OnInit {
     this.itemTypes.subscribe(console.log);
   }
 
+  // this.userRef = this.db.object('users/' + user.uid);
+  // this.user = this.userRef.valueChanges();
+  // this.userRef.query.ref.child('payMethods').once('value', payMethodsSnapshot => {
+  //   if (payMethodsSnapshot.exists()) {
+  //     const payMethods = payMethodsSnapshot.val();
+  //     for (const key in payMethods) if (payMethods.hasOwnProperty(key)) {
+  //       this.paymentRef = this.db.object('payMethods/' + key);
+  //       this.payment = this.paymentRef.valueChanges();
+  //       break;
+  //       // todo support multiple payment methods
+  //     }
+  //   }
+  // }).catch(console.log);
+
 }

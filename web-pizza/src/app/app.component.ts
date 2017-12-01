@@ -18,12 +18,12 @@ export class AppComponent {
     this.auth.auth.onAuthStateChanged(user => {
       this.isLoggedIn = user && !user.isAnonymous;
       this.userInfo = this.db.object(`/users/${user.uid}`).valueChanges();
-      this.userInfo.subscribe(object => this.isAdmin = object.isAdmin);
+      this.userInfo.subscribe(object => this.isAdmin = object.admin);
     });
   }
 }
 
 class UserInfo {
   activeOrder: string;
-  isAdmin: boolean;
+  admin: boolean;
 }
