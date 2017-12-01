@@ -19,7 +19,7 @@ export class CreateToppingCatComponent implements OnInit {
   save() {
     this.db.object('/itemCat').query.ref.push({
       name: this.catagory.name,
-      exclusive: this.catagory.exclusive
+      exclusive: this.catagory.exclusive ? this.catagory.exclusive : false
     }).then(item => {
       this.router.navigateByUrl('/admin');
     });

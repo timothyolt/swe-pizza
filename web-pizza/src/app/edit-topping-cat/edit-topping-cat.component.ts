@@ -24,7 +24,7 @@ export class EditToppingCatComponent implements OnInit {
   save() {
     this.db.object(`/itemCat/${this.key}`).query.ref.set({
       name: this.catagory.name,
-      exclusive: this.catagory.exclusive
+      exclusive: this.catagory.exclusive ? this.catagory.exclusive : false
     }).then(item => {
       this.router.navigateByUrl('/admin');
     });
