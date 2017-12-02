@@ -29,6 +29,7 @@ import { CreateToppingComponent } from './create-topping/create-topping.componen
 import { ToppingCatListComponent } from './topping-cat-list/topping-cat-list.component';
 import { EditToppingCatComponent } from './edit-topping-cat/edit-topping-cat.component';
 import { CreateToppingCatComponent } from './create-topping-cat/create-topping-cat.component';
+import { EditPizzaComponent } from './edit-pizza/edit-pizza.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { CreateToppingCatComponent } from './create-topping-cat/create-topping-c
     CreateToppingComponent,
     ToppingCatListComponent,
     EditToppingCatComponent,
-    CreateToppingCatComponent
+    CreateToppingCatComponent,
+    EditPizzaComponent
   ],
   imports: [
     BrowserModule,
