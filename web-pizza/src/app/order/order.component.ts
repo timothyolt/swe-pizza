@@ -64,7 +64,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   cardRegex = new RegExp('^([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})|([0-9]{16})$');
   expMonths = [
     {value: '01', name: 'January'},
-    {value: '02', name: 'Febuary'},
+    {value: '02', name: 'February'},
     {value: '03', name: 'March'},
     {value: '04', name: 'April'},
     {value: '05', name: 'May'},
