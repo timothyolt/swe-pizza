@@ -1,15 +1,17 @@
 ///<reference path="../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ItemType } from '../../models/item-type';
 import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-item-type',
   templateUrl: './item-type.component.html',
   styleUrls: ['./item-type.component.css']
 })
-export class ItemTypeComponent implements OnInit {
+export class ItemTypeComponent implements OnInit, OnDestroy {
+  subscription = new Subscription();
   private _itemTypeSnapshot: SnapshotAction;
   @Input() itemType: ItemType;
   @Input() exclusive: boolean;
@@ -32,9 +34,11 @@ export class ItemTypeComponent implements OnInit {
 
   @Input()
   set inputRef(value: string) {
+    this.subscription.unsubscribe();
+    this.subscription = new Subscription();
     this.object = this.db.object(value);
     this.input = this.object.snapshotChanges();
-    this.input.subscribe(action => {
+    this.subscription.add(this.input.subscribe(action => {
       console.log('item-type subscription');
       console.log(action);
       if (action.payload.exists()) {
@@ -46,7 +50,7 @@ export class ItemTypeComponent implements OnInit {
       } else {
         this.checked = false;
       }
-    });
+    }));
   }
 
   get inputType() {
@@ -54,6 +58,11 @@ export class ItemTypeComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this.subscription = new Subscription();
   }
 
   onInputChange(e) {
