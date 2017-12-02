@@ -1,3 +1,11 @@
-<p>
-  edit-pizza works!
-</p>
+<div class="d-flex">
+  <input type="text" class="p-2 form-control" maxlength="100" title="Name" placeholder="Pizza name"
+         [ngModel]="pizza.name"
+         (input)="pizzaName = $event.target.value"
+         (blur)="savePizzaName()">
+</div>
+<span *ngIf="pizza.cost" style="margin-left: 0.5rem">Price: ${{pizza.cost}}</span>
+<app-item-category *ngFor="let itemCatSnapshot of itemCatSnapshots | async"
+                   [itemCatSnapshot]="itemCatSnapshot"></app-item-category>
+<button type="button" class="btn btn-success btn-right">Save</button>    
+&nbsp;               
