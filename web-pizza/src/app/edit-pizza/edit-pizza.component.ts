@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Pizza } from '../../models/pizza';
 import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/take'
 
 @Component({
   selector: 'app-edit-pizza',
@@ -9,9 +10,9 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./edit-pizza.component.css']
 })
 export class EditPizzaComponent implements OnInit {
-  pizzaRef: AngularFireObject<Pizza>;
   @Input() pizza = new Pizza();
-  @Input() itemCatSnapshots: Observable<SnapshotAction[]>;
+  itemCatSnapshots: Observable<SnapshotAction[]>;
+  itemTypeSnapshots: Observable<SnapshotAction[]>;
 
   nameEditable = false;
   pizzaName: string;
@@ -20,8 +21,11 @@ export class EditPizzaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.itemCatSnapshots = this.db.list('/itemCat').snapshotChanges().shareReplay(1);
+    this.itemCatSnapshots = this.db.list('/itemCat').snapshotChanges().take(1);
     this.itemCatSnapshots.subscribe(console.log);
+
+    this.itemTypeSnapshots = this.db.list('/itemType').snapshotChanges().take(1);
+    this.itemTypeSnapshots.subscribe(console.log);
   }
 
 }
