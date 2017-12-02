@@ -260,13 +260,14 @@ app.get('/acquireUser', (req, res) => {
         const order = orderSnapshot.val();
         const acquireOrder = acquireOrderSnapshot.val();
         for (const pizza in Object.keys(acquireOrder.pizzas)) if (acquireOrder.pizzas.hasOwnProperty(pizza)) {
-          console.log(Number(pizza));
           acquireOrder.pizzas[Number(pizza) + orderMax + 1] = acquireOrder.pizzas[Number(pizza)];
-          delete acquireOrder.pizzas[Number(pizza)];
+          // recalculate cost
+          acquireOrder.pizzas[Number(pizza) + orderMax + 1].cost = null;
         }
         for (const pizza in Object.keys(order.pizzas)) if (order.pizzas.hasOwnProperty(pizza)) {
-          console.log(Number(pizza));
           acquireOrder.pizzas[Number(pizza)] = order.pizzas[Number(pizza)];
+          // recalculate cost
+          acquireOrder.pizzas[Number(pizza)].cost = null;
         }
         acquireOrder.user = req.user.uid;
         // note, this only produces an option update for direct children

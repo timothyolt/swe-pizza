@@ -24,6 +24,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   addressSubscription: Subscription;
   paymentSubscription: Subscription;
   itemCatsSubscription: Subscription;
+  activeOrderRef: Reference;
   pizzaRef: Reference;
 
   isOrderOpen = true;
@@ -104,6 +105,8 @@ export class OrderComponent implements OnInit, OnDestroy {
           this.paymentSubscription.unsubscribe();
         if (this.itemCatsSubscription)
           this.itemCatsSubscription.unsubscribe();
+        if (this.activeOrderRef)
+          this.activeOrderRef.off();
         if (this.pizzaRef)
           this.pizzaRef.off();
         this.auth.auth.signInAnonymously().catch(console.log);
@@ -120,22 +123,19 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.paymentSubscription.unsubscribe();
     if (this.itemCatsSubscription)
       this.itemCatsSubscription.unsubscribe();
+    if (this.activeOrderRef)
+      this.activeOrderRef.off();
     if (this.pizzaRef)
       this.pizzaRef.off();
   }
 
   private setupOrder(userId: string) {
-    if (this.addressSubscription)
-      this.addressSubscription.unsubscribe();
-    if (this.paymentSubscription)
-      this.paymentSubscription.unsubscribe();
-    if (this.itemCatsSubscription)
-      this.itemCatsSubscription.unsubscribe();
-    if (this.pizzaRef)
-      this.pizzaRef.off();
-    this.db.database.ref('/users/' + userId).once('value', user => {
-      if (user.exists() && user.val().activeOrder) {
-        this.orderRef = '/orders/' + user.val().activeOrder;
+    if (this.activeOrderRef)
+      this.activeOrderRef.off();
+    this.activeOrderRef = this.db.database.ref('/users/' + userId + '/activeOrder');
+    this.activeOrderRef.on('value', activeOrder => {
+      if (activeOrder.exists()) {
+        this.orderRef = '/orders/' + activeOrder.val();
       } else {
         const order: Partial<Order> = {
           createdAt: new DatePipe('en-US').transform(new Date(), 'yyyy-MM-ddTHH:mm:ss'),
@@ -144,7 +144,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         };
         console.log(order);
         const orderId = this.db.database.ref('/orders').push(order).key;
-        this.db.database.ref('/users/' + userId).update({activeOrder: orderId}).catch(console.log);
+        this.activeOrderRef.set(orderId).catch(console.log);
         this.orderRef = '/orders/' + orderId;
         this.addNewPizza();
       }
@@ -153,11 +153,18 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges().shareReplay(1);
       this.addressRef = this.db.object(this.orderRef + '/address');
       this.address = this.addressRef.valueChanges().shareReplay(1);
+      if (this.addressSubscription)
+        this.addressSubscription.unsubscribe();
       this.addressSubscription = this.address.subscribe(address => this.validateAddressForm(address));
       this.paymentRef = this.db.object(this.orderRef + '/payment');
       this.payment = this.paymentRef.valueChanges().shareReplay(1);
+      if (this.paymentSubscription)
+        this.paymentSubscription.unsubscribe();
       this.paymentSubscription = this.payment.subscribe(payment => this.validatePaymentForm(payment));
       this.pizzaRef = this.db.database.ref(this.orderRef + '/pizzas');
+      if (this.pizzaRef)
+        this.pizzaRef.off();
+      this.pizzas = [];
       this.pizzaRef.on('child_added', pizza => {
         console.log('pizza added: ', pizza ? pizza.val() : null);
         if (!this.pizzas) {
@@ -171,8 +178,10 @@ export class OrderComponent implements OnInit, OnDestroy {
         console.log('pizza removed: ', pizza ? pizza.val() : null);
         this.pizzas.splice(Number(pizza.key), 1);
       });
-    }).catch(console.log);
+    }, );
     this.itemCats = this.db.list('/itemCat').snapshotChanges().shareReplay(1);
+    if (this.itemCatsSubscription)
+      this.itemCatsSubscription.unsubscribe();
     this.itemCatsSubscription = this.itemCats.subscribe(console.log);
   }
 
