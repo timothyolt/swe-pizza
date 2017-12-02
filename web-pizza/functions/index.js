@@ -10,7 +10,7 @@ exports.onOrderCostDeleted = functions.database.ref('orders/{order}/cost').onDel
   let taxRate;
   return admin.database().ref('globals/taxRate').once('value', data => {
     taxRate = data.exists() ? data.val() : 0;
-  }).then(() => event.data.ref.parent.transaction(order => {
+  }).then(() => admin.database().ref('orders/' + event.params.order).transaction(order => {
     console.log('order recalculate transaction');
     console.log(order);
     if (!order) return order;
@@ -37,19 +37,24 @@ exports.onPizzaRemoved = functions.database.ref('orders/{order}/pizzas/{pizza}')
     let taxRate;
     return admin.database().ref('globals/taxRate').once('value', data => {
       taxRate = data.exists() ? data.val() : 0;
-    }).then(() => event.data.ref.parent.parent.child('cost').transaction(orderCost => {
+    }).then(() => admin.database().ref('orders/' + event.params.order + '/cost').transaction(orderCost => {
       if (!orderCost) {
         return null;
       }
       orderCost -= event.data.previous.child('cost').val();
       if (orderCost === 0) {
         orderCost = null;
-        event.data.ref.parent.parent.child('total').set(null);
       }
-      else
-        event.data.ref.parent.parent.child('total').set(orderCost + orderCost * taxRate);
       return orderCost;
-    }));
+    })).then((committed, snapshot) => {
+      if (committed) {
+        if (snapshot && snapshot.val()) {
+          return admin.database().ref('orders/' + event.params.order + '/total').set(snapshot.val() + snapshot.val() * taxRate);
+        } else {
+          return admin.database().ref('orders/' + event.params.order + '/total').set(null);
+        }
+      }
+    });
   } else {
     return null;
   }
@@ -72,7 +77,7 @@ exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{
   ).then(() => {
     console.log(event.params.child);
     if (event.params.child === 'cost') {
-      if (event.data.val()) return event.data.ref.parent.parent.parent.transaction(order => {
+      if (event.data.val()) return admin.database().ref('orders/' + event.params.order).transaction(order => {
         console.log('order total transaction');
         console.log(order);
         if (!order) return order;
@@ -90,7 +95,7 @@ exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{
           order.total = order.cost + order.cost * taxRate;
         return order;
       });
-      else return event.data.ref.parent.transaction(pizza => {
+      else return admin.database().ref('orders/' + event.params.order + '/pizzas/' + event.params.pizza).transaction(pizza => {
         console.log('recalculate transaction');
         console.log(pizza);
         if (!pizza) return pizza;
@@ -123,7 +128,7 @@ exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{
     const itemCat = itemCats[event.params.child];
     console.log(itemCat);
     if (!itemCat) return null;
-    return event.data.ref.parent.transaction(pizza => {
+    return admin.database().ref('orders/' + event.params.order + '/pizzas/' + event.params.pizza).transaction(pizza => {
       console.log('modify transaction');
       console.log(pizza);
       if (!pizza) return pizza;
