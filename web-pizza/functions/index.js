@@ -10,7 +10,7 @@ exports.onOrderCostDeleted = functions.database.ref('orders/{order}/cost').onDel
   let taxRate;
   return admin.database().ref('globals/taxRate').once('value', data => {
     taxRate = data.exists() ? data.val() : 0;
-  }).then(() => event.data.ref.parent.transaction(order => {
+  }).then(() => admin.database().ref('orders/' + event.params.order).transaction(order => {
     console.log('order recalculate transaction');
     console.log(order);
     if (!order) return order;
@@ -37,16 +37,24 @@ exports.onPizzaRemoved = functions.database.ref('orders/{order}/pizzas/{pizza}')
     let taxRate;
     return admin.database().ref('globals/taxRate').once('value', data => {
       taxRate = data.exists() ? data.val() : 0;
-    }).then(() => event.data.ref.parent.parent.child('cost').transaction(orderCost => {
+    }).then(() => admin.database().ref('orders/' + event.params.order + '/cost').transaction(orderCost => {
+      if (!orderCost) {
+        return null;
+      }
       orderCost -= event.data.previous.child('cost').val();
       if (orderCost === 0) {
         orderCost = null;
-        event.data.ref.parent.parent.child('total').set(null);
       }
-      else
-        event.data.ref.parent.parent.child('total').set(orderCost + orderCost * taxRate);
       return orderCost;
-    }));
+    })).then((committed, snapshot) => {
+      if (committed) {
+        if (snapshot && snapshot.val()) {
+          return admin.database().ref('orders/' + event.params.order + '/total').set(snapshot.val() + snapshot.val() * taxRate);
+        } else {
+          return admin.database().ref('orders/' + event.params.order + '/total').set(null);
+        }
+      }
+    });
   } else {
     return null;
   }
@@ -69,7 +77,7 @@ exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{
   ).then(() => {
     console.log(event.params.child);
     if (event.params.child === 'cost') {
-      if (event.data.val()) return event.data.ref.parent.parent.parent.transaction(order => {
+      if (event.data.val()) return admin.database().ref('orders/' + event.params.order).transaction(order => {
         console.log('order total transaction');
         console.log(order);
         if (!order) return order;
@@ -87,7 +95,7 @@ exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{
           order.total = order.cost + order.cost * taxRate;
         return order;
       });
-      else return event.data.ref.parent.transaction(pizza => {
+      else return admin.database().ref('orders/' + event.params.order + '/pizzas/' + event.params.pizza).transaction(pizza => {
         console.log('recalculate transaction');
         console.log(pizza);
         if (!pizza) return pizza;
@@ -120,7 +128,7 @@ exports.onPizzaUpdated = functions.database.ref('orders/{order}/pizzas/{pizza}/{
     const itemCat = itemCats[event.params.child];
     console.log(itemCat);
     if (!itemCat) return null;
-    return event.data.ref.parent.transaction(pizza => {
+    return admin.database().ref('orders/' + event.params.order + '/pizzas/' + event.params.pizza).transaction(pizza => {
       console.log('modify transaction');
       console.log(pizza);
       if (!pizza) return pizza;
@@ -224,49 +232,82 @@ app.get('/acquireUser', (req, res) => {
   }).catch(error => {
     console.error('Error while verifying Firebase ID token:', error);
     res.status(403).send('Unauthorized');
-    console.log('Hello', req.user.uid, ' and ', acquireUser.uid);
-  }).then(decodedIdToken => Promise.all([
-    admin.database().ref('/users/' + req.user.uid).on('value', user => {
+  }).then(() => {
+    return admin.database().ref('/users/' + req.user.uid).once('value', user => {
+      console.log('user get: ', user ? user.val() : null);
       userSnapshot = user;
-    }),
-    admin.database().ref('/users/' + decodedIdToken.uid).on('value', user => {
+    })
+  }).then(() => {
+    return admin.database().ref('/users/' + acquireUser.uid).once('value', user => {
+      console.log('user get: ', user ? user.val() : null);
       acquireUserSnapshot = user;
     })
-  ])).then(() => {
-    if (userSnapshot.child('activeOrder').exists() && acquireUserSnapshot.child('activeOrder').exists()) {
+  }).then(() => {
+    console.log('user: ', userSnapshot.val());
+    console.log('acquireUser: ', acquireUserSnapshot.val());
+    if (userSnapshot && acquireUserSnapshot && userSnapshot.child('activeOrder').exists() && acquireUserSnapshot.child('activeOrder').exists()) {
       let acquireOrderSnapshot;
       let orderSnapshot;
       // because the user acquires the new order, the new order must acquire the old one
-      Promise.all([
-        admin.database().ref('/orders/' + userSnapshot.child('activeOrder').val()).on('value', acquireOrder => {
+      return Promise.all([
+        admin.database().ref('/orders/' + userSnapshot.child('activeOrder').val()).once('value', acquireOrder => {
           acquireOrderSnapshot = acquireOrder;
         }),
-        admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).on('value', order => {
+        admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).once('value', order => {
           orderSnapshot = order;
         })
       ]).then(() => {
-        const orderMax = Math.max(Object.keys(orderSnapshot.child('pizzas').val()));
+        let orderMax = -1; // -1 for no pizzas /shrug
+        orderSnapshot.child('pizzas').forEach(pizza => {
+          if (Number(pizza.key) > orderMax)
+            orderMax = Number(pizza.key);
+        });
         const order = orderSnapshot.val();
         const acquireOrder = acquireOrderSnapshot.val();
         for (const pizza in Object.keys(acquireOrder.pizzas)) if (acquireOrder.pizzas.hasOwnProperty(pizza)) {
-          console.log(pizza);
-          acquireOrder.pizzas[pizza + orderMax] = acquireOrder[pizza];
-          delete acquireOrder.pizzas[pizza];
+          acquireOrder.pizzas[Number(pizza) + orderMax + 1] = acquireOrder.pizzas[Number(pizza)];
+          // recalculate cost
+          acquireOrder.pizzas[Number(pizza) + orderMax + 1].cost = null;
         }
         for (const pizza in Object.keys(order.pizzas)) if (order.pizzas.hasOwnProperty(pizza)) {
-          console.log(pizza);
-          acquireOrder.pizzas[pizza] = order.pizzas[pizza];
+          acquireOrder.pizzas[Number(pizza)] = order.pizzas[Number(pizza)];
+          // recalculate cost
+          acquireOrder.pizzas[Number(pizza)].cost = null;
         }
-        return admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).update(acquireOrder);
-      }).catch(console.error);
-    }
-    if (acquireUserSnapshot.exists()) {
+        acquireOrder.user = req.user.uid;
+        // note, this only produces an option update for direct children
+        // a partial address or payment will override a full one
+        return admin.database().ref('/orders/' + acquireUserSnapshot.child('activeOrder').val()).update(acquireOrder).then(() => {
+          return admin.database().ref('/orders/' + userSnapshot.child('activeOrder').val()).remove();
+        });
+      }).then(() => {
+        // note, this only produces an option update for direct children
+        // a partial address will override a full one
+        const acquireUserVal = acquireUserSnapshot.val();
+        // todo: update any payments to allow user access
+        // todo: update any orders to allow user access
+        acquireUserVal.payMethods = null;
+        return admin.database().ref('/users/' + req.user.uid).update(acquireUserVal).then(() => {
+          return admin.database().ref('/users/' + acquireUser.uid).remove();
+        });
+      });
+    } else if (acquireUserSnapshot.exists()) {
       // note, this only produces an option update for direct children
       // a partial address will override a full one
-      admin.database().ref('/users/' + req.user.uid).update(acquireUserSnapshot.val()).catch(console.error);
+      const acquireUserVal = acquireUserSnapshot.val();
+      // todo: update any payments to allow user access
+      // todo: update any orders to allow user access
+      return admin.database().ref('/users/' + req.user.uid).update(acquireUserVal).then(() => {
+        return admin.database().ref('/users/' + acquireUser.uid).remove();
+      });
     }
+  }).then(() => {
+    return admin.auth().deleteUser(acquireUser.uid);
+  }).then(() => {
+    res.status(200).send('OK');
   }).catch(error => {
     console.error('Error while acquiring user: ', error);
+    res.status(500).send(error);
   });
 });
 

@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Order } from '../../models/order';
 import { Pizza } from '../../models/pizza';
 import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularfire2/database';
@@ -10,13 +10,25 @@ import { Check } from '../../models/check';
 import { Cash } from '../../models/cash';
 import 'rxjs/add/operator/shareReplay';
 import { DatePipe } from '@angular/common';
+import { Subscription } from 'rxjs/Subscription';
+import * as firebase from 'firebase';
+import Reference = firebase.database.Reference;
+import DataSnapshot = firebase.database.DataSnapshot;
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
+  authSubscription: Subscription;
+  addressSubscription: Subscription;
+  paymentSubscription: Subscription;
+  itemCatsSubscription: Subscription;
+  activeOrderRef: Reference;
+  pizzaRef: Reference;
+
   isOrderOpen = true;
   isDeliveryOpen = false;
   isPaymentOpen = false;
@@ -54,7 +66,7 @@ export class OrderComponent implements OnInit {
   cardRegex = new RegExp('^([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})|([0-9]{16})$');
   expMonths = [
     {value: '01', name: 'January'},
-    {value: '02', name: 'Febuary'},
+    {value: '02', name: 'February'},
     {value: '03', name: 'March'},
     {value: '04', name: 'April'},
     {value: '05', name: 'May'},
@@ -80,55 +92,104 @@ export class OrderComponent implements OnInit {
   expYearValid: boolean;
   cvcValid: boolean;
 
-  constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) {
-    this.auth.authState.subscribe(user => {
-      if (user && !user.isAnonymous) {
+  constructor(private auth: AngularFireAuth, private db: AngularFireDatabase, private router: Router) { }
+
+  ngOnInit() {
+    this.authSubscription = this.auth.authState.subscribe(user => {
+      if (user) {
         console.log('using user for order: ' + user.uid);
         this.setupOrder(user.uid);
       } else {
         console.log('creating anonymous user for order');
-        this.auth.auth.signInAnonymously().then(anonymousUser => this.setupOrder(anonymousUser.uid)).catch(console.log);
+        if (this.addressSubscription)
+          this.addressSubscription.unsubscribe();
+        if (this.paymentSubscription)
+          this.paymentSubscription.unsubscribe();
+        if (this.itemCatsSubscription)
+          this.itemCatsSubscription.unsubscribe();
+        if (this.activeOrderRef)
+          this.activeOrderRef.off();
+        if (this.pizzaRef)
+          this.pizzaRef.off();
+        this.auth.auth.signInAnonymously().catch(console.log);
       }
     });
   }
 
+  ngOnDestroy() {
+    if (this.authSubscription)
+      this.authSubscription.unsubscribe();
+    if (this.addressSubscription)
+      this.addressSubscription.unsubscribe();
+    if (this.paymentSubscription)
+      this.paymentSubscription.unsubscribe();
+    if (this.itemCatsSubscription)
+      this.itemCatsSubscription.unsubscribe();
+    if (this.activeOrderRef)
+      this.activeOrderRef.off();
+    if (this.pizzaRef)
+      this.pizzaRef.off();
+  }
+
   private setupOrder(userId: string) {
-    this.db.database.ref('/users/' + userId).once('value', user => {
-      if (user.exists() && user.val().activeOrder) {
-        this.orderRef = '/orders/' + user.val().activeOrder;
-      } else {
-        const order: Partial<Order> = {
-          user: userId
-        };
-        console.log(order);
-        const orderId = this.db.database.ref('/orders').push(order).key;
-        this.db.database.ref('/users/' + userId).update({activeOrder: orderId}).catch(console.log);
-        this.orderRef = '/orders/' + orderId;
-        this.addNewPizza();
-      }
-      this.cost = this.db.object(this.orderRef + '/cost').valueChanges().shareReplay(1);
-      this.total = this.db.object(this.orderRef + '/total').valueChanges().shareReplay(1);
-      this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges().shareReplay(1);
-      this.addressRef = this.db.object(this.orderRef + '/address');
-      this.address = this.addressRef.valueChanges().shareReplay(1);
-      this.address.subscribe(address => this.validateAddressForm(address));
-      this.paymentRef = this.db.object(this.orderRef + '/payment');
-      this.payment = this.paymentRef.valueChanges().shareReplay(1);
-      this.payment.subscribe(payment => this.validatePaymentForm(payment));
-      this.db.database.ref(this.orderRef + '/pizzas').on('child_added', pizza => {
-        if (!this.pizzas) {
-          this.pizzas = [];
-        }
-        const pizzaVal = pizza.val();
-        pizzaVal['$key'] = pizza.key;
-        this.pizzas.splice(Number(pizza.key), 0, pizzaVal);
-      });
-      this.db.database.ref(this.orderRef + '/pizzas').on('child_removed', pizza => {
-        this.pizzas.splice(Number(pizza.key), 1);
-      });
-    }).catch(console.log);
+    if (this.activeOrderRef)
+      this.activeOrderRef.off();
+    this.activeOrderRef = this.db.database.ref('/users/' + userId + '/activeOrder');
+    this.activeOrderRef.on('value', activeOrder => this.onActiveOrder(userId, activeOrder));
     this.itemCats = this.db.list('/itemCat').snapshotChanges().shareReplay(1);
-    this.itemCats.subscribe(console.log);
+    if (this.itemCatsSubscription)
+      this.itemCatsSubscription.unsubscribe();
+    this.itemCatsSubscription = this.itemCats.subscribe(console.log);
+  }
+
+  onActiveOrder(userId: string, activeOrder: DataSnapshot) {
+    if (activeOrder.exists()) {
+      this.orderRef = '/orders/' + activeOrder.val();
+    } else {
+      const order: Partial<Order> = {
+        createdAt: new DatePipe('en-US').transform(new Date(), 'yyyy-MM-ddTHH:mm:ss'),
+        user: userId,
+        delivery: true
+      };
+      console.log(order);
+      const orderId = this.db.database.ref('/orders').push(order, error => {
+        if (!error) {
+          this.activeOrderRef.set(orderId).catch(console.log);
+        }
+      }).key;
+      this.orderRef = '/orders/' + orderId;
+      this.addNewPizza();
+    }
+    this.cost = this.db.object(this.orderRef + '/cost').valueChanges().shareReplay(1);
+    this.total = this.db.object(this.orderRef + '/total').valueChanges().shareReplay(1);
+    this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges().shareReplay(1);
+    this.addressRef = this.db.object(this.orderRef + '/address');
+    this.address = this.addressRef.valueChanges().shareReplay(1);
+    if (this.addressSubscription)
+      this.addressSubscription.unsubscribe();
+    this.addressSubscription = this.address.subscribe(address => this.validateAddressForm(address));
+    this.paymentRef = this.db.object(this.orderRef + '/payment');
+    this.payment = this.paymentRef.valueChanges().shareReplay(1);
+    if (this.paymentSubscription)
+      this.paymentSubscription.unsubscribe();
+    this.paymentSubscription = this.payment.subscribe(payment => this.validatePaymentForm(payment));
+    this.pizzaRef = this.db.database.ref(this.orderRef + '/pizzas');
+    if (this.pizzaRef)
+      this.pizzaRef.off();
+    this.pizzas = [];
+    this.pizzaRef.on('child_added', pizza => {
+      console.log('pizza added: ', pizza ? pizza.val() : null);
+      if (!this.pizzas) {
+        this.pizzas = [];
+      }
+      const pizzaVal = pizza.val();
+      pizzaVal['$key'] = pizza.key;
+      this.pizzas.splice(Number(pizza.key), 0, pizzaVal);
+    });
+    this.pizzaRef.on('child_removed', pizza => {
+      console.log('pizza removed: ', pizza ? pizza.val() : null);
+      this.pizzas.splice(Number(pizza.key), 1);
+    });
   }
 
   saveIsDelivery(isDelivery: boolean) {
@@ -388,9 +449,6 @@ export class OrderComponent implements OnInit {
     this.paymentPartial = {};
   }
 
-  ngOnInit() {
-  }
-
   addNewPizza() {
     this.db.database.ref('/defaultPizza').once(
       'value',
@@ -404,5 +462,18 @@ export class OrderComponent implements OnInit {
           return pizzas;
         }).catch(console.log);
       }).catch(console.log);
+  }
+
+  finishOrder() {
+    if (this.orderRef && this.activeOrderRef) {
+      this.activeOrderRef.off();
+      const update = {};
+      update['activeOrder'] = null;
+      update['orders/' + this.db.database.ref(this.orderRef).key] = true;
+      this.db.database.ref('users/' + this.auth.auth.currentUser.uid).update(update).then(() => {
+        return this.router.navigateByUrl('home');
+      }).catch(console.log);
+      // TODO navigate to receipt
+    }
   }
 }

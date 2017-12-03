@@ -2,7 +2,7 @@
   "rules": {
     "defaultPizza": {
       ".read": "true",
-      ".write": "auth.admin === true",
+      ".write": "auth !== null && root.child('users/' + auth.uid + '/admin').val() === true",
       "$itemCat": {
         "$itemType": {
           // itemCategory object keys are valid itemTypes
@@ -19,14 +19,14 @@
     },
     "globals": {
       ".read": "true",
-      ".write": "auth.admin === true",
+      ".write": "auth !== null && root.child('users/' + auth.uid + '/admin').val() === true",
       "taxRate": {
         ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1"
       }
     },
     "itemCat": {
       ".read": "true",
-      ".write": "auth.admin === true",
+      ".write": "auth !== null && root.child('users/' + auth.uid + '/admin').val() === true",
       "$itemCat": {
         "exclusive": {
           ".validate": "newData.isBoolean()"
@@ -38,7 +38,7 @@
     },
     "itemType": {
       ".read": "true",
-      ".write": "auth.admin === true",
+      ".write": "auth !== null && root.child('users/' + auth.uid + '/admin').val() === true",
       ".indexOn": ["cat"],
       "$itemType": {
         "cat": {
@@ -54,9 +54,10 @@
     },
     "orders": {
       "$order": {
-        ".read": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
-        ".write": "auth !== null && (!data.exists() || auth.admin === true || data.child('user').val() === auth.uid)",
+        ".read": "auth !== null && (data.child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
+        ".write": "auth !== null && (!data.exists() || data.child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
         "address": {
+          ".write": "auth !== null && (!data.exists() || data.parent().child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
           "city": {
             ".validate": "newData.isString() && newData.val().length <= 240"
           },
@@ -74,15 +75,16 @@
           }
         },
         "cost": {
-          ".validate": "newData.isNumber()"
+          ".validate": "newData.isNumber() && root.child('users/' + auth.uid + '/admin').val() === true"
         },
-        "createdAt": {
-          ".validate": "newData.isString() && newData.val().matches(/^(19|20)[0-9][0-9]-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[tT]([0-5][0-9]):([0-5][0-9]):([0-5][0-9])$/)"
+        "createdAt": {".validate": "newData.isString() && newData.val().matches(/^(19|20)[0-9][0-9]-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[tT]([0-5][0-9]):([0-5][0-9]):([0-5][0-9])$/)"
         },
         "delivery": {
+          ".write": "auth !== null && (!data.exists() || data.parent().child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
           ".validate": "newData.isBoolean()"
         },
         "payment": {
+          ".write": "auth !== null && (!data.exists() || data.parent().child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
           "name": {
             ".validate": "newData.isString() && newData.val().length <= 240"
           },
@@ -114,10 +116,11 @@
           }
         },
         "pizzas": {
+          ".write": "auth !== null && (!data.exists() || data.parent().child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
           "$pizza": {
             "$itemCat": {
               "cost": {
-                ".validate": "newData.isNumber()"
+                ".validate": "newData.isNumber() && root.child('users/' + auth.uid + '/admin').val() === true"
               },
               "name": {
                 ".validate": "newData.isString() && newData.val().length < 100"
@@ -137,17 +140,17 @@
           }
         },
         "total": {
-          ".validate": "newData.isNumber()"
+          ".validate": "newData.isNumber() && root.child('users/' + auth.uid + '/admin').val() === true"
         },
         "user": {
-          ".validate": "root.child('users/' + newData.val()).exists()"
+          ".validate": "newData.val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true",
         }
       }
     },
     "payMethods": {
       "$payMethod": {
-        ".read": "auth !== null && (auth.admin === true || data.child('user').val() === auth.uid)",
-        ".write": "auth !== null && (!data.exists() || auth.admin === true || data.child('user').val() === auth.uid)",
+        ".read": "auth !== null && (data.child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
+        ".write": "auth !== null && (!data.exists() || data.child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
         "name": {
           ".validate": "newData.isString() && newData.val().length <= 240"
         },
@@ -174,9 +177,6 @@
             ".validate": "newData.parent().parent().child('type').val() === 'check' && newData.isNumber() && newData.val() <= 99999999999999999 && newData.val() >= 0"
           }
         },
-        "user": {
-          ".validate": "root.child('users/' + newData.val()).exists()"
-        },
         "type": {
           ".validate": "newData.isString() && (newData.val() === 'cash' || newData.val() === 'card' || newData.val() === 'check')"
         }
@@ -184,8 +184,8 @@
     },
     "users": {
       "$user": {
-        ".read": "$user === auth.uid || auth.admin === true",
-        ".write": "$user === auth.uid || auth.admin === true",
+        ".read": "auth !== null && ($user === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
+        ".write": "auth !== null && ($user === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
         "activeOrder": {
           ".validate": "root.child('orders/' + newData.val()).exists()"
         },

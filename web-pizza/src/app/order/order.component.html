@@ -23,8 +23,7 @@
         </h5>
         <button type="submit" class="btn btn-success btn-right" style="margin-bottom: 16px;" (click)="isDeliveryOpen = true">Next</button>
         <button type="button" class="btn btn-primary btn-right" style="margin-right: 16px;" (click)="addNewPizza()">
-          New Pizza</button>
-        <button type="button" class="btn btn-secondary btn-right" style="margin-right: 16px;">Load Pizza</button>
+          Add Pizza</button>
       </li>
     </ul>
   </app-accordion-group-list>
@@ -212,14 +211,17 @@
     <button *ngIf="!['cash', 'card', 'check'].includes((payment | async)?.type)" type="submit"
             class="btn btn-right" style="margin-bottom: 16px;">Finish</button>
     <button *ngIf="(payment | async)?.type === 'cash'" type="submit" class="btn btn-success btn-right"
-            style="margin-bottom: 16px;">Finish</button>
+            style="margin-bottom: 16px;"
+            (click)="finishOrder()">Finish</button>
     <button *ngIf="(payment | async)?.type === 'card'" type="submit" class="btn btn-right"
             style="margin-bottom: 16px;"
             [class.btn-success]="nameValid && cardValid && expMonthValid && expYearValid && cvcValid"
-            [disabled]="!(nameValid && cardValid && expMonthValid && expYearValid && cvcValid)">Finish</button>
+            [disabled]="!(nameValid && cardValid && expMonthValid && expYearValid && cvcValid)"
+            (click)="finishOrder()">Finish</button>
     <button *ngIf="(payment | async)?.type === 'check'" type="submit" class="btn btn-right"
             style="margin-bottom: 16px;"
             [class.btn-success]="nameValid && routingValid && bankValid"
-            [disabled]="!(nameValid && routingValid && bankValid)">Finish</button>
+            [disabled]="!(nameValid && routingValid && bankValid)"
+            (click)="finishOrder()">Finish</button>
   </accordion-group>
 </accordion>

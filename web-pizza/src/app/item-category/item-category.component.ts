@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ItemType } from '../../models/item-type';
 import { ItemCategory } from '../../models/item-category';
 import { AngularFireDatabase, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-item-category',
@@ -29,7 +30,6 @@ export class ItemCategoryComponent implements OnInit {
     this.itemCat = itemCatSnapshot.payload.val();
     this.itemTypeSnapshots = this.db.list('/itemType', ref => ref.orderByChild('cat')
         .equalTo(this.itemCatSnapshot && this.itemCatSnapshot.key ? this.itemCatSnapshot.key : null)).snapshotChanges();
-    this.itemTypeSnapshots.subscribe(console.log);
   }
 
   ngOnInit() {
