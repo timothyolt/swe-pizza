@@ -3,6 +3,7 @@ import { Pizza } from '../../models/pizza';
 import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/take'
+declare var $;
 
 @Component({
   selector: 'app-edit-pizza',
@@ -22,10 +23,40 @@ export class EditPizzaComponent implements OnInit {
 
   ngOnInit() {
     this.itemCatSnapshots = this.db.list('/itemCat').snapshotChanges().take(1);
-    this.itemCatSnapshots.subscribe(console.log);
-
     this.itemTypeSnapshots = this.db.list('/itemType').snapshotChanges().take(1);
-    this.itemTypeSnapshots.subscribe(console.log);
+
+    this.itemCatSnapshots.subscribe(cat => {
+
+    });
+    this.itemTypeSnapshots.subscribe(type => {
+
+    });
+
+    $(document).ready(() => {
+      this.db.object('/defaultPizza').query.ref.once('value', defaultPizza => {
+        this.pizza.name = defaultPizza.val().name;
+      }).then(objects => {
+        objects.forEach((object) => {
+          if (object.key !== 'name') {  
+            const key = object.key;        
+            if (object.val() instanceof Object) {
+              // for subjson(non-exclusive)
+              let subkey = Object.keys(object.val())[0];
+              $(`#${subkey}`).attr('checked', true);
+            } else {
+              //for string(exclusive)
+              $(`#${object.val()}`).attr('checked', true);
+            }
+          }
+        });
+      });
+    })
+  }
+
+  ___save() {
+    this.db.object('/defaultPizza').set({
+      name: this.pizza.name,
+    })
   }
 
 }
