@@ -1,0 +1,4 @@
+<button type="button" class="btn btn-success" style="width: 100%; cursor: pointer;" routerLink="/admin/toppings/new">+ New topping</button>
+<ul class="list-group">
+  <a routerLink="/admin/toppings/{{topping.key}}/edit" class="list-group-item list-group-item-action" *ngFor="let topping of itemTypes | async">Edit {{topping.name}}</a>  
+</ul>

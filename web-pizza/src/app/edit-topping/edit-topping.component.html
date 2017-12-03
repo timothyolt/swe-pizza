@@ -1,0 +1,19 @@
+<div *ngIf="doneLoading">
+  <div class="form-group">
+    <label for="toppingNameInput">Name</label>
+    <input type="text" class="form-control" id="toppingNameInput" placeholder="Pepperoni" [(ngModel)]="topping.name">
+  </div>
+  <div class="form-group">
+    <label for="toppingCostInput">Cost</label>
+    <input type="number" class="form-control" id="toppingCostInput" placeholder="1" [(ngModel)]="topping.cost">
+  </div>
+  <div class="form-group">
+    <label for="catagorySelectInput">Catagory</label>
+    <select class="form-control" id="catagorySelectInput" [(ngModel)]="topping.cat">
+      <option *ngFor="let catagory of itemCats | async" [value]="catagory.key">{{catagory.name}}</option>
+    </select>
+  </div>
+  <button type="button" class="btn btn-success btn-right" (click)="save()">Update</button>
+  <button type="button" class="btn btn-danger btn-right" (click)="delete()" style="margin-right: 8px;">Delete</button>
+</div>
+<div class="spinner" *ngIf="!doneLoading"></div>

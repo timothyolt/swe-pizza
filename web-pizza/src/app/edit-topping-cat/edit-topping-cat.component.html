@@ -1,0 +1,14 @@
+<div *ngIf="doneLoading">
+  <div class="form-group">
+    <label for="toppingNameInput">Name</label>
+    <input type="text" class="form-control" id="toppingNameInput" placeholder="Pepperoni" [(ngModel)]="catagory.name">
+  </div>
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" [(ngModel)]="catagory.exclusive"> Exclusive
+    </label>
+  </div>
+  <button type="button" class="btn btn-success btn-right" (click)="save()">Update</button>
+  <button type="button" class="btn btn-danger btn-right" (click)="delete()" style="margin-right: 8px;">Delete</button>
+</div>
+<div class="spinner" *ngIf="!doneLoading"></div>

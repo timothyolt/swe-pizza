@@ -1,0 +1,14 @@
+<div *ngIf="doneLoading">
+  <accordion [closeOthers]="true">
+    <accordion-group heading="Default pizza">
+      <app-edit-pizza></app-edit-pizza>
+    </accordion-group>
+    <accordion-group heading="Toppings">
+      <app-toppings-list></app-toppings-list>
+    </accordion-group>
+    <accordion-group heading="Topping catagories">
+      <app-topping-cat-list></app-topping-cat-list>
+    </accordion-group>
+  </accordion>
+</div>
+<div class="spinner" *ngIf="!doneLoading"></div>

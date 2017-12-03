@@ -19,9 +19,17 @@ import { MyAccountComponent } from './my-account/my-account.component';
 import { PastOrdersComponent } from './past-orders/past-orders.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { ToppingsListComponent } from './toppings-list/toppings-list.component';
 import { AccordionModule, ButtonsModule, TypeaheadModule } from 'ngx-bootstrap';
 import { AccordionGroupListComponent } from './accordion-group-list/accordion-group-list.component';
 import { LogoutComponent } from './logout/logout.component';
+import { EditToppingComponent } from './edit-topping/edit-topping.component';
+import { CreateToppingComponent } from './create-topping/create-topping.component';
+import { ToppingCatListComponent } from './topping-cat-list/topping-cat-list.component';
+import { EditToppingCatComponent } from './edit-topping-cat/edit-topping-cat.component';
+import { CreateToppingCatComponent } from './create-topping-cat/create-topping-cat.component';
+import { EditPizzaComponent } from './edit-pizza/edit-pizza.component';
 
 @NgModule({
   declarations: [
@@ -37,8 +45,16 @@ import { LogoutComponent } from './logout/logout.component';
     MyAccountComponent,
     PastOrdersComponent,
     AccountInfoComponent,
+    AdminPanelComponent,
+    ToppingsListComponent,
     AccordionGroupListComponent,
-    LogoutComponent
+    LogoutComponent,
+    EditToppingComponent,
+    CreateToppingComponent,
+    ToppingCatListComponent,
+    EditToppingCatComponent,
+    CreateToppingCatComponent,
+    EditPizzaComponent
   ],
   imports: [
     BrowserModule,
