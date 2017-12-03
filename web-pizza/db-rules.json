@@ -55,6 +55,7 @@
     "orders": {
       "$order": {
         ".read": "auth !== null && (data.child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
+        ".write": "auth !== null && (!data.exists() || data.child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
         "address": {
           ".write": "auth !== null && (!data.exists() || data.parent().child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
           "city": {
@@ -74,12 +75,9 @@
           }
         },
         "cost": {
-          ".write": "auth !== null && root.child('users/' + auth.uid + '/admin').val() === true",
-          ".validate": "newData.isNumber()"
+          ".validate": "newData.isNumber() && root.child('users/' + auth.uid + '/admin').val() === true"
         },
-        "createdAt": {
-          ".write": "auth !== null && (!data.exists() || data.parent().child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
-          ".validate": "newData.isString() && newData.val().matches(/^(19|20)[0-9][0-9]-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[tT]([0-5][0-9]):([0-5][0-9]):([0-5][0-9])$/)"
+        "createdAt": {".validate": "newData.isString() && newData.val().matches(/^(19|20)[0-9][0-9]-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[tT]([0-5][0-9]):([0-5][0-9]):([0-5][0-9])$/)"
         },
         "delivery": {
           ".write": "auth !== null && (!data.exists() || data.parent().child('user').val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true)",
@@ -122,7 +120,7 @@
           "$pizza": {
             "$itemCat": {
               "cost": {
-                ".validate": "newData.isNumber()"
+                ".validate": "newData.isNumber() && root.child('users/' + auth.uid + '/admin').val() === true"
               },
               "name": {
                 ".validate": "newData.isString() && newData.val().length < 100"
@@ -142,8 +140,10 @@
           }
         },
         "total": {
-          ".write": "auth !== null && root.child('users/' + auth.uid + '/admin').val() === true",
-          ".validate": "newData.isNumber()"
+          ".validate": "newData.isNumber() && root.child('users/' + auth.uid + '/admin').val() === true"
+        },
+        "user": {
+          ".validate": "newData.val() === auth.uid || root.child('users/' + auth.uid + '/admin').val() === true",
         }
       }
     },
