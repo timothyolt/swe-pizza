@@ -41,6 +41,30 @@
         </div>
       </fieldset>
       <div class="form-group">
+        <label for="addressInput">Name</label>
+        <div [class.was-validated]="nameValidated" style="margin-bottom: 16px">
+          <input type="text" class="form-control" id="nameInput" placeholder="Enter name" name="name"
+                 required maxlength="240"
+                 [class.is-valid]="nameValidated && nameValid"
+                 [class.is-invalid]="nameValidated && !nameValid"
+                 [ngModel]="(contact | async)?.name"
+                 (input)="onInputName($event.target.value)"
+                 (blur)="onInputName($event.target.value, true); saveContact()">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="addressInput">Cell phone</label>
+        <div [class.was-validated]="cellValidated" style="margin-bottom: 16px">
+          <input type="text" class="form-control" id="cellInput" placeholder="Enter cell phone" name="cell"
+                 required maxlength="240"
+                 [class.is-valid]="cellValidated && cellValid"
+                 [class.is-invalid]="cellValidated && !cellValid"
+                 [ngModel]="(contact | async)?.cell"
+                 (input)="onInputCell($event.target.value)"
+                 (blur)="onInputCell($event.target.value, true); saveContact()">
+        </div>
+      </div>
+      <div class="form-group">
         <label for="addressInput">Street address</label>
         <div [class.was-validated]="(isDelivery | async) && addressValidated" style="margin-bottom: 16px">
           <input type="text" class="form-control" id="addressInput" placeholder="Enter street address" name="address"
@@ -104,8 +128,8 @@
         </div>
       </div>
       <button type="submit" class="btn btn-right" style="margin-bottom: 16px;" (click)="isPaymentOpen = true"
-              [class.btn-success]="!(isDelivery | async) || (addressValid && apartmentValid && cityValid && stateValid && zipValid)"
-              [disabled]="(isDelivery | async) && !(addressValid && apartmentValid && cityValid && stateValid && zipValid)">Next
+              [class.btn-success]="(!(isDelivery | async) || (addressValid && apartmentValid && cityValid && stateValid && zipValid)) && nameValid && cellValid"
+              [disabled]="((isDelivery | async) && !(addressValid && apartmentValid && cityValid && stateValid && zipValid)) || !(nameValid && cellValid)">Next
       </button>
     </form>
   </accordion-group>
@@ -128,11 +152,11 @@
         <label for="fullNameInput">Full name</label>
         <input class="form-control" id="fullNameInput" placeholder="Enter full name on card" name="name"
                type="text" maxlength="240" required
-               [class.is-valid]="nameValidated && nameValid"
-               [class.is-invalid]="nameValidated && !nameValid"
+               [class.is-valid]="payNameValidated && payNameValid"
+               [class.is-invalid]="payNameValidated && !payNameValid"
                [ngModel]="(payment | async)?.name"
-               (input)="onInputName($event.target.value)"
-               (blur)="onInputName($event.target.value, true); savePayment()">
+               (input)="onInputPayName($event.target.value)"
+               (blur)="onInputPayName($event.target.value, true); savePayment()">
       </div>
       <div *ngIf="(payment | async)?.type === 'check'" class="form-group">
         <label for="bankNumber">Bank number</label>
@@ -215,13 +239,13 @@
             (click)="finishOrder()">Finish</button>
     <button *ngIf="(payment | async)?.type === 'card'" type="submit" class="btn btn-right"
             style="margin-bottom: 16px;"
-            [class.btn-success]="nameValid && cardValid && expMonthValid && expYearValid && cvcValid"
-            [disabled]="!(nameValid && cardValid && expMonthValid && expYearValid && cvcValid)"
+            [class.btn-success]="payNameValid && cardValid && expMonthValid && expYearValid && cvcValid"
+            [disabled]="!(payNameValid && cardValid && expMonthValid && expYearValid && cvcValid)"
             (click)="finishOrder()">Finish</button>
     <button *ngIf="(payment | async)?.type === 'check'" type="submit" class="btn btn-right"
             style="margin-bottom: 16px;"
-            [class.btn-success]="nameValid && routingValid && bankValid"
-            [disabled]="!(nameValid && routingValid && bankValid)"
+            [class.btn-success]="payNameValid && routingValid && bankValid"
+            [disabled]="!(payNameValid && routingValid && bankValid)"
             (click)="finishOrder()">Finish</button>
   </accordion-group>
 </accordion>
