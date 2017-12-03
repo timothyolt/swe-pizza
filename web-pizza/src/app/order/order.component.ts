@@ -13,6 +13,8 @@ import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 import * as firebase from 'firebase';
 import Reference = firebase.database.Reference;
+import DataSnapshot = firebase.database.DataSnapshot;
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order',
@@ -64,7 +66,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   cardRegex = new RegExp('^([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})|([0-9]{16})$');
   expMonths = [
     {value: '01', name: 'January'},
-    {value: '02', name: 'Febuary'},
+    {value: '02', name: 'February'},
     {value: '03', name: 'March'},
     {value: '04', name: 'April'},
     {value: '05', name: 'May'},
@@ -90,7 +92,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   expYearValid: boolean;
   cvcValid: boolean;
 
-  constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) { }
+  constructor(private auth: AngularFireAuth, private db: AngularFireDatabase, private router: Router) { }
 
   ngOnInit() {
     this.authSubscription = this.auth.authState.subscribe(user => {
@@ -133,56 +135,61 @@ export class OrderComponent implements OnInit, OnDestroy {
     if (this.activeOrderRef)
       this.activeOrderRef.off();
     this.activeOrderRef = this.db.database.ref('/users/' + userId + '/activeOrder');
-    this.activeOrderRef.on('value', activeOrder => {
-      if (activeOrder.exists()) {
-        this.orderRef = '/orders/' + activeOrder.val();
-      } else {
-        const order: Partial<Order> = {
-          createdAt: new DatePipe('en-US').transform(new Date(), 'yyyy-MM-ddTHH:mm:ss'),
-          user: userId,
-          delivery: true
-        };
-        console.log(order);
-        const orderId = this.db.database.ref('/orders').push(order).key;
-        this.activeOrderRef.set(orderId).catch(console.log);
-        this.orderRef = '/orders/' + orderId;
-        this.addNewPizza();
-      }
-      this.cost = this.db.object(this.orderRef + '/cost').valueChanges().shareReplay(1);
-      this.total = this.db.object(this.orderRef + '/total').valueChanges().shareReplay(1);
-      this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges().shareReplay(1);
-      this.addressRef = this.db.object(this.orderRef + '/address');
-      this.address = this.addressRef.valueChanges().shareReplay(1);
-      if (this.addressSubscription)
-        this.addressSubscription.unsubscribe();
-      this.addressSubscription = this.address.subscribe(address => this.validateAddressForm(address));
-      this.paymentRef = this.db.object(this.orderRef + '/payment');
-      this.payment = this.paymentRef.valueChanges().shareReplay(1);
-      if (this.paymentSubscription)
-        this.paymentSubscription.unsubscribe();
-      this.paymentSubscription = this.payment.subscribe(payment => this.validatePaymentForm(payment));
-      this.pizzaRef = this.db.database.ref(this.orderRef + '/pizzas');
-      if (this.pizzaRef)
-        this.pizzaRef.off();
-      this.pizzas = [];
-      this.pizzaRef.on('child_added', pizza => {
-        console.log('pizza added: ', pizza ? pizza.val() : null);
-        if (!this.pizzas) {
-          this.pizzas = [];
-        }
-        const pizzaVal = pizza.val();
-        pizzaVal['$key'] = pizza.key;
-        this.pizzas.splice(Number(pizza.key), 0, pizzaVal);
-      });
-      this.pizzaRef.on('child_removed', pizza => {
-        console.log('pizza removed: ', pizza ? pizza.val() : null);
-        this.pizzas.splice(Number(pizza.key), 1);
-      });
-    }, );
+    this.activeOrderRef.on('value', activeOrder => this.onActiveOrder(userId, activeOrder));
     this.itemCats = this.db.list('/itemCat').snapshotChanges().shareReplay(1);
     if (this.itemCatsSubscription)
       this.itemCatsSubscription.unsubscribe();
     this.itemCatsSubscription = this.itemCats.subscribe(console.log);
+  }
+
+  onActiveOrder(userId: string, activeOrder: DataSnapshot) {
+    if (activeOrder.exists()) {
+      this.orderRef = '/orders/' + activeOrder.val();
+    } else {
+      const order: Partial<Order> = {
+        createdAt: new DatePipe('en-US').transform(new Date(), 'yyyy-MM-ddTHH:mm:ss'),
+        user: userId,
+        delivery: true
+      };
+      console.log(order);
+      const orderId = this.db.database.ref('/orders').push(order, error => {
+        if (!error) {
+          this.activeOrderRef.set(orderId).catch(console.log);
+        }
+      }).key;
+      this.orderRef = '/orders/' + orderId;
+      this.addNewPizza();
+    }
+    this.cost = this.db.object(this.orderRef + '/cost').valueChanges().shareReplay(1);
+    this.total = this.db.object(this.orderRef + '/total').valueChanges().shareReplay(1);
+    this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges().shareReplay(1);
+    this.addressRef = this.db.object(this.orderRef + '/address');
+    this.address = this.addressRef.valueChanges().shareReplay(1);
+    if (this.addressSubscription)
+      this.addressSubscription.unsubscribe();
+    this.addressSubscription = this.address.subscribe(address => this.validateAddressForm(address));
+    this.paymentRef = this.db.object(this.orderRef + '/payment');
+    this.payment = this.paymentRef.valueChanges().shareReplay(1);
+    if (this.paymentSubscription)
+      this.paymentSubscription.unsubscribe();
+    this.paymentSubscription = this.payment.subscribe(payment => this.validatePaymentForm(payment));
+    this.pizzaRef = this.db.database.ref(this.orderRef + '/pizzas');
+    if (this.pizzaRef)
+      this.pizzaRef.off();
+    this.pizzas = [];
+    this.pizzaRef.on('child_added', pizza => {
+      console.log('pizza added: ', pizza ? pizza.val() : null);
+      if (!this.pizzas) {
+        this.pizzas = [];
+      }
+      const pizzaVal = pizza.val();
+      pizzaVal['$key'] = pizza.key;
+      this.pizzas.splice(Number(pizza.key), 0, pizzaVal);
+    });
+    this.pizzaRef.on('child_removed', pizza => {
+      console.log('pizza removed: ', pizza ? pizza.val() : null);
+      this.pizzas.splice(Number(pizza.key), 1);
+    });
   }
 
   saveIsDelivery(isDelivery: boolean) {
@@ -455,5 +462,18 @@ export class OrderComponent implements OnInit, OnDestroy {
           return pizzas;
         }).catch(console.log);
       }).catch(console.log);
+  }
+
+  finishOrder() {
+    if (this.orderRef && this.activeOrderRef) {
+      this.activeOrderRef.off();
+      const update = {};
+      update['activeOrder'] = null;
+      update['orders/' + this.db.database.ref(this.orderRef).key] = true;
+      this.db.database.ref('users/' + this.auth.auth.currentUser.uid).update(update).then(() => {
+        return this.router.navigateByUrl('home');
+      }).catch(console.log);
+      // TODO navigate to receipt
+    }
   }
 }
