@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as firebase from 'firebase';
 import Reference = firebase.database.Reference;
 import DataSnapshot = firebase.database.DataSnapshot;
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order',
@@ -91,7 +92,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   expYearValid: boolean;
   cvcValid: boolean;
 
-  constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) { }
+  constructor(private auth: AngularFireAuth, private db: AngularFireDatabase, private router: Router) { }
 
   ngOnInit() {
     this.authSubscription = this.auth.authState.subscribe(user => {
@@ -461,5 +462,18 @@ export class OrderComponent implements OnInit, OnDestroy {
           return pizzas;
         }).catch(console.log);
       }).catch(console.log);
+  }
+
+  finishOrder() {
+    if (this.orderRef && this.activeOrderRef) {
+      this.activeOrderRef.off();
+      const update = {};
+      update['activeOrder'] = null;
+      update['orders/' + this.db.database.ref(this.orderRef).key] = true;
+      this.db.database.ref('users/' + this.auth.auth.currentUser.uid).update(update).then(() => {
+        return this.router.navigateByUrl('home');
+      }).catch(console.log);
+      // TODO navigate to receipt
+    }
   }
 }
