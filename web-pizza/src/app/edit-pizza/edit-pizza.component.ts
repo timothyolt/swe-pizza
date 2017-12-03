@@ -14,46 +14,45 @@ export class EditPizzaComponent implements OnInit {
   @Input() pizza = new Pizza();
   itemCatSnapshots: Observable<SnapshotAction[]>;
   itemTypeSnapshots: Observable<SnapshotAction[]>;
-
   nameEditable = false;
   pizzaName: string;
+  showSuccess = 'none';
+  showWarning = 'none';
 
-  constructor(private db: AngularFireDatabase) {
-  }
+  constructor(private db: AngularFireDatabase) { }
 
   ngOnInit() {
     this.itemCatSnapshots = this.db.list('/itemCat').snapshotChanges().take(1);
     this.itemTypeSnapshots = this.db.list('/itemType').snapshotChanges().take(1);
 
     this.itemCatSnapshots.subscribe(cat => {
-
-    });
-    this.itemTypeSnapshots.subscribe(type => {
-
-    });
-
-    $(document).ready(() => {
-      this.db.object('/defaultPizza').query.ref.once('value', defaultPizza => {
-        this.pizza.name = defaultPizza.val().name;
-      }).then(objects => {
-        objects.forEach((object) => {
-          if (object.key !== 'name') {
-            const key = object.key;
-            if (object.val() instanceof Object) {
-              // for subjson(non-exclusive)
-              let subkey = Object.keys(object.val())[0];
-              $(`#${subkey}`).prop('checked', true);
-            } else {
-              //for string(exclusive)
-              $(`#${object.val()}`).prop('checked', true);
-            }
-          }
+      this.itemTypeSnapshots.subscribe(type => {
+        $(document).ready(() => {
+          this.db.object('/defaultPizza').query.ref.once('value', defaultPizza => {
+            this.pizza.name = defaultPizza.val().name;
+          }).then(objects => {
+            objects.forEach((object) => {
+              if (object.key !== 'name') {
+                const key = object.key;
+                if (object.val() instanceof Object) {
+                  // for subjson(non-exclusive)
+                  let subkey = Object.keys(object.val())[0];
+                  $(`#${subkey}`).prop('checked', true);
+                } else {
+                  //for string(exclusive)
+                  $(`#${object.val()}`).prop('checked', true);
+                }
+              }
+            });
+          });
         });
       });
     });
   }
 
   save() {
+    this.showSuccess = 'none';
+    this.showWarning = 'none';
     let dataToSave: any = { 'name': this.pizza.name };
 
     $(document).ready(() => {
@@ -79,9 +78,12 @@ export class EditPizzaComponent implements OnInit {
       });
 
       console.log('JSON: ' + JSON.stringify(dataToSave));
-
-      this.db.object('/defaultPizza').set(dataToSave);
+      this.db.object('/defaultPizza').set(dataToSave).then(() => {
+        this.showSuccess = 'block';
+      }, () => {
+        this.showWarning = 'block';
+      });
     });
   }
-  
+
 }

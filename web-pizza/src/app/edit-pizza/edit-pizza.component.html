@@ -1,5 +1,11 @@
+<div class="alert alert-success" role="alert" [style.display]="showSuccess">
+    New pizza saved!
+  </div>
+  <div class="alert alert-warning" role="alert" [style.display]="showWarning">
+    New pizza configuration couldn't be saved at this time.
+  </div>
 <div class="d-flex">
-  <input type="text" class="p-2 form-control" maxlength="100" title="Name" placeholder="Pizza name" [ngModel]="pizza.name"
+  <input type="text" class="p-2 form-control" maxlength="100" title="Name" placeholder="Pizza name" [(ngModel)]="pizza.name"
     (input)="pizzaName = $event.target.value">
 </div>
 <br>
