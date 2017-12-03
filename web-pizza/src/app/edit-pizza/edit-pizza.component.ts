@@ -37,26 +37,51 @@ export class EditPizzaComponent implements OnInit {
         this.pizza.name = defaultPizza.val().name;
       }).then(objects => {
         objects.forEach((object) => {
-          if (object.key !== 'name') {  
-            const key = object.key;        
+          if (object.key !== 'name') {
+            const key = object.key;
             if (object.val() instanceof Object) {
               // for subjson(non-exclusive)
               let subkey = Object.keys(object.val())[0];
-              $(`#${subkey}`).attr('checked', true);
+              $(`#${subkey}`).prop('checked', true);
             } else {
               //for string(exclusive)
-              $(`#${object.val()}`).attr('checked', true);
+              $(`#${object.val()}`).prop('checked', true);
             }
           }
         });
       });
-    })
+    });
   }
 
-  ___save() {
-    this.db.object('/defaultPizza').set({
-      name: this.pizza.name,
-    })
-  }
+  save() {
+    let dataToSave: any = { 'name': this.pizza.name };
 
+    $(document).ready(() => {
+      $('#form-wrapper :input').each(function () {
+        if ($(this).prop('checked')) {
+          let key = $(this).attr('id');
+          let cat = $(this).attr('data-cat');
+
+          if ($(this).attr('data-exclusive') === 'true') {
+            $.extend(dataToSave, {
+              [cat]: key
+            });
+          } else {
+            if (dataToSave[cat]) {
+              $.extend(dataToSave[cat], {
+                [key]: true
+              });
+            } else {
+              dataToSave[cat] = { [key]: true };
+            }
+          }
+        }
+      });
+
+      console.log('JSON: ' + JSON.stringify(dataToSave));
+
+      this.db.object('/defaultPizza').set(dataToSave);
+    });
+  }
+  
 }
