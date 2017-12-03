@@ -10,7 +10,7 @@
   <div *ngFor="let itemType of itemTypeSnapshots | async">
     <div *ngIf="itemType.payload.val().cat == itemCat.key">
       <span *ngIf="!itemCat.payload.val().exclusive"><input type="checkbox" data-key="itemType.key" data-cat="itemCat.key"> {{itemType.payload.val().name}}</span>
-      <span *ngIf="itemCat.payload.val().exclusive"><input type="radio" name="itemCat.payload.val().name" data-key="itemType.key" data-cat="itemCat.key"> {{itemType.payload.val().name}}</span>
+      <span *ngIf="itemCat.payload.val().exclusive"><input type="radio" name="itemCat.key" data-key="itemType.key" data-cat="itemCat.key"> {{itemType.payload.val().name}}</span>
     </div>
   </div>
 </div>
