@@ -1,0 +1,4 @@
+<button type="button" class="btn btn-success" style="width: 100%; cursor: pointer;" routerLink="/admin/topping-catagory/new">+ New topping catagory</button>
+<ul class="list-group">
+  <a routerLink="/admin/topping-catagory/{{catagory.key}}/edit" class="list-group-item list-group-item-action" *ngFor="let catagory of itemCats | async">Edit {{catagory.name}}</a>  
+</ul>

@@ -1,12 +1,12 @@
 <div class="alert alert-danger" role="alert" *ngIf="error.display">
-    {{error.message}}
-  </div>
+  {{error.message}}
+</div>
 <div class="card" *ngIf="doneLoading">
   <div class="inner-card">
     <div class="form-group">
       <label for="emailInput">Email address</label>
-      <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Enter email"
-             [(ngModel)]="email" email>
+      <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="email"
+        email>
       <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
     </div>
     <div class="form-group">
@@ -15,11 +15,12 @@
     </div>
     <div class="form-group">
       <label for="confirmPasswordInput">Confirm Password</label>
-      <input type="password" class="form-control" id="confirmPasswordInput" placeholder="Confirm Password"
-             [(ngModel)]="confirmPassword">
+      <input type="password" class="form-control" id="confirmPasswordInput" placeholder="Confirm Password" [(ngModel)]="confirmPassword">
     </div>
     <button type="submit" class="btn btn-success btn-right" (click)="signUp()">Sign Up</button>
   </div>
-  <span class="sub-action">Already have an account? <a routerLink="/login">Login</a></span>
+  <span class="sub-action">Already have an account?
+    <a routerLink="/login">Login</a>
+  </span>
 </div>
 <div class="spinner" *ngIf="!doneLoading"></div>

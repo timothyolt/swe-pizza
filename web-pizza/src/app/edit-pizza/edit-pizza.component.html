@@ -1,0 +1,28 @@
+<div class="alert alert-success" role="alert" [style.display]="showSuccess">
+    New pizza saved!
+  </div>
+  <div class="alert alert-warning" role="alert" [style.display]="showWarning">
+    New pizza configuration couldn't be saved at this time.
+  </div>
+<div class="d-flex">
+  <input type="text" class="p-2 form-control" maxlength="100" title="Name" placeholder="Pizza name" [(ngModel)]="pizza.name"
+    (input)="pizzaName = $event.target.value">
+</div>
+<br>
+<div id="form-wrapper">
+  <div *ngFor="let itemCat of itemCatSnapshots | async">
+    <h3>{{itemCat.payload.val().name}}</h3>
+
+    <div *ngFor="let itemType of itemTypeSnapshots | async">
+      <div *ngIf="itemType.payload.val().cat == itemCat.key">
+        <span *ngIf="!itemCat.payload.val().exclusive">
+          <input type="checkbox" [id]="itemType.key" [attr.data-cat]="itemCat.key" [attr.data-exclusive]="itemCat.payload.val().exclusive"> {{itemType.payload.val().name}}</span>
+        <span *ngIf="itemCat.payload.val().exclusive">
+          <input type="radio" [name]="itemCat.key" [id]="itemType.key" [attr.data-cat]="itemCat.key" [attr.data-exclusive]="itemCat.payload.val().exclusive"> {{itemType.payload.val().name}}</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+<button type="button" class="btn btn-success btn-right" (click)="save()">Save</button>
+&nbsp;

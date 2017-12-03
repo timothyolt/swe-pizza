@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 import { Error } from '../../models/error';
+import { User } from '../../models/user';
 import * as firebase from 'firebase';
 import EmailAuthProvider = firebase.auth.EmailAuthProvider;
 import { Subscription } from 'rxjs/Subscription';
@@ -22,6 +23,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
   ngOnInit() {
+
     this.subscription.add(this.auth.auth.onAuthStateChanged(user => {
       if (user && !user.isAnonymous) {
         this.router.navigateByUrl('home').catch(console.log);
@@ -36,7 +38,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   signUp() {
-    if (this.email !== '' && this.password !== '' && this.email && this.password) {
+    if (this.email !== '' && this.password !== '') {
       this.doneLoading = false;
       if (this.auth.auth.currentUser && this.auth.auth.currentUser.isAnonymous) {
         const emailCredential = EmailAuthProvider.credential(this.email, this.password);

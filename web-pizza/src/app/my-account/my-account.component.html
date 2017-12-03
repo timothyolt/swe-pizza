@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+<ul class="nav nav-tabs nav-fill" id="myTab" role="tablist" *ngIf="doneLoading">
   <li class="nav-item">
     <a class="nav-link active" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="home" aria-selected="true">Past orders</a>
   </li>
@@ -14,3 +14,4 @@
     <app-account-info></app-account-info>
   </div>
 </div>
+<div class="spinner" *ngIf="!doneLoading"></div>
