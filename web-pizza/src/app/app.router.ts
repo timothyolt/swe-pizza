@@ -13,6 +13,7 @@ import { CreateToppingComponent } from './create-topping/create-topping.componen
 import { EditToppingCatComponent } from './edit-topping-cat/edit-topping-cat.component';
 import { CreateToppingCatComponent } from './create-topping-cat/create-topping-cat.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ReceiptComponent } from './receipt/receipt.component';
 
 export const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -26,6 +27,7 @@ export const appRoutes: Routes = [
     { path: 'admin/toppings/new', component: CreateToppingComponent },
     { path: 'admin/topping-catagory/:id/edit', component: EditToppingCatComponent },
     { path: 'admin/topping-catagory/new', component: CreateToppingCatComponent },
+    { path: 'order/:id', component: ReceiptComponent },
     {
         path: '',
         redirectTo: '/home',

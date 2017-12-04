@@ -30,6 +30,7 @@ import { ToppingCatListComponent } from './topping-cat-list/topping-cat-list.com
 import { EditToppingCatComponent } from './edit-topping-cat/edit-topping-cat.component';
 import { CreateToppingCatComponent } from './create-topping-cat/create-topping-cat.component';
 import { EditPizzaComponent } from './edit-pizza/edit-pizza.component';
+import { ReceiptComponent } from './receipt/receipt.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { EditPizzaComponent } from './edit-pizza/edit-pizza.component';
     ToppingCatListComponent,
     EditToppingCatComponent,
     CreateToppingCatComponent,
-    EditPizzaComponent
+    EditPizzaComponent,
+    ReceiptComponent
   ],
   imports: [
     BrowserModule,
