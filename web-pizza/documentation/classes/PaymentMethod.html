@@ -193,9 +193,6 @@
                                     <a href="../classes/ItemType.html" >ItemType</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/ItemType.html" >ItemType</a>
-                                </li>
-                                <li class="link">
                                     <a href="../classes/Order.html" >Order</a>
                                 </li>
                                 <li class="link">
@@ -435,9 +432,6 @@
                                            <a href="../classes/ItemType.html" >ItemType</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/ItemType.html" >ItemType</a>
-                                       </li>
-                                       <li class="link">
                                            <a href="../classes/Order.html" >Order</a>
                                        </li>
                                        <li class="link">
@@ -534,6 +528,13 @@
             <code>src/models/payment-method.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Instanciates a PaymentMethod </p>
+
+            </p>
 
 
 
@@ -599,10 +600,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">src/models/payment-method.ts:4</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">src/models/payment-method.ts:6</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Payment method type </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -614,13 +621,19 @@
     <div class="tab-pane fade tab-source-code" id="c-source">
         <pre class="line-numbers"><code class="language-typescript">import { Address } from &#x27;./address&#x27;;
 
+/** Instanciates a PaymentMethod */
 export abstract class PaymentMethod {
+  /** Payment method type */
   protected abstract type: string;
 }
 
+/** Instanciates an object type SecurePaymentMethod */
 export abstract class SecurePaymentMethod extends PaymentMethod {
+  /** Name of user on payment method */
   name: string;
+  /** Billing address */
   address: Address;
+  /** User id */
   user: string;
 }
 </code></pre>

@@ -1,5 +1,6 @@
 import { browser, by, element } from 'protractor';
 
+/** End to End Test for AppPage */
 export class AppPage {
   /** begin browser test */
   navigateTo() {

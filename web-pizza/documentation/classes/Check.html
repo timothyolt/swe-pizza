@@ -193,9 +193,6 @@
                                     <a href="../classes/ItemType.html" >ItemType</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/ItemType.html" >ItemType</a>
-                                </li>
-                                <li class="link">
                                     <a href="../classes/Order.html" >Order</a>
                                 </li>
                                 <li class="link">
@@ -435,9 +432,6 @@
                                            <a href="../classes/ItemType.html" >ItemType</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/ItemType.html" >ItemType</a>
-                                       </li>
-                                       <li class="link">
                                            <a href="../classes/Order.html" >Order</a>
                                        </li>
                                        <li class="link">
@@ -534,6 +528,13 @@
             <code>src/models/check.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Instanciates an object type Check </p>
+
+            </p>
 
             <p class="comment">
                 <h3>Extends</h3>
@@ -604,10 +605,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="5" class="link-to-prism">src/models/check.ts:5</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/models/check.ts:8</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Check information </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -637,10 +644,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">src/models/check.ts:4</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">src/models/check.ts:6</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Payment type </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -652,10 +665,15 @@
     <div class="tab-pane fade tab-source-code" id="c-source">
         <pre class="line-numbers"><code class="language-typescript">import { SecurePaymentMethod } from &#x27;./payment-method&#x27;;
 
+/** Instanciates an object type Check */
 export class Check extends SecurePaymentMethod {
+  /** Payment type */
   type &#x3D; &#x27;check&#x27;;
+  /** Check information */
   number: {
+    /** Account number */
     bank: number;
+    /** Bank routing number */
     routing: number;
   };
 }

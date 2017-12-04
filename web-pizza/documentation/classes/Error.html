@@ -193,9 +193,6 @@
                                     <a href="../classes/ItemType.html" >ItemType</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/ItemType.html" >ItemType</a>
-                                </li>
-                                <li class="link">
                                     <a href="../classes/Order.html" >Order</a>
                                 </li>
                                 <li class="link">
@@ -435,9 +432,6 @@
                                            <a href="../classes/ItemType.html" >ItemType</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/ItemType.html" >ItemType</a>
-                                       </li>
-                                       <li class="link">
                                            <a href="../classes/Order.html" >Order</a>
                                        </li>
                                        <li class="link">
@@ -534,6 +528,13 @@
             <code>src/models/error.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Instanciates an object type Error </p>
+
+            </p>
 
 
 
@@ -605,12 +606,14 @@
             
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="5" class="link-to-prism">src/models/error.ts:5</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/models/error.ts:9</a></div>
                                         </td>
                                     </tr>
             
                             <tr>
                                 <td class="col-md-4">
+                                        <div class="io-description"><p>Displays an error box with custom message </p>
+            </div>
             
                                         <div class="io-description">
                                                 <b>Parameters :</b>
@@ -683,10 +686,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="3" class="link-to-prism">src/models/error.ts:3</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">src/models/error.ts:6</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Should display error message </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -717,10 +726,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="2" class="link-to-prism">src/models/error.ts:2</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">src/models/error.ts:4</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Error message </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -731,9 +746,12 @@
 
     <div class="tab-pane fade tab-source-code" id="c-source">
         <pre class="line-numbers"><code class="language-typescript">export class Error {
+    /** Error message */
     message: string;
+    /** Should display error message */
     display: boolean;
 
+    /** Displays an error box with custom message */
     show(msg) {
         this.display &#x3D; true;
         this.message &#x3D; msg ? msg : &#x27;An unknown error has occurred. Please try again.&#x27;;

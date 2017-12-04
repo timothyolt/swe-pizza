@@ -193,9 +193,6 @@
                                     <a href="../classes/ItemType.html" >ItemType</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/ItemType.html" >ItemType</a>
-                                </li>
-                                <li class="link">
                                     <a href="../classes/Order.html" >Order</a>
                                 </li>
                                 <li class="link">
@@ -435,9 +432,6 @@
                                            <a href="../classes/ItemType.html" >ItemType</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/ItemType.html" >ItemType</a>
-                                       </li>
-                                       <li class="link">
                                            <a href="../classes/Order.html" >Order</a>
                                        </li>
                                        <li class="link">
@@ -534,6 +528,13 @@
             <code>src/models/pizza.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Instanciates an object type Pizza </p>
+
+            </p>
 
 
 
@@ -577,9 +578,16 @@
                             </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="3" class="link-to-prism">src/models/pizza.ts:3</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">src/models/pizza.ts:6</a></div>
                                         </td>
                                     </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>For inclusive ItemCategories, a boolean map keyed by ItemType id is stored under the ItemCategory id</p>
+            <p>For exclusive ItemCategories, an ItemType id is stored under the ItemCategory id (or null for none) </p>
+            </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
             </section>
@@ -616,10 +624,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="3" class="link-to-prism">src/models/pizza.ts:3</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">src/models/pizza.ts:6</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Total cost of pizza </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -650,10 +664,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="2" class="link-to-prism">src/models/pizza.ts:2</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">src/models/pizza.ts:4</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Name of pizza </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -664,11 +684,16 @@
 
     <div class="tab-pane fade tab-source-code" id="c-source">
         <pre class="line-numbers"><code class="language-typescript">export class Pizza {
+  /** Name of pizza */
   name: string;
+  /** Total cost of pizza */
   cost: number;
+  /** 
+   * For inclusive ItemCategories, a boolean map keyed by ItemType id is stored under the ItemCategory id
+   * 
+   * For exclusive ItemCategories, an ItemType id is stored under the ItemCategory id (or null for none) 
+  */
   [itemCatId: string]: number | string | {[itemTypeId: string]: boolean};
-  // For inclusive ItemCategories, a boolean map keyed by ItemType id is stored under the ItemCategory id
-  // For exclusive ItemCategories, an ItemType id is stored under the ItemCategory id (or null for none)
 }
 </code></pre>
     </div>

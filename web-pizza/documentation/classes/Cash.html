@@ -193,9 +193,6 @@
                                     <a href="../classes/ItemType.html" >ItemType</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/ItemType.html" >ItemType</a>
-                                </li>
-                                <li class="link">
                                     <a href="../classes/Order.html" >Order</a>
                                 </li>
                                 <li class="link">
@@ -435,9 +432,6 @@
                                            <a href="../classes/ItemType.html" >ItemType</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/ItemType.html" >ItemType</a>
-                                       </li>
-                                       <li class="link">
                                            <a href="../classes/Order.html" >Order</a>
                                        </li>
                                        <li class="link">
@@ -534,6 +528,13 @@
             <code>src/models/cash.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Instanciates an object type Cash </p>
+
+            </p>
 
             <p class="comment">
                 <h3>Extends</h3>
@@ -600,10 +601,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">src/models/cash.ts:4</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">src/models/cash.ts:6</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Payment type </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -615,7 +622,9 @@
     <div class="tab-pane fade tab-source-code" id="c-source">
         <pre class="line-numbers"><code class="language-typescript">import { PaymentMethod } from &#x27;./payment-method&#x27;;
 
+/** Instanciates an object type Cash */
 export class Cash extends PaymentMethod {
+  /** Payment type */
   type &#x3D; &#x27;cash&#x27;;
 }
 </code></pre>
