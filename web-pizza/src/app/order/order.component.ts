@@ -529,14 +529,14 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   finishOrder() {
     if (this.orderRef && this.activeOrderRef) {
+      const key = this.db.database.ref(this.orderRef).key;
       this.activeOrderRef.off();
       const update = {};
       update['activeOrder'] = null;
-      update['orders/' + this.db.database.ref(this.orderRef).key] = true;
+      update['orders/' + key] = true;
       this.db.database.ref('users/' + this.auth.auth.currentUser.uid).update(update).then(() => {
-        return this.router.navigateByUrl('home');
+        return this.router.navigateByUrl('order/' + key);
       }).catch(console.log);
-      // TODO navigate to receipt
     }
   }
 }

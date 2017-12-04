@@ -1,3 +1,9 @@
-<p>
-  past-orders works!
-</p>
+<div class="card">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item" *ngFor="let order of orders | async" >
+      <a class="p-2" [routerLink]="'/order/' + order.key">
+        {{(orderName(order.key) | async) | date: 'short'}}
+      </a><br/>
+    </li>
+  </ul>
+</div>
