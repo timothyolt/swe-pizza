@@ -139,6 +139,9 @@
                                     <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                </li>
+                                <li class="link">
                                     <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                 </li>
                                 <li class="link">
@@ -176,6 +179,9 @@
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Check.html" >Check</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Contact.html" >Contact</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Error.html" >Error</a>
@@ -375,6 +381,9 @@
                                            <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                        </li>
                                        <li class="link">
@@ -412,6 +421,9 @@
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Check.html" >Check</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Contact.html" >Contact</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Error.html" >Error</a>
@@ -522,6 +534,13 @@
     <code>src/app/home/home.component.ts</code>
 </p>
 
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Setup Angular component structure </p>
+
+    </p>
 
 
     <p class="comment">
@@ -603,7 +622,7 @@
                     </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/app/home/home.component.ts:8</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/app/home/home.component.ts:9</a></div>
                                 </td>
                             </tr>
     
@@ -642,7 +661,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/home/home.component.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/home/home.component.ts:15</a></div>
                                 </td>
                             </tr>
     
@@ -668,6 +687,7 @@
     <div class="tab-pane fade tab-source-code" id="c-source">
         <pre class="line-numbers"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
 
+/** Setup Angular component structure */
 @Component({
   selector: &#x27;app-home&#x27;,
   templateUrl: &#x27;./home.component.html&#x27;,
@@ -675,6 +695,7 @@
 })
 export class HomeComponent implements OnInit {
 
+  /** Default constructor */
   constructor() { }
 
   /** Called when Angular is ready */
@@ -719,7 +740,7 @@ export class HomeComponent implements OnInit {
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
         var COMPONENT_TEMPLATE = '<div><div class="jumbotron">    <h1 class="display-3">Hello, world!</h1>    <p class="lead">Marketing material here</p>    <hr class="my-4">    <p>pictures here</p></div><a routerLink="/order" class="orderBtn">ORDER NOW</a></div>'
-    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
+    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'ReceiptComponent', 'selector': 'app-receipt'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'HomeComponent'};
 </script>

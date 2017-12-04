@@ -139,6 +139,9 @@
                                     <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                </li>
+                                <li class="link">
                                     <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                 </li>
                                 <li class="link">
@@ -176,6 +179,9 @@
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Check.html" >Check</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Contact.html" >Contact</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Error.html" >Error</a>
@@ -375,6 +381,9 @@
                                            <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                        </li>
                                        <li class="link">
@@ -412,6 +421,9 @@
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Check.html" >Check</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Contact.html" >Contact</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Error.html" >Error</a>
@@ -522,6 +534,13 @@
     <code>src/app/accordion-group-list/accordion-group-list.component.ts</code>
 </p>
 
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Setup Angular component structure </p>
+
+    </p>
 
     <p class="comment">
         <h3>Extends</h3>
@@ -606,12 +625,14 @@
                     </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/accordion-group-list/accordion-group-list.component.ts:11</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/accordion-group-list/accordion-group-list.component.ts:14</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
+                                <div class="io-description"><p>Setup NGX-Boostrap Accordion component </p>
+    </div>
                                 <div>
                                         <b>Parameters :</b>
                                         <table class="params">
@@ -666,10 +687,16 @@
                     </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/accordion-group-list/accordion-group-list.component.ts:10</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/app/accordion-group-list/accordion-group-list.component.ts:12</a></div>
                                 </td>
                             </tr>
     
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-description"><p>Bind css value </p>
+    </div>
+                        </td>
+                    </tr>
     
                 </tbody>
             </table>
@@ -694,10 +721,16 @@
                     </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/accordion-group-list/accordion-group-list.component.ts:11</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/accordion-group-list/accordion-group-list.component.ts:14</a></div>
                                 </td>
                             </tr>
     
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-description"><p>Bind css value </p>
+    </div>
+                        </td>
+                    </tr>
     
                 </tbody>
             </table>
@@ -713,15 +746,19 @@
         <pre class="line-numbers"><code class="language-typescript">import { Component, HostBinding, Input } from &#x27;@angular/core&#x27;;
 import { AccordionComponent, AccordionPanelComponent } from &#x27;ngx-bootstrap&#x27;;
 
+/** Setup Angular component structure */
 @Component({
   selector: &#x27;app-accordion-group-list&#x27;,
   templateUrl: &#x27;./accordion-group-list.component.html&#x27;,
   styleUrls: [&#x27;./accordion-group-list.component.css&#x27;]
 })
 export class AccordionGroupListComponent extends AccordionPanelComponent {
+  /** Bind css value */
   @HostBinding(&#x27;class&#x27;) panelClass: &#x27;panel&#x27;;
+  /** Bind css value */
   @HostBinding(&#x27;style&#x27;) style: &#x27;display: block&#x27;;
 
+  /** Setup NGX-Boostrap Accordion component */
   constructor(accordion: AccordionComponent) {
     super(accordion);
   }
@@ -774,7 +811,7 @@ export class AccordionGroupListComponent extends AccordionPanelComponent {
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
         var COMPONENT_TEMPLATE = '<div><div class="panel card" [ngClass]="panelClass">  <div class="panel-heading card-header" role="tab" (click)="toggleOpen($event)">    <div class="panel-title\">      <div role="button" class="accordion-toggle" [attr.aria-expanded]="isOpen">        <div *ngIf="heading" [ngClass]="{\'text-muted\': isDisabled}"> {{ heading }}        </div>        <ng-content select="[accordion-heading]"></ng-content>      </div>    </div>  </div>  <div class="panel-collapse" role="tabpanel" [class.collapse]="!isOpen">    <ul class="list-group list-group-flush">      <ng-content></ng-content>    </ul>  </div></div></div>'
-    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
+    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'ReceiptComponent', 'selector': 'app-receipt'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'AccordionGroupListComponent'};
 </script>

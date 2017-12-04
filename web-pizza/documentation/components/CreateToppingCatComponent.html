@@ -139,6 +139,9 @@
                                     <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                </li>
+                                <li class="link">
                                     <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                 </li>
                                 <li class="link">
@@ -176,6 +179,9 @@
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Check.html" >Check</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Contact.html" >Contact</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Error.html" >Error</a>
@@ -375,6 +381,9 @@
                                            <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                        </li>
                                        <li class="link">
@@ -412,6 +421,9 @@
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Check.html" >Check</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Contact.html" >Contact</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Error.html" >Error</a>
@@ -522,6 +534,13 @@
     <code>src/app/create-topping-cat/create-topping-cat.component.ts</code>
 </p>
 
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Setup Angular component structure </p>
+
+    </p>
 
 
     <p class="comment">
@@ -620,12 +639,14 @@
                     </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/create-topping-cat/create-topping-cat.component.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/create-topping-cat/create-topping-cat.component.ts:14</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
+                                <div class="io-description"><p>Initalize variables </p>
+    </div>
                                 <div>
                                         <b>Parameters :</b>
                                         <table class="params">
@@ -696,7 +717,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/create-topping-cat/create-topping-cat.component.ts:18</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/create-topping-cat/create-topping-cat.component.ts:20</a></div>
                                 </td>
                             </tr>
     
@@ -735,7 +756,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/create-topping-cat/create-topping-cat.component.ts:22</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/create-topping-cat/create-topping-cat.component.ts:24</a></div>
                                 </td>
                             </tr>
     
@@ -785,7 +806,7 @@
                         </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/create-topping-cat/create-topping-cat.component.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/create-topping-cat/create-topping-cat.component.ts:14</a></div>
                                 </td>
                             </tr>
     
@@ -809,6 +830,7 @@ import { AngularFireDatabase } from &#x27;angularfire2/database&#x27;;
 import { Router } from &#x27;@angular/router&#x27;;
 import { ItemCategory } from &#x27;../../models/item-category&#x27;;
 
+/** Setup Angular component structure */
 @Component({
   selector: &#x27;app-create-topping-cat&#x27;,
   templateUrl: &#x27;./create-topping-cat.component.html&#x27;,
@@ -818,6 +840,7 @@ export class CreateToppingCatComponent implements OnInit {
   /** Data-bound ItemCategory model for form */
   catagory &#x3D; new ItemCategory();
 
+  /** Initalize variables */
   constructor(private db: AngularFireDatabase, private router: Router) { }
 
   /** Called when Angular is ready */
@@ -875,7 +898,7 @@ export class CreateToppingCatComponent implements OnInit {
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
         var COMPONENT_TEMPLATE = '<div><div class="form-group">  <label for="toppingNameInput">Name</label>  <input type="text" class="form-control" id="toppingNameInput" placeholder="Pepperoni" [(ngModel)]="catagory.name"></div><div class="form-check">  <label class="form-check-label">    <input type="checkbox" class="form-check-input" [(ngModel)]="catagory.exclusive"> Exclusive  </label></div><button type="button" class="btn btn-success btn-right" (click)="save()">Create</button></div>'
-    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
+    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'ReceiptComponent', 'selector': 'app-receipt'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'CreateToppingCatComponent'};
 </script>

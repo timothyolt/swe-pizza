@@ -139,6 +139,9 @@
                                     <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                </li>
+                                <li class="link">
                                     <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                 </li>
                                 <li class="link">
@@ -176,6 +179,9 @@
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Check.html" >Check</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Contact.html" >Contact</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Error.html" >Error</a>
@@ -375,6 +381,9 @@
                                            <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                        </li>
                                        <li class="link">
@@ -412,6 +421,9 @@
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Check.html" >Check</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Contact.html" >Contact</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Error.html" >Error</a>
@@ -522,6 +534,13 @@
     <code>src/app/my-account/my-account.component.ts</code>
 </p>
 
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Setup Angular component structure </p>
+
+    </p>
 
 
     <p class="comment">
@@ -617,12 +636,14 @@
                     </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/my-account/my-account.component.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/my-account/my-account.component.ts:14</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
+                                <div class="io-description"><p>Initalize variables </p>
+    </div>
                                 <div>
                                         <b>Parameters :</b>
                                         <table class="params">
@@ -702,7 +723,7 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/my-account/my-account.component.ts:22</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/my-account/my-account.component.ts:24</a></div>
                                 </td>
                             </tr>
     
@@ -753,7 +774,7 @@
                         </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/my-account/my-account.component.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/my-account/my-account.component.ts:14</a></div>
                                 </td>
                             </tr>
     
@@ -777,6 +798,7 @@ import { AngularFireAuth } from &#x27;angularfire2/auth&#x27;;
 import { Router } from &#x27;@angular/router&#x27;;
 import { AngularFireDatabase } from &#x27;angularfire2/database&#x27;;
 
+/** Setup Angular component structure */
 @Component({
   selector: &#x27;app-my-account&#x27;,
   templateUrl: &#x27;./my-account.component.html&#x27;,
@@ -786,6 +808,7 @@ export class MyAccountComponent implements OnInit {
   /** Sets whether or not to show the UI */
   doneLoading &#x3D; false;
 
+  /** Initalize variables */
   constructor(private db: AngularFireDatabase, private auth: AngularFireAuth, private router: Router) { }
 
   /** 
@@ -851,7 +874,7 @@ export class MyAccountComponent implements OnInit {
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
         var COMPONENT_TEMPLATE = '<div><ul class="nav nav-tabs nav-fill" id="myTab" role="tablist" *ngIf="doneLoading">  <li class="nav-item">    <a class="nav-link active" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="home" aria-selected="true">Past orders</a>  </li>  <li class="nav-item">    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Account info</a>  </li></ul><div class="tab-content" id="myTabContent">  <div class="tab-pane fade show active" id="orders" role="tabpanel" aria-labelledby="orders-tab">    <app-past-orders></app-past-orders>  </div>  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">    <app-account-info></app-account-info>  </div></div><div class="spinner" *ngIf="!doneLoading"></div></div>'
-    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
+    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'ReceiptComponent', 'selector': 'app-receipt'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'MyAccountComponent'};
 </script>

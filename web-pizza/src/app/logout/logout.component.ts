@@ -3,6 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 import { Error } from '../../models/error';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
@@ -14,6 +15,7 @@ export class LogoutComponent implements OnInit {
   /** Error model */
   error = new Error();
 
+  /** Initalize variables */
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
   /** 

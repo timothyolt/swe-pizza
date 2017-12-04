@@ -139,6 +139,9 @@
                                     <a href="../components/PizzaComponent.html"  data-type="entity-link" class="active" >PizzaComponent</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                </li>
+                                <li class="link">
                                     <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                 </li>
                                 <li class="link">
@@ -176,6 +179,9 @@
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Check.html" >Check</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Contact.html" >Contact</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Error.html" >Error</a>
@@ -375,6 +381,9 @@
                                            <a href="../components/PizzaComponent.html"  data-type="entity-link" class="active" >PizzaComponent</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                        </li>
                                        <li class="link">
@@ -412,6 +421,9 @@
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Check.html" >Check</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Contact.html" >Contact</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Error.html" >Error</a>
@@ -522,6 +534,13 @@
     <code>src/app/pizza/pizza.component.ts</code>
 </p>
 
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Setup Angular component structure </p>
+
+    </p>
 
 
     <p class="comment">
@@ -674,12 +693,14 @@
                     </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/pizza/pizza.component.ts:19</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/pizza/pizza.component.ts:25</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
+                                <div class="io-description"><p>Initalize AngularFireDatabase </p>
+    </div>
                                 <div>
                                         <b>Parameters :</b>
                                         <table class="params">
@@ -720,6 +741,8 @@
                             <code>itemCatSnapshots</code>
                         </td>
                         <td class="col-md-10">
+                            <div><p>ItemCatagory from HTML property </p>
+</div>
                               <p>
                                 <em>Type:</em>    <code>Observable&lt;[]&gt;</code>
 
@@ -728,7 +751,7 @@
                     </tr>
                             <tr>
                                 <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/pizza/pizza.component.ts:16</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/pizza/pizza.component.ts:21</a></div>
                                 </td>
                             </tr>
                 </tbody>
@@ -741,6 +764,8 @@
                             <code>orderRef</code>
                         </td>
                         <td class="col-md-10">
+                            <div><p>Reflect order reference to HTML property </p>
+</div>
                               <p>
                                 <em>Type:</em>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
 
@@ -749,7 +774,7 @@
                     </tr>
                             <tr>
                                 <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/pizza/pizza.component.ts:31</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/pizza/pizza.component.ts:41</a></div>
                                 </td>
                             </tr>
                 </tbody>
@@ -762,6 +787,8 @@
                             <code>pizza</code>
                         </td>
                         <td class="col-md-10">
+                            <div><p>Pizza from HTML property </p>
+</div>
                               <p>
                                 <em>Type:</em>    <code><a href="../classes/Pizza.html" target="_self" >Pizza</a></code>
 
@@ -770,7 +797,7 @@
                     </tr>
                             <tr>
                                 <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/pizza/pizza.component.ts:15</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/pizza/pizza.component.ts:19</a></div>
                                 </td>
                             </tr>
                 </tbody>
@@ -807,12 +834,14 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/pizza/pizza.component.ts:47</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/pizza/pizza.component.ts:59</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
+                                <div class="io-description"><p>Recreat subscription when component is destroyed </p>
+    </div>
     
                                 <div class="io-description">
                                     <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -844,12 +873,14 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/pizza/pizza.component.ts:44</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/pizza/pizza.component.ts:55</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
+                                <div class="io-description"><p>Called when Angular is ready </p>
+    </div>
     
                                 <div class="io-description">
                                     <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -881,12 +912,14 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/pizza/pizza.component.ts:62</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/app/pizza/pizza.component.ts:76</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
+                                <div class="io-description"><p>Remove pizza from current order on Firebase </p>
+    </div>
     
                                 <div class="io-description">
                                     <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -918,12 +951,14 @@
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/pizza/pizza.component.ts:52</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/pizza/pizza.component.ts:65</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
+                                <div class="io-description"><p>Update pizza name on Firebase when changed </p>
+    </div>
     
                                 <div class="io-description">
                                     <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -968,10 +1003,16 @@
                         </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/pizza/pizza.component.ts:24</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/pizza/pizza.component.ts:32</a></div>
                                 </td>
                             </tr>
     
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-description"><p>Firebase reference for current order </p>
+    </div>
+                        </td>
+                    </tr>
     
                 </tbody>
             </table>
@@ -1001,10 +1042,16 @@
                         </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/pizza/pizza.component.ts:18</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/pizza/pizza.component.ts:23</a></div>
                                 </td>
                             </tr>
     
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-description"><p>Data-bound boolean for whether pizza name input is editable </p>
+    </div>
+                        </td>
+                    </tr>
     
                 </tbody>
             </table>
@@ -1035,10 +1082,16 @@
                         </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/pizza/pizza.component.ts:19</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/pizza/pizza.component.ts:25</a></div>
                                 </td>
                             </tr>
     
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-description"><p>Data-bound string holds name for pizza </p>
+    </div>
+                        </td>
+                    </tr>
     
                 </tbody>
             </table>
@@ -1069,10 +1122,16 @@
                         </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/pizza/pizza.component.ts:14</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/pizza/pizza.component.ts:17</a></div>
                                 </td>
                             </tr>
     
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-description"><p>Firebase reference for Pizza </p>
+    </div>
+                        </td>
+                    </tr>
     
                 </tbody>
             </table>
@@ -1102,10 +1161,16 @@
                         </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/pizza/pizza.component.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/pizza/pizza.component.ts:15</a></div>
                                 </td>
                             </tr>
     
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-description"><p>RXJS Observable subscription </p>
+    </div>
+                        </td>
+                    </tr>
     
                 </tbody>
             </table>
@@ -1131,9 +1196,20 @@
                     </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/pizza/pizza.component.ts:26</a></div>
+                                        <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/pizza/pizza.component.ts:35</a></div>
                                     </td>
                                 </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-description"><p>Get order reference from HTML property </p>
+    </div>
+    
+                                    <div class="io-description">
+                                        <b>Returns : </b>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+    
+                                    </div>
+                            </td>
+                        </tr>
     
                     <tr>
                         <td class="col-md-4">
@@ -1142,9 +1218,46 @@
                     </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/pizza/pizza.component.ts:31</a></div>
+                                        <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/pizza/pizza.component.ts:41</a></div>
                                     </td>
                                 </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-description"><p>Reflect order reference to HTML property </p>
+    </div>
+    
+                                    <div class="io-description">
+                                            <b>Parameters :</b>
+                                            <table class="params">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Name</td>
+                                                        <td>Type</td>
+                                                        <td>Optional</td>
+                                                        <td>Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                        <tr>
+                                                          <td>value</td>
+                                                          <td>
+                                                                  <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                          </td>
+                                                          <td>
+                                                          </td>
+                                                          <td></td>
+                                                        </tr>
+                                                </tbody>
+                                            </table>
+                                    </div>
+                                    <div>
+                                    </div>
+                                    <div class="io-description">
+                                        <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                    </div>
+                            </td>
+                        </tr>
                 </tbody>
             </table>
     </section>
@@ -1158,29 +1271,39 @@ import { AngularFireDatabase, AngularFireObject, SnapshotAction } from &#x27;ang
 import { Observable } from &#x27;rxjs/Observable&#x27;;
 import { Subscription } from &#x27;rxjs/Subscription&#x27;;
 
+/** Setup Angular component structure */
 @Component({
   selector: &#x27;app-pizza&#x27;,
   templateUrl: &#x27;./pizza.component.html&#x27;,
   styleUrls: [&#x27;./pizza.component.css&#x27;]
 })
 export class PizzaComponent implements OnInit, OnDestroy {
+  /** RXJS Observable subscription */
   subscription &#x3D; new Subscription();
+  /** Firebase reference for Pizza */
   pizzaRef: AngularFireObject&lt;Pizza&gt;;
+  /** Pizza from HTML property */
   @Input() pizza: Pizza;
+  /** ItemCatagory from HTML property */
   @Input() itemCatSnapshots: Observable&lt;SnapshotAction[]&gt;;
-
+  /** Data-bound boolean for whether pizza name input is editable */
   nameEditable &#x3D; false;
+  /** Data-bound string holds name for pizza */
   pizzaName: string;
 
+  /** Initalize AngularFireDatabase */
   constructor(private db: AngularFireDatabase) {
   }
 
+  /** Firebase reference for current order */
   private _orderRef: string;
 
+  /** Get order reference from HTML property */
   get orderRef(): string {
     return this._orderRef;
   }
 
+  /** Reflect order reference to HTML property */
   @Input()
   set orderRef(value: string) {
     this.subscription.unsubscribe();
@@ -1195,14 +1318,17 @@ export class PizzaComponent implements OnInit, OnDestroy {
       .snapshotChanges().subscribe(cost &#x3D;&gt; this.pizza.cost &#x3D; (cost.payload.exists() ? cost.payload.val() : null)));
   }
 
+  /** Called when Angular is ready */
   ngOnInit() {
   }
 
+  /** Recreat subscription when component is destroyed */
   ngOnDestroy() {
     this.subscription.unsubscribe();
     this.subscription &#x3D; new Subscription();
   }
 
+  /** Update pizza name on Firebase when changed */
   savePizzaName() {
     if (this.pizzaName) {
       console.log(&#x27;update pizza pizzaName&#x27;);
@@ -1213,6 +1339,7 @@ export class PizzaComponent implements OnInit, OnDestroy {
     this.nameEditable &#x3D; false;
   }
 
+  /** Remove pizza from current order on Firebase */
   removePizza() {
     this.db.database.ref(this.orderRef).child(&#x27;pizzas&#x27;).transaction(pizzas &#x3D;&gt; {
       pizzas.splice(Number(this.pizza[&#x27;$key&#x27;]), 1);
@@ -1269,7 +1396,7 @@ export class PizzaComponent implements OnInit, OnDestroy {
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
         var COMPONENT_TEMPLATE = '<div><div class="d-flex">  <h5 *ngIf="!nameEditable" class="p-2" style="padding-bottom: 0!important; margin-bottom: 0;">{{pizza.name}}</h5>  <input *ngIf="nameEditable" type="text" class="p-2 form-control" maxlength="100" title="Name" placeholder="Pizza name"         [ngModel]="pizza.name"         (input)="pizzaName = $event.target.value"         (blur)="savePizzaName()">  <i class="p-2 ml-auto material-icons md-24" role="button"     [class.hover-blue500] = "!nameEditable"     [class.blue-500] = "nameEditable"     (click)="nameEditable = !nameEditable">edit</i>  <i class="p-2 material-icons md-24 hover-red500" role="button"     (click)="removePizza()">delete</i></div><span *ngIf="pizza.cost" style="margin-left: 0.5rem">Price: ${{pizza.cost}}</span><app-item-category *ngFor="let itemCatSnapshot of itemCatSnapshots | async"                   [pizzaRef]="orderRef + \'/pizzas/\' + pizza.$key"                   [itemCatSnapshot]="itemCatSnapshot"></app-item-category></div>'
-    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
+    var COMPONENTS = [{'name': 'AccordionGroupListComponent', 'selector': 'app-accordion-group-list'},{'name': 'AccountInfoComponent', 'selector': 'app-account-info'},{'name': 'AdminPanelComponent', 'selector': 'app-admin-panel'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateToppingCatComponent', 'selector': 'app-create-topping-cat'},{'name': 'CreateToppingComponent', 'selector': 'app-create-topping'},{'name': 'EditPizzaComponent', 'selector': 'app-edit-pizza'},{'name': 'EditToppingCatComponent', 'selector': 'app-edit-topping-cat'},{'name': 'EditToppingComponent', 'selector': 'app-edit-topping'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ItemCategoryComponent', 'selector': 'app-item-category'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MyAccountComponent', 'selector': 'app-my-account'},{'name': 'OrderComponent', 'selector': 'app-order'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PastOrdersComponent', 'selector': 'app-past-orders'},{'name': 'PizzaComponent', 'selector': 'app-pizza'},{'name': 'ReceiptComponent', 'selector': 'app-receipt'},{'name': 'SignUpComponent', 'selector': 'app-sign-up'},{'name': 'ToppingCatListComponent', 'selector': 'app-topping-cat-list'},{'name': 'ToppingsListComponent', 'selector': 'app-toppings-list'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'PizzaComponent'};
 </script>

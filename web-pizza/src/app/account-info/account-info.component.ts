@@ -9,6 +9,7 @@ type NestedPartial<T> = {
   [P in keyof T]?: NestedPartial<T[P]>;
 };
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-account-info',
   templateUrl: './account-info.component.html',
@@ -30,6 +31,7 @@ export class AccountInfoComponent implements OnInit {
   /** NestedPartial for Payment information */
   paymentPartial: any = {};
 
+  /** Initalize AngularFireDatabase and AngularFireAuth */
   constructor(private db: AngularFireDatabase, public auth: AngularFireAuth) { }
 
   /**

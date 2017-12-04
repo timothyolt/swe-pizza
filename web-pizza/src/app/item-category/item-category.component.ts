@@ -5,6 +5,7 @@ import { AngularFireDatabase, SnapshotAction } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-item-category',
   templateUrl: './item-category.component.html',
@@ -16,6 +17,7 @@ export class ItemCategoryComponent implements OnInit {
   /** Observable list of ItemType snapshots */
   itemTypeSnapshots: Observable<SnapshotAction[]>;
 
+  /** Initalize AngularFireDatabase */
   constructor(private db: AngularFireDatabase) {
   }
 

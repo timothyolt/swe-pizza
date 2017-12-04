@@ -139,6 +139,9 @@
                                     <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                 </li>
                                 <li class="link">
+                                    <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                </li>
+                                <li class="link">
                                     <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                 </li>
                                 <li class="link">
@@ -176,6 +179,9 @@
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Check.html" >Check</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/Contact.html" >Contact</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/Error.html" >Error</a>
@@ -375,6 +381,9 @@
                                            <a href="../components/PizzaComponent.html" >PizzaComponent</a>
                                        </li>
                                        <li class="link">
+                                           <a href="../components/ReceiptComponent.html" >ReceiptComponent</a>
+                                       </li>
+                                       <li class="link">
                                            <a href="../components/SignUpComponent.html" >SignUpComponent</a>
                                        </li>
                                        <li class="link">
@@ -412,6 +421,9 @@
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Check.html" >Check</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/Contact.html" >Contact</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/Error.html" >Error</a>
@@ -522,6 +534,13 @@
             <code>src/app/app.component.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>User model </p>
+
+            </p>
 
 
 
@@ -586,10 +605,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/app.component.ts:27</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/app.component.ts:34</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Current active order key </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -620,10 +645,16 @@
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/app.component.ts:28</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/app.component.ts:36</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-description"><p>Is user an admin </p>
+            </div>
+                                </td>
+                            </tr>
             
                         </tbody>
                     </table>
@@ -639,16 +670,21 @@ import { AngularFireDatabase } from &#x27;angularfire2/database&#x27;;
 import { log } from &#x27;util&#x27;;
 import { Observable } from &#x27;rxjs/Observable&#x27;;
 
+/** Setup Angular component structure */
 @Component({
   selector: &#x27;app-root&#x27;,
   templateUrl: &#x27;app.component.html&#x27;,
   styleUrls: [&#x27;app.component.css&#x27;]
 })
 export class AppComponent {
+  /** Observable list of user information */
   userInfo: Observable&lt;UserInfo&gt;;
+  /** Sets if user is logged in */
   isLoggedIn &#x3D; false;
+  /** Sets if user is an admin */
   isAdmin &#x3D; false;
 
+  /** Initalize variables and check if user is authed and an admin */
   constructor(private auth: AngularFireAuth, private db: AngularFireDatabase) {
     this.auth.auth.onAuthStateChanged(user &#x3D;&gt; {
       this.isLoggedIn &#x3D; user &amp;&amp; !user.isAnonymous;
@@ -658,8 +694,11 @@ export class AppComponent {
   }
 }
 
+/** User model */
 class UserInfo {
+  /** Current active order key */
   activeOrder: string;
+  /** Is user an admin */
   admin: boolean;
 }
 </code></pre>

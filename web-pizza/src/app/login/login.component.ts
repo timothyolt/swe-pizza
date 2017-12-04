@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Error } from '../../models/error';
 import { Subscription } from 'rxjs/Subscription';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   /** Error model */
   error = new Error();
 
+  /** Initalize variables */
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
   /** 

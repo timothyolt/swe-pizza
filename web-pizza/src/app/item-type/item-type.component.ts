@@ -5,6 +5,7 @@ import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularf
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-item-type',
   templateUrl: './item-type.component.html',
@@ -26,6 +27,7 @@ export class ItemTypeComponent implements OnInit, OnDestroy {
   /** Holds whether a topping is exclusive or not */
   checked: boolean;
 
+  /** Initalize AngularFireDatabase */
   constructor(private db: AngularFireDatabase) {
   }
 

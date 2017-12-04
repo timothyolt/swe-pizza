@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ItemCategory } from '../../models/item-category';
 import { ItemType } from '../../models/item-type';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-edit-topping',
   templateUrl: './edit-topping.component.html',
@@ -20,6 +21,7 @@ export class EditToppingComponent implements OnInit {
   /** Topping id from Firebase */
   key: string;
 
+  /** Initalize variables */
   constructor(private db: AngularFireDatabase, private router: Router, private route: ActivatedRoute) { }
 
   /**

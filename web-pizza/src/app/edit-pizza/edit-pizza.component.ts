@@ -6,6 +6,7 @@ import 'rxjs/add/operator/take'
 /** Allow jQuery to work */
 declare var $;
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-edit-pizza',
   templateUrl: './edit-pizza.component.html',
@@ -25,6 +26,7 @@ export class EditPizzaComponent implements OnInit {
   /** Data-bound css value for warning banner */
   showWarning = 'none';
 
+  /** Initalize AngularFireDatabase */
   constructor(private db: AngularFireDatabase) { }
 
   /**

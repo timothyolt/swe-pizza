@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ItemCategory } from '../../models/item-category';
 import { ItemType } from '../../models/item-type';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-create-topping',
   templateUrl: './create-topping.component.html',
@@ -16,6 +17,7 @@ export class CreateToppingComponent implements OnInit {
   /** Observable list of type ItemCatagory */
   itemCats: Observable<ItemCategory[]>;
 
+  /** Initalize variables */
   constructor(private db: AngularFireDatabase, private router: Router) { }
 
   /** 

@@ -3,6 +3,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Router } from '@angular/router';
 import { ItemCategory } from '../../models/item-category';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-create-topping-cat',
   templateUrl: './create-topping-cat.component.html',
@@ -12,6 +13,7 @@ export class CreateToppingCatComponent implements OnInit {
   /** Data-bound ItemCategory model for form */
   catagory = new ItemCategory();
 
+  /** Initalize variables */
   constructor(private db: AngularFireDatabase, private router: Router) { }
 
   /** Called when Angular is ready */

@@ -3,6 +3,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ItemCategory } from '../../models/item-category';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-edit-topping-cat',
   templateUrl: './edit-topping-cat.component.html',
@@ -16,6 +17,7 @@ export class EditToppingCatComponent implements OnInit {
   /** Id of ItemCategory */
   key: string;
 
+  /** Initalize variables */
   constructor(private db: AngularFireDatabase, private router: Router, private route: ActivatedRoute) { }
 
   /**

@@ -3,6 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Router } from '@angular/router';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-admin-panel',
   templateUrl: './admin-panel.component.html',
@@ -12,6 +13,7 @@ export class AdminPanelComponent implements OnInit {
   /** Sets whether or not to show the UI */
   doneLoading = false;
 
+  /** Initalize variables */
   constructor(private auth: AngularFireAuth, private router: Router, private db: AngularFireDatabase) { }
 
   /** 
