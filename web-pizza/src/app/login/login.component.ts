@@ -10,14 +10,23 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  /** RXJS Observable subscription */
   subscription = new Subscription();
+  /** Sets whether or not to show the UI */
   doneLoading = false;
+  /** Model for email address */
   email: string;
+  /** Model for password */
   password: string;
+  /** Error model */
   error = new Error();
 
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
+  /** 
+   * Check if user is authenticated
+   * 
+   * Called when Angular is ready */
   ngOnInit() {
     this.subscription.add(this.auth.auth.onAuthStateChanged(user => {
       if (user && !user.isAnonymous) {
@@ -28,10 +37,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     }));
   }
 
+  /** Removes subscription when component is destroyed */
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
+  /** Authenticate the user and get their auth token */
   login() {
     if (this.email !== '' && this.password !== '' && this.email && this.password) {
       this.doneLoading = false;

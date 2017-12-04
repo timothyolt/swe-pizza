@@ -9,11 +9,18 @@ import { Error } from '../../models/error';
   styleUrls: ['./logout.component.css']
 })
 export class LogoutComponent implements OnInit {
+  /** Sets whether or not to show the UI */
   doneLoading = false;
+  /** Error model */
   error = new Error();
 
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
+  /** 
+   * Logs the user out
+   * 
+   * Called when Angular is ready 
+  */
   ngOnInit() {
     console.log('logging out');
     this.doneLoading = false;

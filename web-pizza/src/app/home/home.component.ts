@@ -9,6 +9,7 @@ export class HomeComponent implements OnInit {
 
   constructor() { }
 
+  /** Called when Angular is ready */
   ngOnInit() {
   }
 

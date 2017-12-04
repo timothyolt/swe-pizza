@@ -11,13 +11,22 @@ import { ItemType } from '../../models/item-type';
   styleUrls: ['./edit-topping.component.css']
 })
 export class EditToppingComponent implements OnInit {
+  /** Sets whether or not to show the UI */
   doneLoading = false;
+  /** Data-bound model for ItemType */
   topping = new ItemType();
+  /** Observable list of ItemCategory */
   itemCats: Observable<ItemCategory[]>;
+  /** Topping id from Firebase */
   key: string;
 
   constructor(private db: AngularFireDatabase, private router: Router, private route: ActivatedRoute) { }
 
+  /**
+   * Fetch ItemCatagory and ItemType from Firebase
+   * 
+   * Called when Angular is ready
+   */
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.key = params['id'];
@@ -33,6 +42,7 @@ export class EditToppingComponent implements OnInit {
     });
   }
 
+  /** Save topping model to Firebase */
   save() {
     this.db.object(`/itemType/${this.key}`).query.ref.set({
       name: this.topping.name,
@@ -43,6 +53,7 @@ export class EditToppingComponent implements OnInit {
     });
   }
 
+  /** Delete ItemType using key */
   delete() {
     if (confirm('Are you sure you want to delete this topping?(TEMP BOX)')) {
       this.db.object(`/itemType/${this.key}`).query.ref.remove().then(() => {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-page-not-found',
   templateUrl: './page-not-found.component.html',
@@ -7,8 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageNotFoundComponent implements OnInit {
 
+  /** Default constructor */
   constructor() { }
 
+  /** Called when Angular is ready */
   ngOnInit() {
   }
 

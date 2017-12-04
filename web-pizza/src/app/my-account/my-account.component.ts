@@ -9,10 +9,16 @@ import { AngularFireDatabase } from 'angularfire2/database';
   styleUrls: ['./my-account.component.css']
 })
 export class MyAccountComponent implements OnInit {
+  /** Sets whether or not to show the UI */
   doneLoading = false;
 
   constructor(private db: AngularFireDatabase, private auth: AngularFireAuth, private router: Router) { }
 
+  /** 
+   * Show UI if user is logged in
+   * 
+   * Called when Angular is ready 
+  */
   ngOnInit() {
     this.auth.auth.onAuthStateChanged(user => {
       if (user && !user.isAnonymous) {

@@ -9,13 +9,16 @@ import { ItemCategory } from '../../models/item-category';
   styleUrls: ['./create-topping-cat.component.css']
 })
 export class CreateToppingCatComponent implements OnInit {
+  /** Data-bound ItemCategory model for form */
   catagory = new ItemCategory();
 
   constructor(private db: AngularFireDatabase, private router: Router) { }
 
+  /** Called when Angular is ready */
   ngOnInit() {
   }
 
+  /** Pushes catagory model to Firebase */
   save() {
     this.db.object('/itemCat').query.ref.push({
       name: this.catagory.name,
