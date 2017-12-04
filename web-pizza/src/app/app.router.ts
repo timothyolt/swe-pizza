@@ -36,4 +36,5 @@ export const appRoutes: Routes = [
     { path: '**', component: PageNotFoundComponent }
 ];
 
+/** Export Router module */
 export const routes: ModuleWithProviders = RouterModule.forRoot(appRoutes);

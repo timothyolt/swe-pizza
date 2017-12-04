@@ -9,23 +9,36 @@ type NestedPartial<T> = {
   [P in keyof T]?: NestedPartial<T[P]>;
 };
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-account-info',
   templateUrl: './account-info.component.html',
   styleUrls: ['./account-info.component.css']
 })
 export class AccountInfoComponent implements OnInit {
+  /** User email */
   email: string;
+  /** Firebase User Reference */
   userRef: AngularFireObject<User>;
+  /** Holds User objects from Firebase */
   user: Observable<User>;
+  /** NestedPartial for User information */
   userPartial: any = {};
+  /** Firebase Card Reference */
   paymentRef: AngularFireObject<Card>;
+  /** Holds Card objects from Firebase */
   payment: Observable<Card>;
+  /** NestedPartial for Payment information */
   paymentPartial: any = {};
 
+  /** Initalize AngularFireDatabase and AngularFireAuth */
   constructor(private db: AngularFireDatabase, public auth: AngularFireAuth) { }
 
+  /**
+   * Called when Angular is ready
+   */
   ngOnInit() {
+    /** Waits for auth state to update then fetches user payment info */
     this.auth.auth.onAuthStateChanged(user => {
       if (user) {
         // todo get user info
@@ -53,6 +66,7 @@ export class AccountInfoComponent implements OnInit {
     // }
   }
 
+  /** Saves user's email and address infomation to Firebase */
   saveAccountInfo() {
     console.log('saveAccountInfo');
     console.log(this.email);
@@ -65,6 +79,7 @@ export class AccountInfoComponent implements OnInit {
     this.userPartial = {};
   }
 
+  /** Saves user's credit card information to Firebase */
   savePaymentInfo() {
     console.log('savePaymentInfo');
     console.log(this.paymentPartial);

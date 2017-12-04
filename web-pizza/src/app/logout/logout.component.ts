@@ -3,17 +3,26 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 import { Error } from '../../models/error';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
   styleUrls: ['./logout.component.css']
 })
 export class LogoutComponent implements OnInit {
+  /** Sets whether or not to show the UI */
   doneLoading = false;
+  /** Error model */
   error = new Error();
 
+  /** Initalize variables */
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
+  /** 
+   * Logs the user out
+   * 
+   * Called when Angular is ready 
+  */
   ngOnInit() {
     console.log('logging out');
     this.doneLoading = false;

@@ -17,92 +17,155 @@ import DataSnapshot = firebase.database.DataSnapshot;
 import { Router } from '@angular/router';
 import { Contact } from '../../models/contact';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit, OnDestroy {
+  /** RXJS Observable subscription */
   authSubscription: Subscription;
+  /** RXJS Observable subscription */
   contactSubscription: Subscription;
+  /** RXJS Observable subscription */
   addressSubscription: Subscription;
+  /** RXJS Observable subscription */
   paymentSubscription: Subscription;
+  /** RXJS Observable subscription */
   itemCatsSubscription: Subscription;
+  /** Firebase reference for current order */
   activeOrderRef: Reference;
+  /** Firebase reference for pizzas */
   pizzaRef: Reference;
-
+  /** Is order accordian open */
   isOrderOpen = true;
+  /** Is delivery accordian open */
   isDeliveryOpen = false;
+  /** Is payment accordian open */
   isPaymentOpen = false;
 
+  /** Firebase order reference */
   orderRef: string;
+  /** Subscribable number */
   cost: Observable<number>;
+  /** Subscribable number */
   total: Observable<number>;
+  /** Array of Pizza objects */
   pizzas: Pizza[] = [];
+  /** Observable list of item catagories */
   itemCats: Observable<SnapshotAction[]>;
 
+  /** Is order set for delievery */
   isDelivery: Observable<boolean>;
+  /** Firebase reference for user contact info */
   contactRef: AngularFireObject<Contact>;
+  /** Subscribable contact object */
   contact: Observable<Contact>;
+  /** Partial contact data */
   contactPartial: any = {};
+  /** Firebase address reference */
   addressRef: AngularFireObject<Address>;
+  /** Subscribable address object */
   address: Observable<Address>;
+  /** Partial address data */
   addressPartial: any = {};
+  /** Array of US states */
   states = ['NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI',
     'VA', 'WA', 'WV', 'WI', 'WY', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN',
     'MS', 'MO', 'MT', 'NE', 'NV', 'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM'];
+  /** US states regex */
   stateRegex = new RegExp(['^(NH)|(NJ)|(NM)|(NY)|(NC)(ND)|(MP)|(OH)|(OK)|(OR)|(PW)|(PA)|(PR)|(RI)|(SC)|(SD)|(TN)|(TX)|(UT)|(VT)|(VI)|(VA)|',
     '(WA)|(WV)|(WI)|(WY)|(FL)|(GA)|(GU)|(HI)|(ID)|(IL)|(IN)|(IA)|(KS)|(KY)|(LA)|(ME)|(MH)|(MD)|(MA)|(MI)|(MN)|(MS)|(MO)|(MT)|(NE)|(NV)|',
     '(AL)|(AK)|(AS)|(AZ)|(AR)|(CA)|(CO)|(CT)|(DE)|(DC)|(FM)$'].join(''));
+  /** Is name validated */
   nameValidated = false;
+  /** Is cell validated */
   cellValidated = false;
+  /** Is address validated */
   addressValidated = false;
+  /** Is apartment validated */
   apartmentValidated = false;
+  /** Is city validated */
   cityValidated = false;
+  /** Is state validated */
   stateValidated = false;
+  /** Is zip validated */
   zipValidated = false;
+  /** Is name valid */
   nameValid: boolean;
+  /** Is cell valid */
   cellValid: boolean;
+  /** Is address valid */
   addressValid: boolean;
+  /** Is apartment valid */
   apartmentValid = true; // not required, starts valid to prevent having to touch input field
+  /** Is city valid */
   cityValid: boolean;
+  /** Is state valid */
   stateValid: boolean;
+  /** Is state valid */
   zipValid: boolean;
 
+  /** Payment type Firebase reference */
   paymentRef: AngularFireObject<Check | Card | Cash>;
+  /** Subscribable payment object */
   payment: Observable<Check | Card | Cash>;
+  /** Partial payment data */
   paymentPartial: any = {};
+  /** Regex for credit card numbers */
   cardRegex = new RegExp('^([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})|([0-9]{16})$');
+  /** Credit card expiration array */
   expMonths = [
-    {value: '01', name: 'January'},
-    {value: '02', name: 'February'},
-    {value: '03', name: 'March'},
-    {value: '04', name: 'April'},
-    {value: '05', name: 'May'},
-    {value: '06', name: 'June'},
-    {value: '07', name: 'July'},
-    {value: '08', name: 'August'},
-    {value: '09', name: 'September'},
-    {value: '10', name: 'October'},
-    {value: '11', name: 'November'},
-    {value: '12', name: 'December'}];
+    { value: '01', name: 'January' },
+    { value: '02', name: 'February' },
+    { value: '03', name: 'March' },
+    { value: '04', name: 'April' },
+    { value: '05', name: 'May' },
+    { value: '06', name: 'June' },
+    { value: '07', name: 'July' },
+    { value: '08', name: 'August' },
+    { value: '09', name: 'September' },
+    { value: '10', name: 'October' },
+    { value: '11', name: 'November' },
+    { value: '12', name: 'December' }];
+  /** Is card name validated */
   payNameValidated = false;
+  /** Is routing number validated */
   routingValidated = false;
+  /** Is bank number validated */
   bankValidated = false;
+  /** Is card number validated */
   cardValidated = false;
+  /** Is expiration month validated */
   expMonthValidated = false;
+  /** Is expiration year validated */
   expYearValidated = false;
+  /** Is credit card cvc validated */
   cvcValidated = false;
+  /** Is card name valid */
   payNameValid: boolean;
+  /** Is routing number valid */
   routingValid: boolean;
+  /** Is bank number valid */
   bankValid: boolean;
+  /** Is card number valid */
   cardValid: boolean;
+  /** Is expiration month valid */
   expMonthValid: boolean;
+  /** Is expiration year valid */
   expYearValid: boolean;
+  /** Is credit card cvc valid */
   cvcValid: boolean;
 
+  /** Initalize variables */
   constructor(private auth: AngularFireAuth, private db: AngularFireDatabase, private router: Router) { }
 
+  /** 
+   * Get user info and subscribe to their data streams
+   * 
+   * Called when Angular is ready 
+  */
   ngOnInit() {
     this.authSubscription = this.auth.authState.subscribe(user => {
       if (user) {
@@ -127,6 +190,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     });
   }
 
+  /** unsubscribe to user data streams */
   ngOnDestroy() {
     if (this.authSubscription)
       this.authSubscription.unsubscribe();
@@ -144,6 +208,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.pizzaRef.off();
   }
 
+  /** Create new order assigned to the user */
   private setupOrder(userId: string) {
     if (this.activeOrderRef)
       this.activeOrderRef.off();
@@ -155,6 +220,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.itemCatsSubscription = this.itemCats.subscribe(console.log);
   }
 
+  /** Set default values on new order creation */
   onActiveOrder(userId: string, activeOrder: DataSnapshot) {
     if (activeOrder.exists()) {
       this.orderRef = '/orders/' + activeOrder.val();
@@ -210,22 +276,26 @@ export class OrderComponent implements OnInit, OnDestroy {
     });
   }
 
+  /** Save isDelivery to Firebase */
   saveIsDelivery(isDelivery: boolean) {
     console.log('order delivery update');
     console.log(isDelivery);
-    this.db.database.ref(this.orderRef).update({delivery: isDelivery}).catch(console.log);
+    this.db.database.ref(this.orderRef).update({ delivery: isDelivery }).catch(console.log);
   }
 
+  /** Reset contact form validation */
   resetContactFormValidated() {
     this.nameValidated = false;
     this.cellValidated = false;
   }
 
+  /** Check if contact form values are valid */
   validateContactForm(contact: Contact) {
     this.validateName(contact ? contact.name : null);
     this.validateCell(contact ? contact.cell : null);
   }
 
+  /** Update validation on pizza name input event */
   onInputName(value: string, final = false) {
     if (final) {
       this.nameValidated = true;
@@ -236,10 +306,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle pizza name validation */
   private validateName(value: string | null) {
     this.nameValid = value && value.length > 0 && value.length <= 240;
   }
 
+  /** Run cell number validation on input event */
   onInputCell(value: string, final = false) {
     if (final) {
       this.cellValidated = true;
@@ -250,10 +322,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle cell number validation */
   private validateCell(value: string | null) {
     this.cellValid = value && value.length > 0 && value.length <= 240;
   }
 
+  /** Save contract info to Firebase */
   saveContact() {
     console.log('order contact update');
     console.log(this.contactPartial);
@@ -261,6 +335,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.contactPartial = {};
   }
 
+  /** Reset address form validation */
   resetAddressFormValidated() {
     this.addressValidated = false;
     this.apartmentValidated = false;
@@ -269,6 +344,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.zipValidated = false;
   }
 
+  /** Validate address form fields */
   validateAddressForm(address: Address) {
     this.validateAddress(address ? address.line1 : null);
     this.validateApartment(address ? address.line2 : null);
@@ -277,6 +353,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.validateZip(address ? address.zip : null);
   }
 
+  /** Run address validation on input event */
   onInputAddress(value: string, final = false) {
     if (final) {
       this.addressValidated = true;
@@ -287,10 +364,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle address validation */
   private validateAddress(value: string | null) {
     this.addressValid = value && value.length > 0 && value.length <= 240;
   }
 
+  /** Run apartment validation on input */
   onInputApartment(value: string, final = false) {
     if (final) {
       this.apartmentValidated = true;
@@ -301,24 +380,28 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle apartment validation */
   private validateApartment(value: string | null) {
     this.apartmentValid = value ? value.length <= 240 : true;
   }
 
+  /** Run city validation on input */
   onInputCity(value: string, final = false) {
     if (final) {
       this.cityValidated = true;
     }
     this.validateCity(value);
     if (this.cityValid) {
-       this.addressPartial.city = value;
+      this.addressPartial.city = value;
     }
   }
 
+  /** Handle city validation */
   private validateCity(value: string | null) {
     this.cityValid = value && value.length > 0 && value.length <= 240;
   }
 
+  /** Run state validation on input */
   onInputState(value: string, final = false) {
     if (final) {
       this.stateValidated = true;
@@ -329,10 +412,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle state validation */
   private validateState(value: string | null) {
     this.stateValid = value && this.stateRegex.test(value);
   }
 
+  /** Run zip code validation on input */
   onInputZip(value: string, final = false) {
     if (final) {
       this.zipValidated = true;
@@ -344,10 +429,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle zip code validation */
   private validateZip(zip: number | null) {
     this.zipValid = zip && zip >= 0 && zip <= 99999;
   }
 
+  /** Update address in Firebase */
   saveAddress() {
     console.log('order address update');
     console.log(this.addressPartial);
@@ -355,12 +442,14 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.addressPartial = {};
   }
 
+  /** Update payment type in Firebase */
   savePaymentType(paymentType: string) {
     console.log('order payment type update');
     console.log(paymentType);
-    this.paymentRef.update({type: paymentType}).catch(console.log);
+    this.paymentRef.update({ type: paymentType }).catch(console.log);
   }
 
+  /** Reset payment form validation */
   resetPaymentFormValidated() {
     this.payNameValidated = false;
     this.routingValidated = false;
@@ -371,6 +460,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.cvcValidated = false;
   }
 
+  /** Run payment form validation based on type */
   validatePaymentForm(payment: Card | Check | Cash) {
     if (payment) switch (payment.type) {
       case 'card':
@@ -385,6 +475,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Validate credit card form */
   validatePaymentCardForm(payment: Card) {
     this.validatePayName(payment.name);
     this.validateCard(payment.number ? payment.number.card : null);
@@ -393,15 +484,18 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.validateCvc(payment.number ? payment.number.cvc : null);
   }
 
+  /** Validate check form */
   validatePaymentCheckForm(payment: Check) {
     this.validatePayName(payment.name);
     this.validateRouting(payment.number ? payment.number.routing : null);
     this.validateBank(payment.number ? payment.number.bank : null);
   }
 
+  /** Validate cash form */
   validatePaymentCashForm(payment: Cash) {
   }
 
+  /** Payment name input event validation */
   onInputPayName(value: string, final = false) {
     if (final) {
       this.payNameValidated = true;
@@ -412,10 +506,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle payment name validation */
   private validatePayName(name: string | null) {
     this.payNameValid = name && name.length > 0 && name.length <= 240;
   }
 
+  /** Routing number input event validation */
   onInputRouting(value: string, final = false) {
     if (final) {
       this.routingValidated = true;
@@ -427,10 +523,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle routing number validation */
   private validateRouting(routing: number | null) {
     this.routingValid = routing && routing > 0 && routing <= 999999999;
   }
 
+  /** Bank number input event validation */
   onInputBank(value: string, final = false) {
     if (final) {
       this.bankValidated = true;
@@ -442,10 +540,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle bank number validation */
   private validateBank(bank: number | null) {
     this.bankValid = bank && bank > 0 && bank <= 99999999999999999;
   }
 
+  /** Card number input event validation */
   onInputCard(value: string, final = false) {
     if (final) {
       this.cardValidated = true;
@@ -456,10 +556,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle card number validation */
   private validateCard(card: string | null) {
     this.cardValid = card && this.cardRegex.test(card);
   }
 
+  /** Card expiration month input event validation */
   onInputExpMonth(value: string, final = false) {
     if (final) {
       this.expMonthValidated = true;
@@ -471,10 +573,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle card expiration month validation */
   private validateExpMonth(expMonth: number | null) {
     this.expMonthValid = expMonth && expMonth >= 1 && expMonth <= 12;
   }
 
+  /** Card expiration year input event validation */
   onInputExpYear(value: string, final = false) {
     if (final) {
       this.expYearValidated = true;
@@ -486,10 +590,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle card expiration year validation */
   private validateExpYear(expYear: number | null) {
     this.expYearValid = expYear && expYear >= 1 && expYear <= 99;
   }
 
+  /** Card CVC input event validation */
   onInputCvc(value: string, final = false) {
     if (final) {
       this.cvcValidated = true;
@@ -501,10 +607,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Handle Card CVC validation */
   private validateCvc(cvc: number | null) {
     this.cvcValid = cvc && cvc >= 100 && cvc <= 9999;
   }
 
+  /** Update payment info in Firebase */
   savePayment() {
     console.log('order payment update');
     console.log(this.paymentPartial);
@@ -512,6 +620,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.paymentPartial = {};
   }
 
+  /** Add new pizza to active order */
   addNewPizza() {
     this.db.database.ref('/defaultPizza').once(
       'value',
@@ -527,6 +636,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       }).catch(console.log);
   }
 
+  /** Update and finalize order on Firebase and show reciept */
   finishOrder() {
     if (this.orderRef && this.activeOrderRef) {
       const key = this.db.database.ref(this.orderRef).key;

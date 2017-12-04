@@ -7,23 +7,35 @@ import * as firebase from 'firebase';
 import EmailAuthProvider = firebase.auth.EmailAuthProvider;
 import { Subscription } from 'rxjs/Subscription';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit, OnDestroy {
+  /** RXJS Observable subscription */
   subscription = new Subscription();
+  /** Sets whether or not to show the UI */
   doneLoading = false;
+  /** Email model */
   email: string;
+  /** Password model */
   password: string;
+  /** Confirm password model */
   confirmPassword = '';
+  /** Error model */
   error = new Error();
 
+  /** Initalize variables */
   constructor(private auth: AngularFireAuth, private router: Router) { }
 
+  /** 
+   * Check if user is logged in and redirect if they are
+   * 
+   * Called when Angular is ready 
+  */
   ngOnInit() {
-
     this.subscription.add(this.auth.auth.onAuthStateChanged(user => {
       if (user && !user.isAnonymous) {
         this.router.navigateByUrl('home').catch(console.log);
@@ -33,10 +45,12 @@ export class SignUpComponent implements OnInit, OnDestroy {
     }));
   }
 
+  /** Unsubscribe when component is destroyed */
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
+  /** Sign up and log in user */
   signUp() {
     if (this.email !== '' && this.password !== '') {
       this.doneLoading = false;

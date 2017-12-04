@@ -5,33 +5,51 @@ import { AngularFireDatabase, AngularFireObject, SnapshotAction } from 'angularf
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
+/** Setup Angular component structure */
 @Component({
   selector: 'app-item-type',
   templateUrl: './item-type.component.html',
   styleUrls: ['./item-type.component.css']
 })
 export class ItemTypeComponent implements OnInit, OnDestroy {
+  /** RXJS Observable subscription */
   subscription = new Subscription();
+  /** Firebase snapshot of ItemType */
   private _itemTypeSnapshot: SnapshotAction;
+  /** Holds ItemType from HTML property */
   @Input() itemType: ItemType;
+  /** Holds boolean from HTML property */
   @Input() exclusive: boolean;
+  /** Unproccessed object from Firebase */
   object: AngularFireObject<any>;
+  /** Observable list of snapshots */
   input: Observable<any>;
+  /** Holds whether a topping is exclusive or not */
   checked: boolean;
 
+  /** Initalize AngularFireDatabase */
   constructor(private db: AngularFireDatabase) {
   }
 
+  /** Get snapshot value from HTML property */
   get itemTypeSnapshot(): SnapshotAction {
     return this._itemTypeSnapshot;
   }
 
+  /** 
+   * Relect snapshot value to HTML property 
+   * @param {SnapshotAction} itemTypeSnapshot SnapshotAction from HTML property
+   * */
   @Input()
   set itemTypeSnapshot(itemTypeSnapshot: SnapshotAction) {
     this._itemTypeSnapshot = itemTypeSnapshot;
     this.itemType = itemTypeSnapshot.payload.val();
   }
 
+  /** 
+     * Relect Firebase reference to HTML property 
+     * @param {string} value Firebase reference from HTML property
+     * */
   @Input()
   set inputRef(value: string) {
     this.subscription.unsubscribe();
@@ -53,18 +71,22 @@ export class ItemTypeComponent implements OnInit, OnDestroy {
     }));
   }
 
+  /** Get boolean from HTML property */
   get inputType() {
     return this.exclusive ? 'radio' : 'checkbox';
   }
 
+  /** Called when Angular is ready */
   ngOnInit() {
   }
 
+  /** Called when component is destroyed */
   ngOnDestroy() {
     this.subscription.unsubscribe();
     this.subscription = new Subscription();
   }
 
+  /** Event listener method when checkbox changes value */
   onInputChange(e) {
     this.checked = e.target.checked;
     if (this.exclusive) {
