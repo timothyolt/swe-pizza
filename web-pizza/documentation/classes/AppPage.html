@@ -591,12 +591,14 @@
             
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">e2e/app.po.ts:8</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">e2e/app.po.ts:10</a></div>
                                         </td>
                                     </tr>
             
                             <tr>
                                 <td class="col-md-4">
+                                        <div class="io-description"><p>test h1 text get </p>
+            </div>
             
                                         <div class="io-description">
                                             <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
@@ -628,12 +630,14 @@
             
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">e2e/app.po.ts:4</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="5" class="link-to-prism">e2e/app.po.ts:5</a></div>
                                         </td>
                                     </tr>
             
                             <tr>
                                 <td class="col-md-4">
+                                        <div class="io-description"><p>begin browser test </p>
+            </div>
             
                                         <div class="io-description">
                                             <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
@@ -654,10 +658,12 @@
         <pre class="line-numbers"><code class="language-typescript">import { browser, by, element } from &#x27;protractor&#x27;;
 
 export class AppPage {
+  /** begin browser test */
   navigateTo() {
     return browser.get(&#x27;/&#x27;);
   }
 
+  /** test h1 text get */
   getParagraphText() {
     return element(by.css(&#x27;app-root h1&#x27;)).getText();
   }

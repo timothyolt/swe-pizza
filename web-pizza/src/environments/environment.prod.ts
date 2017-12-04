@@ -1,3 +1,4 @@
+/** Firebase production enviroment config */
 export const environment = {
   production: true,
   firebase: {
