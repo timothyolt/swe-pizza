@@ -1,0 +1,44 @@
+<div *ngIf="order | async as order" class="card">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item container">
+      <div class="row">
+        <div *ngFor="let pizza of order?.pizzas" class="col col-lg-4 col-md-6 col-sm-12 col-12">
+          <h5 class="p-2" style="padding-bottom: 0!important; margin-bottom: 0;">{{pizza.name}}</h5>
+          <span style="margin-left: 0.5rem">Price: ${{pizza.cost}}</span>
+          <div *ngFor="let itemCat of itemCats | async">
+            <h6 style="margin-left: 0.5rem; margin-bottom: 0;">{{itemCat.payload.val().name}}</h6>
+            <div *ngFor="let itemType of itemTypes | async">
+              <div  *ngIf="pizza[itemCat.key] === itemType.key || pizza[itemCat.key][itemType.key] === true"
+                    class="d-flex justify-content-left pl-2">
+                {{itemType.payload.val().name}}
+                <div class="ml-auto pl-2">${{itemType.payload.val().cost}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <h5 *ngIf="order?.cost as cost">
+        Subtotal: ${{cost}}
+      </h5>
+      <h5 *ngIf="order?.total as total">
+        Total: ${{total}}
+      </h5>
+    </li>
+    <li class="list-group-item">
+      <h5>{{order?.delivery === true ? "Delivery" : "Pickup"}}</h5>
+      <h6>{{order?.contact?.name}} - {{order?.contact?.cell}}</h6>
+      <ng-container *ngIf="order?.delivery === true && order?.address">
+        {{order?.address?.line1}}<br/>
+        <ng-container *ngIf="order?.address?.line2 && order?.address?.line2.length > 0">
+          {{order?.address?.line2}}<br/>
+        </ng-container>
+        {{order?.address?.city}}, {{order?.address?.state}}, {{order?.address?.zip}}<br/>
+      </ng-container>
+    </li>
+    <li class="list-group-item">
+      <h5>Paid with {{order?.payment?.type}}</h5>
+    </li>
+  </ul>
+</div>

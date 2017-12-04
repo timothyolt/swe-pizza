@@ -15,6 +15,7 @@ import * as firebase from 'firebase';
 import Reference = firebase.database.Reference;
 import DataSnapshot = firebase.database.DataSnapshot;
 import { Router } from '@angular/router';
+import { Contact } from '../../models/contact';
 
 @Component({
   selector: 'app-order',
@@ -23,6 +24,7 @@ import { Router } from '@angular/router';
 })
 export class OrderComponent implements OnInit, OnDestroy {
   authSubscription: Subscription;
+  contactSubscription: Subscription;
   addressSubscription: Subscription;
   paymentSubscription: Subscription;
   itemCatsSubscription: Subscription;
@@ -40,6 +42,9 @@ export class OrderComponent implements OnInit, OnDestroy {
   itemCats: Observable<SnapshotAction[]>;
 
   isDelivery: Observable<boolean>;
+  contactRef: AngularFireObject<Contact>;
+  contact: Observable<Contact>;
+  contactPartial: any = {};
   addressRef: AngularFireObject<Address>;
   address: Observable<Address>;
   addressPartial: any = {};
@@ -49,11 +54,15 @@ export class OrderComponent implements OnInit, OnDestroy {
   stateRegex = new RegExp(['^(NH)|(NJ)|(NM)|(NY)|(NC)(ND)|(MP)|(OH)|(OK)|(OR)|(PW)|(PA)|(PR)|(RI)|(SC)|(SD)|(TN)|(TX)|(UT)|(VT)|(VI)|(VA)|',
     '(WA)|(WV)|(WI)|(WY)|(FL)|(GA)|(GU)|(HI)|(ID)|(IL)|(IN)|(IA)|(KS)|(KY)|(LA)|(ME)|(MH)|(MD)|(MA)|(MI)|(MN)|(MS)|(MO)|(MT)|(NE)|(NV)|',
     '(AL)|(AK)|(AS)|(AZ)|(AR)|(CA)|(CO)|(CT)|(DE)|(DC)|(FM)$'].join(''));
+  nameValidated = false;
+  cellValidated = false;
   addressValidated = false;
   apartmentValidated = false;
   cityValidated = false;
   stateValidated = false;
   zipValidated = false;
+  nameValid: boolean;
+  cellValid: boolean;
   addressValid: boolean;
   apartmentValid = true; // not required, starts valid to prevent having to touch input field
   cityValid: boolean;
@@ -77,14 +86,14 @@ export class OrderComponent implements OnInit, OnDestroy {
     {value: '10', name: 'October'},
     {value: '11', name: 'November'},
     {value: '12', name: 'December'}];
-  nameValidated = false;
+  payNameValidated = false;
   routingValidated = false;
   bankValidated = false;
   cardValidated = false;
   expMonthValidated = false;
   expYearValidated = false;
   cvcValidated = false;
-  nameValid: boolean;
+  payNameValid: boolean;
   routingValid: boolean;
   bankValid: boolean;
   cardValid: boolean;
@@ -101,6 +110,8 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.setupOrder(user.uid);
       } else {
         console.log('creating anonymous user for order');
+        if (this.contactSubscription)
+          this.contactSubscription.unsubscribe();
         if (this.addressSubscription)
           this.addressSubscription.unsubscribe();
         if (this.paymentSubscription)
@@ -119,6 +130,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.authSubscription)
       this.authSubscription.unsubscribe();
+    if (this.contactSubscription)
+      this.contactSubscription.unsubscribe();
     if (this.addressSubscription)
       this.addressSubscription.unsubscribe();
     if (this.paymentSubscription)
@@ -163,7 +176,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.cost = this.db.object(this.orderRef + '/cost').valueChanges().shareReplay(1);
     this.total = this.db.object(this.orderRef + '/total').valueChanges().shareReplay(1);
     this.isDelivery = this.db.object(this.orderRef + '/delivery').valueChanges().shareReplay(1);
+    this.contactRef = this.db.object(this.orderRef + '/contact');
     this.addressRef = this.db.object(this.orderRef + '/address');
+    this.contact = this.contactRef.valueChanges().shareReplay(1);
+    if (this.contactSubscription)
+      this.contactSubscription.unsubscribe();
+    this.contactSubscription = this.contact.subscribe(contact => this.validateContactForm(contact));
     this.address = this.addressRef.valueChanges().shareReplay(1);
     if (this.addressSubscription)
       this.addressSubscription.unsubscribe();
@@ -196,6 +214,51 @@ export class OrderComponent implements OnInit, OnDestroy {
     console.log('order delivery update');
     console.log(isDelivery);
     this.db.database.ref(this.orderRef).update({delivery: isDelivery}).catch(console.log);
+  }
+
+  resetContactFormValidated() {
+    this.nameValidated = false;
+    this.cellValidated = false;
+  }
+
+  validateContactForm(contact: Contact) {
+    this.validateName(contact ? contact.name : null);
+    this.validateCell(contact ? contact.cell : null);
+  }
+
+  onInputName(value: string, final = false) {
+    if (final) {
+      this.nameValidated = true;
+    }
+    this.validateName(value);
+    if (this.nameValid) {
+      this.contactPartial.name = value;
+    }
+  }
+
+  private validateName(value: string | null) {
+    this.nameValid = value && value.length > 0 && value.length <= 240;
+  }
+
+  onInputCell(value: string, final = false) {
+    if (final) {
+      this.cellValidated = true;
+    }
+    this.validateCell(value);
+    if (this.cellValid) {
+      this.contactPartial.cell = value;
+    }
+  }
+
+  private validateCell(value: string | null) {
+    this.cellValid = value && value.length > 0 && value.length <= 240;
+  }
+
+  saveContact() {
+    console.log('order contact update');
+    console.log(this.contactPartial);
+    this.contactRef.query.ref.update(this.contactPartial).catch(console.log);
+    this.contactPartial = {};
   }
 
   resetAddressFormValidated() {
@@ -248,7 +311,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
     this.validateCity(value);
     if (this.cityValid) {
-      this.addressPartial.city = value;
+       this.addressPartial.city = value;
     }
   }
 
@@ -299,7 +362,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   resetPaymentFormValidated() {
-    this.nameValidated = false;
+    this.payNameValidated = false;
     this.routingValidated = false;
     this.bankValidated = false;
     this.cardValidated = false;
@@ -323,7 +386,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   validatePaymentCardForm(payment: Card) {
-    this.validateName(payment.name);
+    this.validatePayName(payment.name);
     this.validateCard(payment.number ? payment.number.card : null);
     this.validateExpMonth(payment.number && payment.number.expiration ? payment.number.expiration.month : null);
     this.validateExpYear(payment.number && payment.number.expiration ? payment.number.expiration.year : null);
@@ -331,7 +394,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   validatePaymentCheckForm(payment: Check) {
-    this.validateName(payment.name);
+    this.validatePayName(payment.name);
     this.validateRouting(payment.number ? payment.number.routing : null);
     this.validateBank(payment.number ? payment.number.bank : null);
   }
@@ -339,18 +402,18 @@ export class OrderComponent implements OnInit, OnDestroy {
   validatePaymentCashForm(payment: Cash) {
   }
 
-  onInputName(value: string, final = false) {
+  onInputPayName(value: string, final = false) {
     if (final) {
-      this.nameValidated = true;
+      this.payNameValidated = true;
     }
-    this.validateName(value);
-    if (this.nameValid) {
+    this.validatePayName(value);
+    if (this.payNameValid) {
       this.paymentPartial.name = value;
     }
   }
 
-  private validateName(name: string | null) {
-    this.nameValid = name && name.length > 0 && name.length <= 240;
+  private validatePayName(name: string | null) {
+    this.payNameValid = name && name.length > 0 && name.length <= 240;
   }
 
   onInputRouting(value: string, final = false) {
@@ -466,14 +529,14 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   finishOrder() {
     if (this.orderRef && this.activeOrderRef) {
+      const key = this.db.database.ref(this.orderRef).key;
       this.activeOrderRef.off();
       const update = {};
       update['activeOrder'] = null;
-      update['orders/' + this.db.database.ref(this.orderRef).key] = true;
+      update['orders/' + key] = true;
       this.db.database.ref('users/' + this.auth.auth.currentUser.uid).update(update).then(() => {
-        return this.router.navigateByUrl('home');
+        return this.router.navigateByUrl('order/' + key);
       }).catch(console.log);
-      // TODO navigate to receipt
     }
   }
 }
